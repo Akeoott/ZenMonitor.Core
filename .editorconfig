@@ -1,0 +1,74 @@
+# EditorConfig is awesome: http://editorconfig.org
+# Used some of the config from https://github.com/ppy/osu >.< luv u ppy
+root = true
+
+# ================
+# General Settings
+
+[*]
+# Core settings
+charset = utf-8
+end_of_line = lf
+trim_trailing_whitespace = true
+
+# Default Indentation
+indent_style = space
+indent_size = 4
+
+# ==============================
+# C# (.NET SDK) Styling Settings
+
+[*.cs]
+# Styling
+end_of_line = crlf
+insert_final_newline = true
+indent_style = space
+indent_size = 4
+trim_trailing_whitespace = true
+
+# File Header
+file_header_template = Copyright (c) Ame (Akeoot/Akeoott) <akeoot@pm.me>. Licensed under the LGPL-3.0 Licence.\nSee the LICENSE file in the repository root for full license text.
+dotnet_diagnostic.IDE0073.severity = error
+
+# using
+dotnet_separate_import_directive_groups = true
+dotnet_sort_system_directives_first = true
+csharp_style_using_directive_placement = outside_namespace:suggestion
+csharp_style_namespace_declaration = file_scoped:suggestion
+
+# Code Block
+csharp_new_line_before_open_brace = all
+csharp_new_line_before_else = true
+csharp_new_line_before_catch = true
+csharp_new_line_before_finally = true
+csharp_new_line_before_members_in_object_initializers = true
+csharp_new_line_before_members_in_anonymous_types = true
+csharp_preserve_single_line_blocks = true
+
+# License header
+dotnet_diagnostic.OLOC001.words_in_name = 5
+dotnet_diagnostic.OLOC001.license_header = // Copyright (c) Ame (Akeoot/Akeoott) <akeoot@pm.me>. Licensed under the LGPL-3.0 Licence.\n// See the LICENCE file in the repository root for full licence text.
+
+[*.{csproj,props,targets}]
+charset = utf-8-bom
+end_of_line = crlf
+indent_style = space
+indent_size = 2
+trim_trailing_whitespace = true
+
+# xml based files
+[*.{xml,axaml,slnx,csproj}]
+indent_style = space
+indent_size = 2
+
+[*.{yaml,yml}]
+insert_final_newline = true
+indent_style = space
+indent_size = 2
+trim_trailing_whitespace = true
+
+# =======================
+# Markdown and Text Files
+
+[*.{md,txt}]
+trim_trailing_whitespace = true

@@ -1,0 +1,66 @@
+name: Tests & Coverage
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    strategy:
+      matrix:
+        include:
+          - os: linux
+            runner: ubuntu-latest
+            filter: Platform=Linux
+          - os: windows
+            runner: windows-latest
+            filter: Platform=Windows
+
+    name: test-${{ matrix.os }}
+    runs-on: ${{ matrix.runner }}
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: "10.0.203"
+
+      - name: Cache NuGet packages
+        uses: actions/cache@v4
+        with:
+          path: ~/.nuget/packages
+          key: ${{ runner.os }}-nuget-${{ hashFiles('**/*.csproj', '**/*.sln') }}
+          restore-keys: |
+            ${{ runner.os }}-nuget-
+
+      - name: Restore
+        run: dotnet restore
+
+      - name: Build
+        run: dotnet build --no-restore
+
+      - name: Check code style
+        run: dotnet format --verify-no-changes --no-restore
+
+      - name: Run ${{ matrix.os }} tests with coverage
+        run: >
+          dotnet test --no-build --collect:"XPlat Code Coverage"
+          --results-directory ./coverage --settings coverlet.runsettings
+          --filter "${{ matrix.filter }}"
+
+      - name: Upload to Codecov
+        uses: codecov/codecov-action@v4
+        with:
+          directory: ./coverage
+          fail_ci_if_error: false
