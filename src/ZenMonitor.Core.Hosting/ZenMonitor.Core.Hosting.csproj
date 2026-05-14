@@ -9,7 +9,7 @@
 
     <!-- NuGet Package Metadata -->
     <PackageId>ZenMonitor.Core.Hosting</PackageId>
-    <Version>1.0.0-alpha.1</Version>
+    <Version>1.0.1-alpha</Version>
     <Authors>ZenMonitor Contributors</Authors>
     <Description>Auto-detection and DI registration for ZenMonitor.Core platform services.</Description>
     <PackageLicenseExpression>LGPL-3.0-or-later</PackageLicenseExpression>
