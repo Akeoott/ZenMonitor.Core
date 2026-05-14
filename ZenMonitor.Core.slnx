@@ -1,3 +1,6 @@
 <Solution>
-  <Project Path="ZenMonitor.Core/ZenMonitor.Core.csproj" />
+  <Project Path="src\ZenMonitor.Core\ZenMonitor.Core.csproj" />
+  <Project Path="src\ZenMonitor.Core.Linux\ZenMonitor.Core.Linux.csproj" />
+  <Project Path="src\ZenMonitor.Core.Hosting\ZenMonitor.Core.Hosting.csproj" />
+  <Project Path="tests\ZenMonitor.Core.Tests\ZenMonitor.Core.Tests.csproj" />
 </Solution>

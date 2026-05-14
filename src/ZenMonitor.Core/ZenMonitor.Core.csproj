@@ -1,0 +1,31 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFrameworks>net10.0;net9.0</TargetFrameworks>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <RootNamespace>ZenMonitor.Core</RootNamespace>
+
+    <!-- NuGet Package Metadata -->
+    <PackageId>ZenMonitor.Core</PackageId>
+    <Version>1.0.0-alpha.1</Version>
+    <Authors>ZenMonitor Contributors</Authors>
+    <Description>Core hardware abstraction interfaces, models, and platform services for the
+      ZenMonitor system telemetry monitor.</Description>
+    <PackageLicenseExpression>LGPL-3.0-or-later</PackageLicenseExpression>
+    <PackageProjectUrl>https://github.com/Akeoott/ZenMonitor.Core</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/Akeoott/ZenMonitor.Core.git</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <PackageTags>system-monitoring;telemetry;hardware;abstraction</PackageTags>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+    <IncludeSymbols>true</IncludeSymbols>
+    <SymbolPackageFormat>snupkg</SymbolPackageFormat>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Include="..\..\README.md" Pack="true" PackagePath="\" />
+    <None Include="..\..\LICENSE" Pack="true" PackagePath="\" />
+  </ItemGroup>
+
+</Project>
