@@ -279,6 +279,7 @@ _pkginfo.txt
 *.[Cc]ache
 # but keep track of directories ending in .cache
 !?*.[Cc]ache/
+*.lscache
 
 # Others
 ClientBin/
@@ -445,8 +446,5 @@ FodyWeavers.xsd
 
 # JetBrains Rider
 *.sln.iml
-
-# NuGet package output directory
-nupkg/
 
 # End of https://www.toptal.com/developers/gitignore/api/csharp
