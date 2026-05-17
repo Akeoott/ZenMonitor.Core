@@ -18,11 +18,26 @@ namespace ZenMonitor.Core.Linux.Services;
 public class Network(ILogger<Network> logger) : INetwork
 {
     private readonly ILogger<Network> _logger = logger;
-    private readonly NetworkInfoSnapshot _snapshot = new("");
+    private NetworkInfoSnapshot _snapshot = new(0, 0, []);
 
     /// <summary>Updates all cached network metrics.</summary>
-    public void Update() => _logger.LogWarning("Network is not implemented yet. Returning empty snapshot...");
+    public void Update() => _snapshot = FetchNetworkInfo();
 
-    /// <summary>Returns a placeholder value.</summary>
-    public string GetNone() => _snapshot.None;
+    /// <summary>Returns the aggregate download speed across all interfaces in bytes per second.</summary>
+    public long GetDownloadSpeed() => _snapshot.DownloadSpeed;
+
+    /// <summary>Returns the aggregate upload speed across all interfaces in bytes per second.</summary>
+    public long GetUploadSpeed() => _snapshot.UploadSpeed;
+
+    /// <summary>Returns metric information for each active network interface.</summary>
+    public NetworkInterfaces[] GetNetworks() => _snapshot.Networks;
+
+    private NetworkInfoSnapshot FetchNetworkInfo()
+    {
+        _logger.LogTrace("Fetching all Network info...");
+        _logger.LogInformation("Network has not been implemented yet for linux.");
+
+        return new NetworkInfoSnapshot(0, 0, []);
+    }
+
 }
