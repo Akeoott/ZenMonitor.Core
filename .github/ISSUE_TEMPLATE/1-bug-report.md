@@ -32,10 +32,10 @@ To expedite issue processing, please search open and closed issues before submit
 ### **Which component?**
 <!-- Select the component(s) affected by this bug. -->
 
-- [ ] **Core** — hardware services, data collection
-- [ ] **CLI** — command-line frontend
-- [ ] **TUI** — Terminal.Gui frontend
-- [ ] **GUI** — planned graphical frontend
+- [ ] **Core** — interfaces, models, data models
+- [ ] **Linux** — Linux platform service implementations
+- [ ] **Hosting** — DI registration and OS detection
+- [ ] **Tests** — test suite
 - [ ] **Other** — build, CI, documentation
 
 ---

@@ -1,9 +1,6 @@
 repository:
-  # See https://developer.github.com/v3/repos/#edit for all available settings.
-
   name: ZenMonitor.Core
   description: All kinds of system telemetry!
-  #homepage:
   topics: system-monitoring, dotnet, csharp, nuget
   private: false
   has_issues: true
@@ -14,7 +11,6 @@ repository:
   allow_merge_commit: true
   allow_rebase_merge: false
 
-# Labels: define labels for Issues and Pull Requests
 labels:
   - name: "Type: Bug"
     color: e80c0c
@@ -28,6 +24,10 @@ labels:
     color: 54b2ff
     description: Suggest a new feature.
 
+  - name: "Type: Documentation"
+    color: 54b2ff
+    description: Suggest something about Documentation.
+
   - name: "Type: Security"
     color: fbff00
     description: A problem or enhancement related to a security issue.
@@ -39,6 +39,10 @@ labels:
   - name: "Type: Test"
     color: ce54e3
     description: A problem or enhancement related to a test.
+
+  - name: "Type: CI"
+    color: 54b2ff
+    description: A problem or change related to CI/CD workflows.
 
   - name: "Status: Awaiting Review"
     color: 24d15d
@@ -56,14 +60,6 @@ labels:
     color: 8a6d3b
     description: Has had no activity for some time.
 
-  - name: "Duplicate"
-    color: EB862D
-    description: Duplicate of another issue.
-
-  - name: "Invalid"
-    color: c4a500
-    description: This issue doesn't seem right.
-
   - name: "Priority: High +"
     color: e80c0c
     description: Task is considered higher-priority.
@@ -76,13 +72,13 @@ labels:
     color: 0c9e3e
     description: Task is considered lower-priority.
 
-  - name: "Documentation"
-    color: 2fbceb
-    description: An issue/change with the documentation.
+  - name: "Duplicate"
+    color: EB862D
+    description: Duplicate of another issue.
 
-  - name: "Type: CI"
-    color: 54b2ff
-    description: A problem or change related to CI/CD workflows.
+  - name: "Invalid"
+    color: c4a500
+    description: This issue doesn't seem right.
 
   - name: "Won't fix"
     color: C8D9E6
