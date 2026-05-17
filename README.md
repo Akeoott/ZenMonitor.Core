@@ -14,9 +14,40 @@
 Core hardware abstraction interfaces, models, and platform services powering the [ZenMonitor](https://github.com/Akeoott/ZenMonitor) system monitor.
 
 > [!WARNING]
-> This repository is a separate NuGet library extracted from the main ZenMonitor project.
+> This repository is a separate NuGet library extracted from the main [ZenMonitor](https://github.com/Akeoott/ZenMonitor) project.
 >
-> The structure is still being defined — expect changes.
+> The structure is still being defined — expect major changes.
+
+---
+
+## Architecture
+
+The library is split across four projects:
+
+| Project | Description |
+|---------|-------------|
+| `ZenMonitor.Core` | Hardware abstraction interfaces (`ICpu`, `IDrive`, `IGpu`, `IMemory`, `INetwork`, `ISystem`), data models, and Null-object fallback services. |
+| `ZenMonitor.Core.Linux` | Linux-specific platform implementations for each interface, including GPU vendor auto-detection (NVIDIA / AMD). |
+| `ZenMonitor.Core.Hosting` | DI registration extensions (`AddZenMonitor()`) that auto-detect the OS and register the correct platform services. |
+| `ZenMonitor.Core.Tests` | xUnit test suite. |
+
+### Interface Pattern
+
+Each hardware component is defined as an interface in the `Abstractions` namespace, with a corresponding Null-object service in `Services` (used as fallback when no platform implementation is available). The Linux project provides real implementations, while Windows support is planned.
+
+An `IHardwareMonitor` aggregator interface ties all sub-monitors together as properties, providing a single entry point for consumers.
+
+### NuGet Packages
+
+Three NuGet packages are built and published:
+- `ZenMonitor.Core` — interfaces, models, Null services
+- `ZenMonitor.Core.Linux` — Linux platform services
+- `ZenMonitor.Core.Hosting` — DI registration helpers
+
+Use `using ZenMonitor.Core.Hosting;` for initialization and DI,<br>
+and use `using ZenMonitor.Core;` for using core components of this package.
+
+All are currently in alpha (`v1.0.1-alpha`).
 
 ---
 
@@ -26,10 +57,23 @@ This project is in early development. The API surface and project layout are not
 
 Key milestones being worked on:
 - [x] Define hardware abstraction interfaces
-- [ ] Implement main platform services
-  - [x] Linux
+- [x] Implement main platform services
+  - [x] Linux (CPU, Drive, GPU, Memory, Network, System)
   - [ ] Windows
-- [ ] Publish initial NuGet package
+- [x] Publish initial NuGet packages
+
+---
+
+## Getting Started
+
+```bash
+# Add the packages to your project
+dotnet add package ZenMonitor.Core # Main components
+dotnet add package ZenMonitor.Core.Hosting # Init ZenMonitor
+
+# Register services (auto-detects OS)
+services.AddZenMonitor();
+```
 
 ---
 

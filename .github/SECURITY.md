@@ -11,7 +11,7 @@ ZenMonitor is a system monitor that can run with elevated privileges (root on Li
 - **Privilege escalation** — any way the app could be used to gain or leak elevated privileges
 - **Command injection** — vulnerabilities in parsing `/proc`/`sys` files or configuration inputs that could lead to arbitrary code execution
 - **Data exposure** — system telemetry or logs unintentionally leaking sensitive user data
-- **Dependency vulnerabilities** — CVEs in dependencies such as Serilog, Spectre.Console, Terminal.Gui, or .NET runtime itself
+- **Dependency vulnerabilities** — CVEs in dependencies such as System.IO.Abstractions or the .NET runtime itself
 
 If you are unsure whether something qualifies, stay on the side of caution and report it.
 

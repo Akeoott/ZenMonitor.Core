@@ -31,7 +31,7 @@ Please follow it in all your interactions with the project.
 
 ### Prerequisites
 
-- [.NET SDK 10.0.203](https://dotnet.microsoft.com/en-us/download/dotnet/10.0) (pinned in [`global.json`](https://github.com/Akeoott/ZenMonitor.Core/blob/main/global.json))
+- [.NET SDK 10.0.300](https://dotnet.microsoft.com/en-us/download/dotnet/10.0) (pinned in [`global.json`](https://github.com/Akeoott/ZenMonitor.Core/blob/main/global.json))
 - A terminal and your editor of choice (VS Code, Rider, etc.)
 
 ### Build & Verify
@@ -107,7 +107,7 @@ Coverage configuration is in [`coverlet.runsettings`](https://github.com/Akeoott
 
 The CI workflow (`.github/workflows/tests.yml`) runs on every push and pull request to `main`:
 
-1. **Setup .NET** — installs SDK 10.0.203
+1. **Setup .NET** — installs SDK 10.0.300
 2. **Restore** — `dotnet restore`
 3. **Build** — `dotnet build --no-restore`
 4. **Test** — runs tests with coverage
