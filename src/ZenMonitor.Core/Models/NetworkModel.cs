@@ -3,11 +3,21 @@
 
 namespace ZenMonitor.Core.Models;
 
+public record ConnectedNetworks(
+    string Name,
+    long DownloadSpeed,
+    long UploadSpeed,
+    long TotalBytesDownloaded,
+    long TotalBytesUploaded,
+    bool IsUp
+);
+
 /// <summary>
 /// Placeholder snapshot for network metrics.
 /// This will be redesigned with proper network interface statistics.
 /// </summary>
-/// <param name="None">Placeholder value; currently always empty.</param>
 public record NetworkInfoSnapshot(
-    string None
+    long DownloadSpeed,
+    long UploadSpeed,
+    ConnectedNetworks[] Networks
 );
