@@ -1,0 +1,4 @@
+# Defines codeowners of sensitive files
+
+/.github/CODEOWNERS @Akeoott
+/.github/settings.yml @Akeoott
