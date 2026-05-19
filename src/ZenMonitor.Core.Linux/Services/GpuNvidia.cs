@@ -72,7 +72,7 @@ public class GpuNvidia(ILogger<GpuNvidia> logger, IHelper helper) : IGpu
 
     private string RunNvidiaSmi(string arguments)
     {
-        ProcessResult result = _helper.RunProcess("nvidia-smi", arguments);
+        ProcessResult result = _helper.Linux.RunProcess("nvidia-smi", arguments);
 
         if (result.ExitCode != 0)
         {

@@ -38,9 +38,9 @@ public class DriveTests
     {
         // Arrange
         _mockFileSystem.AddFile("/proc/diskstats", new MockFileData(TestData.DiskStats1()));
-        _mockHelper.Setup(h => h.RunProcess("df", "-T -B1"))
+        _mockHelper.Setup(h => h.Linux.RunProcess("df", "-T -B1"))
                    .Returns(new ProcessResult(0, TestData.DfOutput(), ""));
-        _mockHelper.Setup(c => c.UtcNow).Returns(new DateTime(2026, 1, 1, 0, 0, 1));
+        _mockHelper.Setup(c => c.Linux.UtcNow).Returns(new DateTime(2026, 1, 1, 0, 0, 1));
 
         var drive = CreateDrive();
 
@@ -60,7 +60,7 @@ public class DriveTests
 
         // Arrange
         _mockFileSystem.AddFile("/proc/diskstats", new MockFileData(TestData.DiskStats2()));
-        _mockHelper.Setup(c => c.UtcNow).Returns(new DateTime(2026, 1, 1, 0, 0, 5));
+        _mockHelper.Setup(c => c.Linux.UtcNow).Returns(new DateTime(2026, 1, 1, 0, 0, 5));
 
         // Act
         drive.Update();

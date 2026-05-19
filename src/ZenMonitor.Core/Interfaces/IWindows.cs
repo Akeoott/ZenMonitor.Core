@@ -8,13 +8,8 @@ namespace ZenMonitor.Core.Interfaces;
 /// <summary>
 /// Abstraction for system-level operations that need to be mockable in tests.
 /// </summary>
-public interface IHelper
+[SupportedOSPlatform("windows")]
+public interface IWindows
 {
-    /// <summary> </summary>
-    [SupportedOSPlatform("linux")]
-    ILinux Linux { get; }
 
-    /// <summary> </summary>
-    [SupportedOSPlatform("windows")]
-    IWindows Windows { get; }
 }

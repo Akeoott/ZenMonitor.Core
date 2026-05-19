@@ -102,7 +102,7 @@ public class Drive(ILogger<Drive> logger, IFileSystem fileSystem, IHelper helper
 
                 if (_previousDiskStats.TryGetValue(name, out var prev))
                 {
-                    double deltaTime = (_helper.UtcNow - prev.time).TotalMilliseconds;
+                    double deltaTime = (_helper.Linux.UtcNow - prev.time).TotalMilliseconds;
                     double deltaIo = ioTime - prev.ioTime;
                     double usage = deltaTime > 0 ? deltaIo / deltaTime * 100 : 0;
                     ioUsages[name] = usage;
@@ -112,7 +112,7 @@ public class Drive(ILogger<Drive> logger, IFileSystem fileSystem, IHelper helper
                     ioUsages[name] = 0;
                 }
 
-                _previousDiskStats[name] = (ioTime, _helper.UtcNow);
+                _previousDiskStats[name] = (ioTime, _helper.Linux.UtcNow);
             }
         }
 
@@ -121,7 +121,7 @@ public class Drive(ILogger<Drive> logger, IFileSystem fileSystem, IHelper helper
 
     private string RunDf(string arguments)
     {
-        var result = _helper.RunProcess("df", arguments);
+        var result = _helper.Linux.RunProcess("df", arguments);
         if (result.ExitCode != 0)
         {
             _logger.LogError("df failed: {Error}", result.StandardError);

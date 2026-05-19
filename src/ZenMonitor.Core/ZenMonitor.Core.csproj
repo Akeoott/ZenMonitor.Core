@@ -9,7 +9,7 @@
 
     <!-- NuGet Package Metadata -->
     <PackageId>ZenMonitor.Core</PackageId>
-    <Version>1.0.2-alpha</Version>
+    <Version>1.0.3-alpha</Version>
     <Authors>ZenMonitor Contributors</Authors>
     <Description>Core hardware abstraction interfaces, models, and platform services for the
       ZenMonitor system telemetry monitor.</Description>

@@ -234,13 +234,13 @@ public class CpuTests
         _mockFileSystem.AddFile("/proc/cpuinfo", new MockFileData(TestData.CpuInfo()));
         _mockFileSystem.AddFile("/proc/stat", new MockFileData(TestData.Stat1()));
 
-        _mockHelper.Setup(c => c.UtcNow).Returns(new DateTime(2026, 1, 1, 0, 0, 1));
+        _mockHelper.Setup(c => c.Linux.UtcNow).Returns(new DateTime(2026, 1, 1, 0, 0, 1));
         _mockFileSystem.AddFile(energyUjPath, new MockFileData(TestData.EnergyUj1()));
         var cpu = CreateCpu();
 
         cpu.Update();
 
-        _mockHelper.Setup(c => c.UtcNow).Returns(new DateTime(2026, 1, 1, 0, 0, 6));
+        _mockHelper.Setup(c => c.Linux.UtcNow).Returns(new DateTime(2026, 1, 1, 0, 0, 6));
         _mockFileSystem.AddFile(energyUjPath, new MockFileData(TestData.EnergyUj2()));
 
         cpu.Update();

@@ -8,15 +8,14 @@ using System.Runtime.Versioning;
 using ZenMonitor.Core.Interfaces;
 using ZenMonitor.Core.Models;
 
-namespace ZenMonitor.Core.Linux.Services;
+namespace ZenMonitor.Core.Linux.Helper;
 
 /// <summary>
 /// Provides system-level helper operations that are abstracted for testability.
-/// Wraps process execution and time utilities.
 /// </summary>
 [ExcludeFromCodeCoverage]
 [SupportedOSPlatform("linux")]
-public class Helper : IHelper
+public class Linux : ILinux
 {
     /// <summary>Returns the current UTC date and time.</summary>
     public DateTime UtcNow => DateTime.UtcNow;

@@ -5,18 +5,18 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
-    <RootNamespace>ZenMonitor.Core.Hosting</RootNamespace>
+    <RootNamespace>ZenMonitor.Core.Windows</RootNamespace>
 
     <!-- NuGet Package Metadata -->
-    <PackageId>ZenMonitor.Core.Hosting</PackageId>
+    <PackageId>ZenMonitor.Core.Windows</PackageId>
     <Version>1.0.3-alpha</Version>
     <Authors>ZenMonitor Contributors</Authors>
-    <Description>Auto-detection and DI registration for ZenMonitor.Core platform services.</Description>
+    <Description>Windows platform services and implementations for ZenMonitor.Core.</Description>
     <PackageLicenseExpression>LGPL-3.0-or-later</PackageLicenseExpression>
     <PackageProjectUrl>https://github.com/Akeoott/ZenMonitor.Core</PackageProjectUrl>
     <RepositoryUrl>https://github.com/Akeoott/ZenMonitor.Core.git</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
-    <PackageTags>system-monitoring;telemetry;hardware;hosting;di</PackageTags>
+    <PackageTags>system-monitoring;telemetry;windows;hardware</PackageTags>
     <PackageReadmeFile>README.md</PackageReadmeFile>
     <IncludeSymbols>true</IncludeSymbols>
     <SymbolPackageFormat>snupkg</SymbolPackageFormat>
@@ -25,13 +25,14 @@
   <ItemGroup>
     <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions"
       Version="9.0.3" />
+    <PackageReference Include="Microsoft.Extensions.Logging.Abstractions"
+      Version="9.0.3" />
     <PackageReference Include="System.IO.Abstractions"
       Version="22.1.1" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\ZenMonitor.Core\ZenMonitor.Core.csproj" />
-    <ProjectReference Include="..\ZenMonitor.Core.Linux\ZenMonitor.Core.Linux.csproj" />
     <None Include="..\..\README.md" Pack="true" PackagePath="\" />
     <None Include="..\..\LICENSE" Pack="true" PackagePath="\" />
   </ItemGroup>

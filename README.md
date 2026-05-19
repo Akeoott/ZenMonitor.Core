@@ -46,7 +46,7 @@ Three NuGet packages are built and published:
 Use `using ZenMonitor.Core.Hosting;` for initialization and DI,<br>
 and use `using ZenMonitor.Core;` for using core components of this package.
 
-All are currently in alpha (`v1.0.2-alpha`).
+All are currently in alpha (`v1.0.3-alpha`).
 
 ---
 

@@ -365,7 +365,7 @@ public class Cpu(ILogger<Cpu> logger, IFileSystem fileSystem, IHelper helper) : 
         try
         {
             double energyUj = double.Parse(_fileSystem.File.ReadAllText(EnergyUjPath).Trim());
-            DateTime now = _helper.UtcNow;
+            DateTime now = _helper.Linux.UtcNow;
 
             double power = 0;
             if (_prevEnergyUj > 0)

@@ -1,6 +1,8 @@
 // Copyright (c) Ame (Akeoot/Akeoott) <akeoot@pm.me>. Licensed under the LGPL-3.0 Licence.
 // See the LICENSE file in the repository root for full license text.
 
+using System.Runtime.Versioning;
+
 namespace ZenMonitor.Core.Models;
 
 /// <summary>
@@ -9,4 +11,5 @@ namespace ZenMonitor.Core.Models;
 /// <param name="ExitCode">Process exit code.</param>
 /// <param name="StandardOutput">Captured standard output.</param>
 /// <param name="StandardError">Captured standard error.</param>
+[SupportedOSPlatform("linux")]
 public record ProcessResult(int ExitCode, string StandardOutput, string StandardError);
