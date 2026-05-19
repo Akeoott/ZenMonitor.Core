@@ -3,13 +3,41 @@
 
 using System.Runtime.Versioning;
 
+using ZenMonitor.Core.Models;
+
 namespace ZenMonitor.Core.Interfaces;
 
 /// <summary>
-/// Abstraction for system-level operations that need to be mockable in tests.
+/// Abstractions for Windows-native system operations via Win32 API that need
+/// to be mockable in tests.
 /// </summary>
 [SupportedOSPlatform("windows")]
 public interface IWindows
 {
+    /// <summary>Returns the CPU processor model name.</summary>
+    string GetProcessorName();
 
+    /// <summary>Returns the number of logical processors.</summary>
+    int GetProcessorCount();
+
+    /// <summary>Returns the base processor frequency in MHz.</summary>
+    int GetProcessorBaseFrequencyMHz();
+
+    /// <summary>
+    /// Returns the current total system idle/kernel/user tick counts.
+    /// Kernel includes idle — subtract idle to get actual kernel time.
+    /// </summary>
+    CpuTickInfo GetSystemTimes();
+
+    /// <summary>
+    /// Returns per-core idle/kernel/user tick counts for each logical processor.
+    /// Kernel includes idle — subtract idle to get actual kernel time.
+    /// </summary>
+    CpuTickInfo[] GetPerCoreTimes();
+
+    /// <summary>Returns the current CPU temperature in degrees Celsius.</summary>
+    int GetCpuTemperature();
+
+    /// <summary>Returns the current CPU package power draw in watts.</summary>
+    double GetCpuPowerDraw();
 }

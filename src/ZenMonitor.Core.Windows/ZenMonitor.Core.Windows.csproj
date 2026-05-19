@@ -6,6 +6,7 @@
     <Nullable>enable</Nullable>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <RootNamespace>ZenMonitor.Core.Windows</RootNamespace>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
 
     <!-- NuGet Package Metadata -->
     <PackageId>ZenMonitor.Core.Windows</PackageId>
@@ -25,10 +26,9 @@
   <ItemGroup>
     <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions"
       Version="9.0.3" />
-    <PackageReference Include="Microsoft.Extensions.Logging.Abstractions"
-      Version="9.0.3" />
-    <PackageReference Include="System.IO.Abstractions"
-      Version="22.1.1" />
+    <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="9.0.3" />
+    <PackageReference Include="System.IO.Abstractions" Version="22.1.1" />
+    <PackageReference Include="System.Management" Version="10.0.8" />
   </ItemGroup>
 
   <ItemGroup>

@@ -5,3 +5,10 @@ using System.Runtime.Versioning;
 
 namespace ZenMonitor.Core.Models;
 
+/// <summary>
+/// Represents a snapshot of processor time counters from the system.
+/// </summary>
+/// <param name="IdleTime">Total idle time in system ticks.</param>
+/// <param name="KernelTime">Total kernel time in system ticks (includes idle time).</param>
+/// <param name="UserTime">Total user time in system ticks.</param>
+public record CpuTickInfo(long IdleTime, long KernelTime, long UserTime);

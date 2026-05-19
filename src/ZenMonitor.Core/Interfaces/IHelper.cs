@@ -10,11 +10,9 @@ namespace ZenMonitor.Core.Interfaces;
 /// </summary>
 public interface IHelper
 {
-    /// <summary> </summary>
     [SupportedOSPlatform("linux")]
     ILinux Linux { get; }
 
-    /// <summary> </summary>
     [SupportedOSPlatform("windows")]
     IWindows Windows { get; }
 }
