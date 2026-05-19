@@ -1,0 +1,3 @@
+Filesystem     Type   1B-blocks       Used   Available  Use%  Mounted on
+/dev/sda1      ext4  1000000000  500000000   400000000  50%   /
+tmpfs          tmpfs    1000000     100000      900000  10%   /tmp

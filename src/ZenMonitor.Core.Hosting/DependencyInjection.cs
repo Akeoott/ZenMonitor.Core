@@ -1,6 +1,8 @@
 // Copyright (c) Ame (Akeoot/Akeoott) <akeoot@pm.me>. Licensed under the LGPL-3.0 Licence.
 // See the LICENSE file in the repository root for full license text.
 
+using System.IO.Abstractions;
+
 using Microsoft.Extensions.DependencyInjection;
 
 using ZenMonitor.Core.Hosting.Registration;
@@ -34,7 +36,7 @@ public static class DependencyInjection
     public static IServiceCollection AddZenMonitor(this IServiceCollection services, out bool gpuNotSupported)
     {
         // Common infrastructure, used by all platforms
-        services.AddSingleton<System.IO.Abstractions.IFileSystem, System.IO.Abstractions.FileSystem>();
+        services.AddSingleton<IFileSystem, FileSystem>();
 
         gpuNotSupported = false;
 
