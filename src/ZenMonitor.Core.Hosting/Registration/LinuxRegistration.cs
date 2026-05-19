@@ -4,7 +4,6 @@
 using System.Runtime.Versioning;
 
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
 
 using ZenMonitor.Core.Abstractions;
 using ZenMonitor.Core.Interfaces;

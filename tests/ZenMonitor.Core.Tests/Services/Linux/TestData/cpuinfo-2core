@@ -1,0 +1,6 @@
+processor	: 0
+model name	: Test CPU
+cpu MHz		: 3200.000
+
+processor	: 1
+cpu MHz		: 3200.000
