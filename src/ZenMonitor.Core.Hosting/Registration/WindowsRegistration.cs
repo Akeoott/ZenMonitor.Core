@@ -4,6 +4,7 @@
 using System.Runtime.Versioning;
 
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Win32;
 
 using ZenMonitor.Core.Abstractions;
 using ZenMonitor.Core.Interfaces;
@@ -40,7 +41,7 @@ internal static class WindowsRegistration
     public static void Register(IServiceCollection services, out bool gpuNotSupported)
     {
         // Infrastructure
-        services.AddSingleton<IServiceAbstraction, Helper>();
+        services.AddSingleton<IServiceAbstraction, ServiceAbstraction>();
 
         // Platform-level services
         services.AddSingleton<ICpu, Cpu>();
@@ -49,7 +50,7 @@ internal static class WindowsRegistration
         services.AddSingleton<INetwork, Network>();
         services.AddSingleton<ISystem, Windows.Services.System>();
 
-        var vendor = DetectWindowsGpuVendor();
+        var vendor = DetectGpuVendor();
         gpuNotSupported = vendor == GpuVendor.Unknown;
 
         services.AddSingleton<IGpu>(serviceProvider =>
@@ -65,15 +66,32 @@ internal static class WindowsRegistration
         services.AddSingleton<IHardwareMonitor, HardwareMonitor>();
     }
 
-    /// <summary>
-    /// Detects the GPU vendor on Windows by reading /sys/class/drm or /proc/driver/nvidia.
-    /// Returns the most specific <see cref="GpuVendor"/> value, or <see cref="GpuVendor.Unknown"/>.
-    /// </summary>
-    private static GpuVendor DetectWindowsGpuVendor()
+    private static GpuVendor DetectGpuVendor()
     {
         try
         {
+            const string gpuClass = @"SYSTEM\CurrentControlSet\Control\Class\{4d36e968-e325-11ce-bfc1-08002be10318}";
+            using var gpuKey = Registry.LocalMachine.OpenSubKey(gpuClass);
+            if (gpuKey == null)
+                return GpuVendor.Unknown;
 
+            foreach (var subKeyName in gpuKey.GetSubKeyNames())
+            {
+                using var subKey = gpuKey.OpenSubKey(subKeyName);
+                if (subKey == null)
+                    continue;
+
+                string? provider = subKey.GetValue("ProviderName") as string;
+                if (string.IsNullOrEmpty(provider))
+                    continue;
+
+                if (provider.Contains("NVIDIA", StringComparison.OrdinalIgnoreCase))
+                    return GpuVendor.Nvidia;
+
+                if (provider.Contains("AMD", StringComparison.OrdinalIgnoreCase) ||
+                    provider.Contains("Advanced Micro Devices", StringComparison.OrdinalIgnoreCase))
+                    return GpuVendor.Amd;
+            }
         }
         catch
         {

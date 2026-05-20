@@ -40,7 +40,7 @@ internal static class LinuxRegistration
     public static void Register(IServiceCollection services, out bool gpuNotSupported)
     {
         // Infrastructure
-        services.AddSingleton<IServiceAbstraction, Helper>();
+        services.AddSingleton<IServiceAbstraction, ServiceAbstraction>();
 
         // Platform-level services
         services.AddSingleton<ICpu, Cpu>();
@@ -49,7 +49,7 @@ internal static class LinuxRegistration
         services.AddSingleton<INetwork, Network>();
         services.AddSingleton<ISystem, Linux.Services.System>();
 
-        var vendor = DetectLinuxGpuVendor();
+        var vendor = DetectGpuVendor();
         gpuNotSupported = vendor == GpuVendor.Unknown;
 
         services.AddSingleton<IGpu>(serviceProvider =>
@@ -65,11 +65,7 @@ internal static class LinuxRegistration
         services.AddSingleton<IHardwareMonitor, HardwareMonitor>();
     }
 
-    /// <summary>
-    /// Detects the GPU vendor on Linux by reading /sys/class/drm or /proc/driver/nvidia.
-    /// Returns the most specific <see cref="GpuVendor"/> value, or <see cref="GpuVendor.Unknown"/>.
-    /// </summary>
-    private static GpuVendor DetectLinuxGpuVendor()
+    private static GpuVendor DetectGpuVendor()
     {
         try
         {
