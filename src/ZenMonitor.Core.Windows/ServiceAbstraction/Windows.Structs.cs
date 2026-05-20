@@ -9,6 +9,7 @@ namespace ZenMonitor.Core.Windows.ServiceAbstraction;
 [SupportedOSPlatform("windows")]
 public partial class Windows
 {
+    #region Cpu
     [StructLayout(LayoutKind.Sequential)]
     internal struct SYSTEM_INFO
     {
@@ -46,4 +47,52 @@ public partial class Windows
 
     internal const int SystemProcessorPerformanceInformation = 8;
     internal const int SystemPowerInformation = 5;
+    #endregion
+
+    #region Memory
+    internal const double BytesToGiB = 1024.0 * 1024.0 * 1024.0;
+
+    [StructLayout(LayoutKind.Sequential)]
+    internal struct MEMORYSTATUSEX
+    {
+        public uint dwLength;
+        public uint dwMemoryLoad;
+        public ulong ullTotalPhys;
+        public ulong ullAvailPhys;
+        public ulong ullTotalPageFile;
+        public ulong ullAvailPageFile;
+        public ulong ullTotalVirtual;
+        public ulong ullAvailVirtual;
+        public ulong ullAvailExtendedVirtual;
+
+        public MEMORYSTATUSEX()
+        {
+            dwLength = (uint)Marshal.SizeOf<MEMORYSTATUSEX>();
+        }
+    }
+
+    [StructLayout(LayoutKind.Sequential)]
+    internal struct PERFORMANCE_INFORMATION
+    {
+        public uint cb;
+        public UIntPtr CommitTotal;
+        public UIntPtr CommitLimit;
+        public UIntPtr CommitPeak;
+        public UIntPtr PhysicalTotal;
+        public UIntPtr PhysicalAvailable;
+        public UIntPtr SystemCache;
+        public UIntPtr KernelTotal;
+        public UIntPtr KernelPaged;
+        public UIntPtr KernelNonpaged;
+        public UIntPtr PageSize;
+        public uint HandleCount;
+        public uint ProcessCount;
+        public uint ThreadCount;
+
+        public PERFORMANCE_INFORMATION()
+        {
+            cb = (uint)Marshal.SizeOf<PERFORMANCE_INFORMATION>();
+        }
+    }
+    #endregion
 }

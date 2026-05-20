@@ -9,6 +9,7 @@ namespace ZenMonitor.Core.Windows.ServiceAbstraction;
 [SupportedOSPlatform("windows")]
 public partial class Windows
 {
+    #region Cpu
     [LibraryImport("kernel32.dll", EntryPoint = "GetSystemInfo")]
     internal static partial void GetSystemInfo(out SYSTEM_INFO lpSystemInfo);
 
@@ -32,4 +33,15 @@ public partial class Windows
         int nInputBufferSize,
         out SYSTEM_POWER_INFORMATION lpOutputBuffer,
         int nOutputBufferSize);
+    #endregion
+
+    #region Memory
+    [LibraryImport("kernel32.dll", EntryPoint = "GlobalMemoryStatusEx")]
+    [return: MarshalAs(UnmanagedType.Bool)]
+    internal static partial bool GlobalMemoryStatusEx(ref MEMORYSTATUSEX lpBuffer);
+
+    [LibraryImport("psapi.dll", EntryPoint = "GetPerformanceInfo")]
+    [return: MarshalAs(UnmanagedType.Bool)]
+    internal static partial bool GetPerformanceInfo(ref PERFORMANCE_INFORMATION pPerformanceInformation, uint cb);
+    #endregion
 }

@@ -21,6 +21,7 @@ namespace ZenMonitor.Core.Windows.ServiceAbstraction;
 [SupportedOSPlatform("windows")]
 public partial class Windows : IWindows
 {
+    #region Cpu
     /// <inheritdoc />
     public string GetProcessorName()
     {
@@ -155,4 +156,11 @@ public partial class Windows : IWindows
             return 0.0;
         }
     }
+    #endregion
+
+    #region Memory
+    // TODO: Implement Memory and update IWindows to accept the new values.
+    //       ApiDeclerations and structs are already available.
+
+    #endregion
 }
