@@ -32,6 +32,7 @@
   <ItemGroup>
     <ProjectReference Include="..\ZenMonitor.Core\ZenMonitor.Core.csproj" />
     <ProjectReference Include="..\ZenMonitor.Core.Linux\ZenMonitor.Core.Linux.csproj" />
+    <ProjectReference Include="..\ZenMonitor.Core.Windows\ZenMonitor.Core.Windows.csproj" />
     <None Include="..\..\README.md" Pack="true" PackagePath="\" />
     <None Include="..\..\LICENSE" Pack="true" PackagePath="\" />
   </ItemGroup>

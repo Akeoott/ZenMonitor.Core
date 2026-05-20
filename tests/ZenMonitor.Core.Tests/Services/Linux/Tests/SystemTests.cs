@@ -10,8 +10,6 @@ using Moq;
 
 using Xunit;
 
-using ZenMonitor.Core.Linux.Services;
-
 namespace ZenMonitor.Core.Tests.Services.Linux.Tests;
 
 [Trait("Platform", "Linux")]
@@ -19,16 +17,16 @@ namespace ZenMonitor.Core.Tests.Services.Linux.Tests;
 public class SystemTests
 {
     // Need to use explicit naming cause of conflict with namespace System
-    private readonly Mock<ILogger<SystemStatus>> _mockLogger;
+    private readonly Mock<ILogger<Core.Linux.Services.System>> _mockLogger;
     private readonly MockFileSystem _mockFileSystem;
 
     public SystemTests()
     {
-        _mockLogger = new Mock<ILogger<SystemStatus>>();
+        _mockLogger = new Mock<ILogger<Core.Linux.Services.System>>();
         _mockFileSystem = new MockFileSystem();
     }
 
-    private SystemStatus CreateSystem() => new(_mockLogger.Object, _mockFileSystem);
+    private Core.Linux.Services.System CreateSystem() => new(_mockLogger.Object, _mockFileSystem);
 
     [Fact]
     public void Update_ParsesSystemInfoCorrectly()

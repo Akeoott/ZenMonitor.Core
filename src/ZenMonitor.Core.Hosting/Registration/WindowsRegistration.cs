@@ -7,21 +7,21 @@ using Microsoft.Extensions.DependencyInjection;
 
 using ZenMonitor.Core.Abstractions;
 using ZenMonitor.Core.Interfaces;
-using ZenMonitor.Core.Linux.Services;
 using ZenMonitor.Core.Models;
 using ZenMonitor.Core.Services;
+using ZenMonitor.Core.Windows.Services;
 
 namespace ZenMonitor.Core.Hosting.Registration;
 
 /// <summary>
-/// Registers all Linux-specific ZenMonitor services,
+/// Registers all Windows-specific ZenMonitor services,
 /// including GPU vendor auto-detection.
 /// </summary>
-[SupportedOSPlatform("linux")]
-internal static class LinuxRegistration
+[SupportedOSPlatform("windows")]
+internal static class WindowsRegistration
 {
     /// <summary>
-    /// Registers Linux hardware monitoring services into the DI container.
+    /// Registers Windows hardware monitoring services into the DI container.
     /// Automatically detects NVIDIA vs AMD GPU to select the correct implementation.
     /// </summary>
     public static void Register(IServiceCollection services)
@@ -30,7 +30,7 @@ internal static class LinuxRegistration
     }
 
     /// <summary>
-    /// Registers Linux hardware monitoring services into the DI container.
+    /// Registers Windows hardware monitoring services into the DI container.
     /// Automatically detects NVIDIA vs AMD GPU to select the correct implementation.
     /// </summary>
     /// <param name="services">The service collection to register with.</param>
@@ -47,9 +47,9 @@ internal static class LinuxRegistration
         services.AddSingleton<IDrive, Drive>();
         services.AddSingleton<IMemory, Memory>();
         services.AddSingleton<INetwork, Network>();
-        services.AddSingleton<ISystem, Linux.Services.System>();
+        services.AddSingleton<ISystem, Windows.Services.System>();
 
-        var vendor = DetectLinuxGpuVendor();
+        var vendor = DetectWindowsGpuVendor();
         gpuNotSupported = vendor == GpuVendor.Unknown;
 
         services.AddSingleton<IGpu>(serviceProvider =>
@@ -66,42 +66,14 @@ internal static class LinuxRegistration
     }
 
     /// <summary>
-    /// Detects the GPU vendor on Linux by reading /sys/class/drm or /proc/driver/nvidia.
+    /// Detects the GPU vendor on Windows by reading /sys/class/drm or /proc/driver/nvidia.
     /// Returns the most specific <see cref="GpuVendor"/> value, or <see cref="GpuVendor.Unknown"/>.
     /// </summary>
-    private static GpuVendor DetectLinuxGpuVendor()
+    private static GpuVendor DetectWindowsGpuVendor()
     {
         try
         {
-            if (Directory.Exists("/proc/driver/nvidia") ||
-                File.Exists("/usr/bin/nvidia-smi"))
-            {
-                return GpuVendor.Nvidia;
-            }
 
-            if (Directory.Exists("/sys/class/drm"))
-            {
-                var cards = Directory.GetDirectories("/sys/class/drm", "card*");
-                foreach (var card in cards)
-                {
-                    var deviceDir = Path.Combine(card, "device");
-                    if (!Directory.Exists(deviceDir))
-                        continue;
-
-                    var vendorFile = Path.Combine(deviceDir, "vendor");
-                    if (!File.Exists(vendorFile))
-                        continue;
-
-                    var vendorId = File.ReadAllText(vendorFile).Trim();
-
-                    return vendorId switch
-                    {
-                        "0x1002" => GpuVendor.Amd,
-                        "0x10de" => GpuVendor.Nvidia,
-                        _ => GpuVendor.Unknown,
-                    };
-                }
-            }
         }
         catch
         {

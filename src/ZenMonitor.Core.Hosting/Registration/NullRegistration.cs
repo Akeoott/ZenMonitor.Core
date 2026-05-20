@@ -25,6 +25,6 @@ internal static class NullRegistration
         services.AddSingleton<IMemory, NullMemory>();
         services.AddSingleton<INetwork, NullNetwork>();
         services.AddSingleton<ISystem, NullSystem>();
-        services.AddSingleton<IHardwareMonitor, NullHardwareMonitor>();
+        services.AddSingleton<IHardwareMonitor, HardwareMonitor>();
     }
 }
