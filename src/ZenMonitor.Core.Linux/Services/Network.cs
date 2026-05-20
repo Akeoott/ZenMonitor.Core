@@ -20,9 +20,9 @@ public class Network(ILogger<Network> logger) : INetwork
     private readonly ILogger<Network> _logger = logger;
     private readonly NetworkInfoSnapshot _snapshot = new("");
 
-    /// <summary>Updates all cached network metrics.</summary>
+    /// <inheritdoc />
     public void Update() => _logger.LogWarning("Network is not implemented yet. Returning empty snapshot...");
 
-    /// <summary>Returns a placeholder value.</summary>
+    /// <inheritdoc />
     public string GetNone() => _snapshot.None;
 }

@@ -22,28 +22,28 @@ public class Memory(ILogger<Memory> logger, IFileSystem fileSystem) : IMemory
     private readonly IFileSystem _fileSystem = fileSystem;
     private MemoryInfoSnapshot _snapshot = new(0, 0, 0, 0, 0, 0, 0);
 
-    /// <summary>Updates all cached memory metrics by reading from system files.</summary>
+    /// <inheritdoc />
     public void Update() => _snapshot = FetchMemoryInfo();
 
-    /// <summary>Returns total physical memory in GiB.</summary>
+    /// <inheritdoc />
     public double GetMemTotal() => _snapshot.MemTotal;
 
-    /// <summary>Returns free physical memory in GiB.</summary>
+    /// <inheritdoc />
     public double GetMemFree() => _snapshot.MemFree;
 
-    /// <summary>Returns available physical memory in GiB.</summary>
+    /// <inheritdoc />
     public double GetMemAvailable() => _snapshot.MemAvailable;
 
-    /// <summary>Returns used physical memory in GiB.</summary>
+    /// <inheritdoc />
     public double GetMemUsed() => _snapshot.MemUsed;
 
-    /// <summary>Returns cached memory in GiB.</summary>
+    /// <inheritdoc />
     public double GetCached() => _snapshot.Cached;
 
-    /// <summary>Returns total swap space in GiB.</summary>
+    /// <inheritdoc />
     public double GetSwapTotal() => _snapshot.SwapTotal;
 
-    /// <summary>Returns free swap space in GiB.</summary>
+    /// <inheritdoc />
     public double GetSwapFree() => _snapshot.SwapFree;
 
     private MemoryInfoSnapshot FetchMemoryInfo()

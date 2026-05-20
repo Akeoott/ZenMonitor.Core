@@ -17,19 +17,19 @@ namespace ZenMonitor.Core.Linux.Services;
 /// information from <c>df</c> and disk I/O stats from <c>/proc/diskstats</c>.
 /// </summary>
 [SupportedOSPlatform("linux")]
-public class Drive(ILogger<Drive> logger, IFileSystem fileSystem, IHelper helper) : IDrive
+public class Drive(ILogger<Drive> logger, IFileSystem fileSystem, IServiceAbstraction helper) : IDrive
 {
     private readonly ILogger<Drive> _logger = logger;
     private readonly IFileSystem _fileSystem = fileSystem;
-    private readonly IHelper _helper = helper;
+    private readonly IServiceAbstraction _helper = helper;
     private DriveInfoSnapshot _snapshot = new([]);
 
     private readonly Dictionary<string, (long ioTime, DateTime time)> _previousDiskStats = [];
 
-    /// <summary>Updates all cached drive metrics by reading from system files.</summary>
+    /// <inheritdoc />
     public void Update() => _snapshot = FetchDriveInfo();
 
-    /// <summary>Returns information about all mounted filesystems.</summary>
+    /// <inheritdoc />
     public DriveMountInfo[] GetMountInfos() => _snapshot.MountInfos;
 
     private DriveInfoSnapshot FetchDriveInfo()

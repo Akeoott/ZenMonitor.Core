@@ -9,7 +9,7 @@ namespace ZenMonitor.Core.Services;
 /// <summary>
 ///
 /// </summary>
-public sealed class Helper(ILinux linux, IWindows windows) : IHelper
+public sealed class Helper(ILinux linux, IWindows windows) : IServiceAbstraction
 {
     /// <summary> </summary>
     public ILinux Linux { get; } = linux;

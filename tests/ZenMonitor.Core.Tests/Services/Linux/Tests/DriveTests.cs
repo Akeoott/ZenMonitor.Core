@@ -22,13 +22,13 @@ public class DriveTests
 {
     private readonly Mock<ILogger<Drive>> _mockLogger;
     private readonly MockFileSystem _mockFileSystem;
-    private readonly Mock<IHelper> _mockHelper;
+    private readonly Mock<IServiceAbstraction> _mockHelper;
 
     public DriveTests()
     {
         _mockLogger = new Mock<ILogger<Drive>>();
         _mockFileSystem = new MockFileSystem();
-        _mockHelper = new Mock<IHelper>();
+        _mockHelper = new Mock<IServiceAbstraction>();
     }
 
     private Drive CreateDrive() => new(_mockLogger.Object, _mockFileSystem, _mockHelper.Object);

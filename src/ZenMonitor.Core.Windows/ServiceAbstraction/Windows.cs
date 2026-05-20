@@ -11,7 +11,7 @@ using Microsoft.Win32;
 using ZenMonitor.Core.Interfaces;
 using ZenMonitor.Core.Models;
 
-namespace ZenMonitor.Core.Windows.Helper;
+namespace ZenMonitor.Core.Windows.ServiceAbstraction;
 
 /// <summary>
 /// Windows implementation of <see cref="IWindows"/> using native Win32 API calls
@@ -21,74 +21,6 @@ namespace ZenMonitor.Core.Windows.Helper;
 [SupportedOSPlatform("windows")]
 public partial class Windows : IWindows
 {
-    // Win32 API Declarations
-
-    [LibraryImport("kernel32.dll")]
-    private static partial void GetSystemInfo(out SYSTEM_INFO lpSystemInfo);
-
-    [LibraryImport("kernel32.dll")]
-    private static partial int GetSystemTimes(
-        out long lpIdleTime,
-        out long lpKernelTime,
-        out long lpUserTime);
-
-    [LibraryImport("ntdll.dll")]
-    private static partial int NtQuerySystemInformation(
-        int SystemInformationClass,
-        IntPtr SystemInformation,
-        int SystemInformationLength,
-        out int ReturnLength);
-
-    [LibraryImport("powrprof.dll")]
-    private static partial int CallNtPowerInformation(
-        int InformationLevel,
-        IntPtr lpInputBuffer,
-        int nInputBufferSize,
-        out SYSTEM_POWER_INFORMATION lpOutputBuffer,
-        int nOutputBufferSize);
-
-    // Structs
-
-    [StructLayout(LayoutKind.Sequential)]
-    private struct SYSTEM_INFO
-    {
-        public ushort wProcessorArchitecture;
-        public ushort wReserved;
-        public uint dwPageSize;
-        public IntPtr lpMinimumApplicationAddress;
-        public IntPtr lpMaximumApplicationAddress;
-        public IntPtr dwActiveProcessorMask;
-        public uint dwNumberOfProcessors;
-        public uint dwProcessorType;
-        public uint dwAllocationGranularity;
-        public ushort wProcessorLevel;
-        public ushort wProcessorRevision;
-    }
-
-    [StructLayout(LayoutKind.Sequential)]
-    private struct SYSTEM_PROCESSOR_PERFORMANCE_INFORMATION
-    {
-        public long IdleTime;
-        public long KernelTime;
-        public long UserTime;
-        public long Reserved1;
-        public long Reserved2;
-    }
-
-    [StructLayout(LayoutKind.Sequential)]
-    private struct SYSTEM_POWER_INFORMATION
-    {
-        public ulong MaxIdlenessAllowed;
-        public ulong Idleness;
-        public ulong TimeRemaining;
-        public byte CoolingMode;
-    }
-
-    private const int SystemProcessorPerformanceInformation = 8;
-    private const int SystemPowerInformation = 5;
-
-    // IWindows Implementation
-
     /// <inheritdoc />
     public string GetProcessorName()
     {
@@ -130,8 +62,7 @@ public partial class Windows : IWindows
     /// <inheritdoc />
     public CpuTickInfo GetSystemTimes()
     {
-        long idle = 0, kernel = 0, user = 0;
-        int result = GetSystemTimes(out idle, out kernel, out user);
+        int result = GetSystemTimes(out long idle, out long kernel, out long user);
         if (result == 0)
             return new CpuTickInfo(0, 0, 0);
 

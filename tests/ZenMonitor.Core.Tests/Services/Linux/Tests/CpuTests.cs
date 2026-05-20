@@ -22,13 +22,13 @@ public class CpuTests
 {
     private readonly Mock<ILogger<Cpu>> _mockLogger;
     private readonly MockFileSystem _mockFileSystem;
-    private readonly Mock<IHelper> _mockHelper;
+    private readonly Mock<IServiceAbstraction> _mockHelper;
 
     public CpuTests()
     {
         _mockLogger = new Mock<ILogger<Cpu>>();
         _mockFileSystem = new MockFileSystem();
-        _mockHelper = new Mock<IHelper>();
+        _mockHelper = new Mock<IServiceAbstraction>();
     }
 
     private Cpu CreateCpu() => new(_mockLogger.Object, _mockFileSystem, _mockHelper.Object);

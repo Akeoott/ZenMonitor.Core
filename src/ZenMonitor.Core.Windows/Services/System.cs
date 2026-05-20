@@ -23,22 +23,22 @@ public class System(ILogger<System> logger, IFileSystem fileSystem) : ISystem
     private SystemInfoSnapshot _snapshot = new(
         "", "", 0, 0, 0);
 
-    /// <summary>Updates all cached system info by reading from system files.</summary>
+    /// <inheritdoc />
     public void Update() => _snapshot = FetchSystemInfo();
 
-    /// <summary>Returns the operating system kernel version string.</summary>
+    /// <inheritdoc />
     public string GetKernelVersion() => _snapshot.KernelVersion;
 
-    /// <summary>Returns the system hostname.</summary>
+    /// <inheritdoc />
     public string GetHostname() => _snapshot.Hostname;
 
-    /// <summary>Returns the system uptime in seconds.</summary>
+    /// <inheritdoc />
     public double GetUptimeSeconds() => _snapshot.UptimeSeconds;
 
-    /// <summary>Returns the number of currently running tasks/processes.</summary>
+    /// <inheritdoc />
     public int GetRunningTasks() => _snapshot.RunningTasks;
 
-    /// <summary>Returns the total number of tasks/processes on the system.</summary>
+    /// <inheritdoc />
     public int GetTotalTasks() => _snapshot.TotalTasks;
 
     private SystemInfoSnapshot FetchSystemInfo()

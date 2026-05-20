@@ -16,16 +16,16 @@ namespace ZenMonitor.Core.Windows.Services;
 /// via native Win32 API calls through <see cref="IWindows"/>.
 /// </summary>
 [SupportedOSPlatform("windows")]
-public class Drive(ILogger<Drive> logger, IHelper helper) : IDrive
+public class Drive(ILogger<Drive> logger, IServiceAbstraction helper) : IDrive
 {
     private readonly ILogger<Drive> _logger = logger;
-    private readonly IHelper _helper = helper;
+    private readonly IServiceAbstraction _helper = helper;
     private DriveInfoSnapshot _snapshot = new([]);
 
-    /// <summary>Updates all cached drive metrics by reading from system files.</summary>
+    /// <inheritdoc />
     public void Update() => _snapshot = FetchDriveInfo();
 
-    /// <summary>Returns information about all mounted filesystems.</summary>
+    /// <inheritdoc />
     public DriveMountInfo[] GetMountInfos() => _snapshot.MountInfos;
 
     private DriveInfoSnapshot FetchDriveInfo()

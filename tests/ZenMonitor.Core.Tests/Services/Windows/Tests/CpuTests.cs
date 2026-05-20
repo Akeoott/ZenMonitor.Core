@@ -20,14 +20,14 @@ namespace ZenMonitor.Core.Tests.Services.Windows.Tests;
 public class CpuTests
 {
     private readonly Mock<ILogger<Cpu>> _mockLogger;
-    private readonly Mock<IHelper> _mockHelper;
+    private readonly Mock<IServiceAbstraction> _mockHelper;
     private readonly Mock<IWindows> _mockWindows;
 
     public CpuTests()
     {
         _mockLogger = new Mock<ILogger<Cpu>>();
         _mockWindows = new Mock<IWindows>();
-        _mockHelper = new Mock<IHelper>();
+        _mockHelper = new Mock<IServiceAbstraction>();
         _mockHelper.Setup(h => h.Windows).Returns(_mockWindows.Object);
     }
 

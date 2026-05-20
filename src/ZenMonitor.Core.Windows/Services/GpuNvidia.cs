@@ -16,38 +16,38 @@ namespace ZenMonitor.Core.Windows.Services;
 /// Reads metrics via the <c>nvidia-smi</c> CLI tool.
 /// </summary>
 [SupportedOSPlatform("windows")]
-public class GpuNvidia(ILogger<GpuNvidia> logger, IHelper helper) : IGpu
+public class GpuNvidia(ILogger<GpuNvidia> logger, IServiceAbstraction helper) : IGpu
 {
     private readonly ILogger<GpuNvidia> _logger = logger;
-    private readonly IHelper _helper = helper;
+    private readonly IServiceAbstraction _helper = helper;
     private GpuInfoSnapshot _snapshot = new(
         "", 0, 0, 0.0, 0.0, 0, "", 0.0);
 
-    /// <summary>Updates all cached GPU metrics.</summary>
+    /// <inheritdoc />
     public void Update() => _snapshot = FetchGpuInfo();
 
-    /// <summary>Returns the GPU model name.</summary>
+    /// <inheritdoc />
     public string GetGpuName() => _snapshot.GpuName;
 
-    /// <summary>Returns the GPU core utilization percentage (0-100).</summary>
+    /// <inheritdoc />
     public int GetUsageGpu() => _snapshot.UsageGpu;
 
-    /// <summary>Returns the GPU memory utilization percentage (0-100).</summary>
+    /// <inheritdoc />
     public int GetUsageMemory() => _snapshot.UsageMemory;
 
-    /// <summary>Returns the GPU memory used in megabytes.</summary>
+    /// <inheritdoc />
     public double GetMemoryUsed() => _snapshot.MemoryUsed;
 
-    /// <summary>Returns the total GPU memory in megabytes.</summary>
+    /// <inheritdoc />
     public double GetMemoryTotal() => _snapshot.MemoryTotal;
 
-    /// <summary>Returns the GPU temperature in degrees Celsius.</summary>
+    /// <inheritdoc />
     public int GetTemperatureGpu() => _snapshot.TemperatureGpu;
 
-    /// <summary>Returns the current GPU power state.</summary>
+    /// <inheritdoc />
     public string GetPowerState() => _snapshot.PowerState;
 
-    /// <summary>Returns the current GPU power draw in watts.</summary>
+    /// <inheritdoc />
     public double GetPowerDraw() => _snapshot.PowerDraw;
 
     private GpuInfoSnapshot FetchGpuInfo()

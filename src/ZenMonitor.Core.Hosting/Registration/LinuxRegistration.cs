@@ -40,7 +40,7 @@ internal static class LinuxRegistration
     public static void Register(IServiceCollection services, out bool gpuNotSupported)
     {
         // Infrastructure
-        services.AddSingleton<IHelper, Helper>();
+        services.AddSingleton<IServiceAbstraction, Helper>();
 
         // Platform-level services
         services.AddSingleton<ICpu, Cpu>();

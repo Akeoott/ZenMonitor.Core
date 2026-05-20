@@ -20,12 +20,12 @@ namespace ZenMonitor.Core.Tests.Services.Linux.Tests;
 public class GpuNvidiaTests
 {
     private readonly Mock<ILogger<GpuNvidia>> _mockLogger;
-    private readonly Mock<IHelper> _mockHelper;
+    private readonly Mock<IServiceAbstraction> _mockHelper;
 
     public GpuNvidiaTests()
     {
         _mockLogger = new Mock<ILogger<GpuNvidia>>();
-        _mockHelper = new Mock<IHelper>();
+        _mockHelper = new Mock<IServiceAbstraction>();
     }
 
     [Fact]
