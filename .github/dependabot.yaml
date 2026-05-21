@@ -13,3 +13,10 @@ updates:
       semver-major-days: 14
       semver-minor-days: 7
       semver-patch-days: 3
+    groups:
+      non-major-updates:
+        patterns:
+          - "*"
+        update-types:
+          - "minor"
+          - "patch"
