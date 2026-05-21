@@ -5,7 +5,8 @@ updates:
       - "/src/ZenMonitor.Core*"
       - "/tests/ZenMonitor.Core*"
     schedule:
-      interval: "daily"
+      interval: "weekly"
+      day: "friday"
       time: "08:00"
       timezone: "Europe/Berlin"
     cooldown:
