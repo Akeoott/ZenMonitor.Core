@@ -44,6 +44,10 @@ labels:
     color: 54b2ff
     description: A problem or change related to CI/CD workflows.
 
+  - name: "Type: Dependencies"
+    color: ce54e3
+    description: A problem or enhancement related to a Dependencies.
+
   - name: "Status: Awaiting Review"
     color: 24d15d
     description: Ready for review.
