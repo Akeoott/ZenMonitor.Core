@@ -28,11 +28,6 @@ public static class TestData
     public static string Stat2() => ReadFile("stat2");
 
     /// <summary>
-    /// /sys/class/hwmon directory listing (not a file, we'll handle hwmon as a set of files later)
-    /// </summary>
-    //! For hwmon, we'll define separate methods for individual files when needed.
-
-    /// <summary>
     /// /sys/class/powercap/intel-rapl:0/energy_uj
     /// </summary>
     public static string EnergyUj1() => ReadFile("energy_uj1");
@@ -108,6 +103,21 @@ public static class TestData
     /// /proc/diskstats second snapshot
     /// </summary>
     public static string DiskStats2() => ReadFile("diskstats2");
+
+    /// <summary>
+    /// /proc/net/dev first snapshot
+    /// </summary>
+    public static string NetDev1() => ReadFile("proc_net_dev1");
+
+    /// <summary>
+    /// /proc/net/dev second snapshot
+    /// </summary>
+    public static string NetDev2() => ReadFile("proc_net_dev2");
+
+    /// <summary>
+    /// /sys/class/net/eth0/operstate
+    /// </summary>
+    public static string OperstateEth0() => ReadFile("operstate_eth0");
 
     private static string ReadFile(string filename)
     {
