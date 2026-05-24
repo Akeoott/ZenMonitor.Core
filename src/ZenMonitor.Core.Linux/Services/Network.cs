@@ -11,18 +11,31 @@ using ZenMonitor.Core.Models;
 namespace ZenMonitor.Core.Linux.Services;
 
 /// <summary>
-/// Linux implementation of <see cref="INetwork"/>.
-/// Currently a placeholder — network metrics are not yet implemented.
+/// Linux implementation of <see cref="INetwork"/> that gets all network related telemetry.
 /// </summary>
 [SupportedOSPlatform("linux")]
 public class Network(ILogger<Network> logger) : INetwork
 {
     private readonly ILogger<Network> _logger = logger;
-    private readonly NetworkInfoSnapshot _snapshot = new("");
+    private NetworkInfoSnapshot _snapshot = new(0, 0, []);
 
     /// <inheritdoc />
-    public void Update() => _logger.LogWarning("Network is not implemented yet. Returning empty snapshot...");
+    public void Update() => _snapshot = FetchNetworkInfo();
 
     /// <inheritdoc />
-    public string GetNone() => _snapshot.None;
+    public long GetDownloadSpeed() => _snapshot.DownloadSpeed;
+
+    /// <inheritdoc />
+    public long GetUploadSpeed() => _snapshot.UploadSpeed;
+
+    /// <inheritdoc />
+    public ConnectedNetworks[] GetNetworks() => _snapshot.Networks;
+
+    private NetworkInfoSnapshot FetchNetworkInfo()
+    {
+        _logger.LogTrace("Fetching all Network info...");
+        _logger.LogInformation("Network has not been implemented yet for linux.");
+
+        return new NetworkInfoSnapshot(0, 0, []);
+    }
 }

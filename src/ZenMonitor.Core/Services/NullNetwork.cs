@@ -2,6 +2,7 @@
 // See the LICENSE file in the repository root for full license text.
 
 using ZenMonitor.Core.Abstractions;
+using ZenMonitor.Core.Models;
 
 namespace ZenMonitor.Core.Services;
 
@@ -9,11 +10,17 @@ namespace ZenMonitor.Core.Services;
 /// No-op <see cref="INetwork"/> implementation.
 /// Used as a fallback when the platform is unsupported or detection fails.
 /// </summary>
-public sealed class NullNetwork : INetwork
+public class NullNetwork : INetwork
 {
     /// <summary>No-op update — does nothing.</summary>
     public void Update() { }
 
-    /// <summary>Returns an empty string.</summary>
-    public string GetNone() => "";
+    /// <summary>Returns 0.</summary>
+    public long GetDownloadSpeed() => 0;
+
+    /// <summary>Returns 0.</summary>
+    public long GetUploadSpeed() => 0;
+
+    /// <summary>Returns an empty array.</summary>
+    public ConnectedNetworks[] GetNetworks() => [];
 }
