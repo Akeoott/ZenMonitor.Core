@@ -39,6 +39,11 @@ public static class DependencyInjection
     {
         // Common infrastructure, used by all platforms
         services.AddSingleton<IFileSystem, FileSystem>();
+#pragma warning disable CA1416 // disable validation of platform compatibility
+        services.AddSingleton<ILinux, Linux.ServiceAbstraction.Linux>();
+        services.AddSingleton<IWindows, Windows.ServiceAbstraction.Windows>();
+        services.AddSingleton<IServiceAbstraction, ServiceAbstraction>();
+#pragma warning restore CA1416 // warning will appear if used elsewhere
 
         gpuNotSupported = false;
 
