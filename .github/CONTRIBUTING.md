@@ -40,6 +40,8 @@ Please follow it in all your interactions with the project.
 dotnet restore
 dotnet build
 dotnet test
+# Platform specific tests may fail,
+# depending on what platform you're on.
 ```
 
 </details>
@@ -94,12 +96,17 @@ The project uses **xUnit**. Tests are organized under `ZenMonitor.Core.Tests/`.
 ### Running Tests Locally
 
 ```bash
-# All tests
-dotnet test
+dotnet test # All tests
 
-# With code coverage
-dotnet test --collect:"XPlat Code Coverage" --settings coverlet.runsettings
+# All Linux specific tests
+dotnet test --filter "Platform=Linux"
+
+# All Windows specific tests
+dotnet test --filter "Platform=Windows"
 ```
+
+Platform specific tests may fail,
+depending on what platform you're on.
 
 Coverage configuration is in [`coverlet.runsettings`](https://github.com/Akeoott/ZenMonitor.Core/blob/main/coverlet.runsettings). Output is written to `./coverage/`.
 
@@ -116,10 +123,8 @@ The CI workflow (`.github/workflows/tests.yml`) runs on every push and pull requ
 Patch coverage is set to `informational: true` (see `.github/codecov.yml`), so a coverage drop won't block a PR — but aim to cover new code. Maintainers might tell you to add more Unit Tests.
 
 > [!NOTE]
-> When creating a pull request to main,<br>
-> Codecov will automatically run Unit Tests and determine coverage.
-
-We want deterministic data, checking for exact values instead of simple null checks etc.
+> In tests, we want deterministic data,<br>
+> checking for exact values instead of simple null checks etc.
 
 </details>
 
@@ -187,7 +192,10 @@ If you haven't configured Git for signing yet:
 git config --global user.name "Your Name"
 git config --global user.email "your-email@example.com"
 
-# Tell Git which signing key to use (get the key ID from gpg --list-secret-keys)
+# Get your secret key id
+gpg --list-secret-keys
+
+# Tell Git which signing key to use
 git config --global user.signingkey <key-id>
 
 # Enable signing for all commits
@@ -265,11 +273,19 @@ Prefixes: `feature/`, `fix/`, `docs/`, `chore/`, `refactor/`, `test/`
 
 ### Pull Request Process
 
-1. Ensure your branch is up to date with the upstream `main`:
-   ```bash
-   git fetch upstream
-   git rebase upstream/main
-   ```
+1. Ensure your branch is up to date with the `origin/main`:
+    ```bash
+    # 1. Update your local main branch
+    git checkout main
+    git pull origin main
+
+    # 2. Switch back to your feature branch
+    git checkout your-feature-branch
+
+    # 3. Merge or rebase main into your feature branch
+    git merge main # Use when others are on your branch.
+    git rebase main # Use when your the only one on your branch.
+    ```
 2. Open the PR against the `main` branch.
 3. Fill out the [pull request template](https://github.com/Akeoott/ZenMonitor.Core/blob/main/.github/pull_request_template.md).
 4. Ensure all CI checks pass.
@@ -291,4 +307,4 @@ Exceptions for squash merges are when there are changes that go beyond the scope
 
 ---
 
-*Thank you for contributing to ZenMonitor.Core!*
+***Thank you for contributing to ZenMonitor.Core!***
