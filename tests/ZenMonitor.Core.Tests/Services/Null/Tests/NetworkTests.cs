@@ -13,6 +13,8 @@ public class NetworkTests
     {
         Core.Services.NullNetwork network = new();
         network.Update();
-        Assert.Equal("", network.GetNone());
+        Assert.Equal(0, network.GetUploadSpeed());
+        Assert.Equal(0, network.GetDownloadSpeed());
+        Assert.Equal([], network.GetNetworks());
     }
 }

@@ -61,8 +61,6 @@ internal static class LinuxRegistration
                 _ => new NullGpu(),
             };
         });
-
-        services.AddSingleton<IHardwareMonitor, HardwareMonitor>();
     }
 
     private static GpuVendor DetectGpuVendor()
