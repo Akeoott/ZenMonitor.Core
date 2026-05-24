@@ -20,12 +20,12 @@ namespace ZenMonitor.Core.Tests.Services.Linux.Tests;
 public class GpuNvidiaTests
 {
     private readonly Mock<ILogger<GpuNvidia>> _mockLogger;
-    private readonly Mock<IHelper> _mockHelper;
+    private readonly Mock<IServiceAbstraction> _mockHelper;
 
     public GpuNvidiaTests()
     {
         _mockLogger = new Mock<ILogger<GpuNvidia>>();
-        _mockHelper = new Mock<IHelper>();
+        _mockHelper = new Mock<IServiceAbstraction>();
     }
 
     [Fact]
@@ -34,7 +34,7 @@ public class GpuNvidiaTests
         // Arrange
         string output = "GeForce RTX 4090, 12, 6, 1024, 24576, 72, P0, 450.00";
         _mockHelper
-            .Setup(r => r.RunProcess("nvidia-smi", It.IsAny<string>()))
+            .Setup(r => r.Linux.RunProcess("nvidia-smi", It.IsAny<string>()))
             .Returns(new ProcessResult(0, output, string.Empty));
 
         var gpu = new GpuNvidia(_mockLogger.Object, _mockHelper.Object);
@@ -58,7 +58,7 @@ public class GpuNvidiaTests
     {
         // Arrange
         _mockHelper
-            .Setup(r => r.RunProcess("nvidia-smi", It.IsAny<string>()))
+            .Setup(r => r.Linux.RunProcess("nvidia-smi", It.IsAny<string>()))
             .Returns(new ProcessResult(1, string.Empty, "Failed to query GPU"));
 
         var gpu = new GpuNvidia(_mockLogger.Object, _mockHelper.Object);

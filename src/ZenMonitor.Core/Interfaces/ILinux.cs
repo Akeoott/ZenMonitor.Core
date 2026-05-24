@@ -1,6 +1,8 @@
 // Copyright (c) Ame (Akeoot/Akeoott) <akeoot@pm.me>. Licensed under the LGPL-3.0 Licence.
 // See the LICENSE file in the repository root for full license text.
 
+using System.Runtime.Versioning;
+
 using ZenMonitor.Core.Models;
 
 namespace ZenMonitor.Core.Interfaces;
@@ -8,7 +10,8 @@ namespace ZenMonitor.Core.Interfaces;
 /// <summary>
 /// Abstraction for system-level operations that need to be mockable in tests.
 /// </summary>
-public interface IHelper
+[SupportedOSPlatform("linux")]
+public interface ILinux
 {
     /// <summary>Gets the current UTC date and time.</summary>
     DateTime UtcNow { get; }

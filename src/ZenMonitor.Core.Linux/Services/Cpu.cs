@@ -17,12 +17,12 @@ namespace ZenMonitor.Core.Linux.Services;
 /// <c>/proc</c> and <c>/sys</c> filesystems.
 /// </summary>
 [SupportedOSPlatform("linux")]
-public class Cpu(ILogger<Cpu> logger, IFileSystem fileSystem, IHelper helper) : ICpu
+public class Cpu(ILogger<Cpu> logger, IFileSystem fileSystem, IServiceAbstraction helper) : ICpu
 {
     private const string EnergyUjPath = "/sys/class/powercap/intel-rapl:0/energy_uj";
     private readonly ILogger<Cpu> _logger = logger;
     private readonly IFileSystem _fileSystem = fileSystem;
-    private readonly IHelper _helper = helper;
+    private readonly IServiceAbstraction _helper = helper;
     private CpuInfoSnapshot _snapshot = new("", 0, 0, 0, 0, [], [], []);
 
     private long[] _currentTotalTicks = [];
@@ -33,31 +33,31 @@ public class Cpu(ILogger<Cpu> logger, IFileSystem fileSystem, IHelper helper) : 
     private double _prevEnergyUj;
     private DateTime _prevEnergyTime;
 
-    /// <summary>Updates all cached CPU metrics by reading from system files.</summary>
+    /// <inheritdoc />
     public void Update() => _snapshot = FetchCpuInfo();
 
-    /// <summary>Returns the CPU model name.</summary>
+    /// <inheritdoc />
     public string GetCpuName() => _snapshot.CpuName;
 
-    /// <summary>Returns the overall CPU frequency in MHz.</summary>
+    /// <inheritdoc />
     public double GetCpuSpeed() => _snapshot.CpuSpeed;
 
-    /// <summary>Returns the overall CPU usage percentage (0-100).</summary>
+    /// <inheritdoc />
     public int GetCpuUsage() => _snapshot.CpuUsage;
 
-    /// <summary>Returns the overall CPU temperature in degrees Celsius.</summary>
+    /// <inheritdoc />
     public int GetCpuTemp() => _snapshot.CpuTemp;
 
-    /// <summary>Returns the current CPU package power draw in watts.</summary>
+    /// <inheritdoc />
     public double GetPowerDraw() => _snapshot.PowerDraw;
 
-    /// <summary>Returns per-core frequency measurements.</summary>
+    /// <inheritdoc />
     public CpuCoreSpeed[] GetCoreSpeeds() => _snapshot.CoreSpeeds;
 
-    /// <summary>Returns per-core usage percentages (0-100).</summary>
+    /// <inheritdoc />
     public CpuCoreUsage[] GetCoreUsages() => _snapshot.CoreUsages;
 
-    /// <summary>Returns per-core temperature readings in degrees Celsius.</summary>
+    /// <inheritdoc />
     public CpuCoreTemp[] GetCoreTemps() => _snapshot.CoreTemps;
 
     private CpuInfoSnapshot FetchCpuInfo()
@@ -365,7 +365,7 @@ public class Cpu(ILogger<Cpu> logger, IFileSystem fileSystem, IHelper helper) : 
         try
         {
             double energyUj = double.Parse(_fileSystem.File.ReadAllText(EnergyUjPath).Trim());
-            DateTime now = _helper.UtcNow;
+            DateTime now = _helper.Linux.UtcNow;
 
             double power = 0;
             if (_prevEnergyUj > 0)

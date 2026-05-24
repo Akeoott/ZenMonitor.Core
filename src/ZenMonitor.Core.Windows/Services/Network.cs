@@ -8,13 +8,13 @@ using Microsoft.Extensions.Logging;
 using ZenMonitor.Core.Abstractions;
 using ZenMonitor.Core.Models;
 
-namespace ZenMonitor.Core.Linux.Services;
+namespace ZenMonitor.Core.Windows.Services;
 
 /// <summary>
-/// Linux implementation of <see cref="INetwork"/>.
+/// Windows implementation of <see cref="INetwork"/>.
 /// Currently a placeholder — network metrics are not yet implemented.
 /// </summary>
-[SupportedOSPlatform("linux")]
+[SupportedOSPlatform("windows")]
 public class Network(ILogger<Network> logger) : INetwork
 {
     private readonly ILogger<Network> _logger = logger;

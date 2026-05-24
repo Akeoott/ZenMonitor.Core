@@ -9,13 +9,13 @@ using Microsoft.Extensions.Logging;
 using ZenMonitor.Core.Abstractions;
 using ZenMonitor.Core.Models;
 
-namespace ZenMonitor.Core.Linux.Services;
+namespace ZenMonitor.Core.Windows.Services;
 
 /// <summary>
-/// Linux implementation of <see cref="ISystem"/> that reads system information
+/// Windows implementation of <see cref="ISystem"/> that reads system information
 /// from <c>/proc/sys</c>, <c>/proc/uptime</c>, and <c>/proc/loadavg</c>.
 /// </summary>
-[SupportedOSPlatform("linux")]
+[SupportedOSPlatform("windows")]
 public class System(ILogger<System> logger, IFileSystem fileSystem) : ISystem
 {
     private readonly ILogger<System> _logger = logger;
@@ -46,22 +46,7 @@ public class System(ILogger<System> logger, IFileSystem fileSystem) : ISystem
         try
         {
             _logger.LogTrace("Fetching all System info...");
-
-            string kernel = _fileSystem.File.ReadAllText("/proc/sys/kernel/osrelease").Trim();
-            string hostname = _fileSystem.File.ReadAllText("/proc/sys/kernel/hostname").Trim();
-
-            var uptimeParts = _fileSystem.File.ReadAllText("/proc/uptime").Trim().Split(' ');
-            double uptime = double.Parse(uptimeParts[0]);
-
-            var loadParts = _fileSystem.File.ReadAllText("/proc/loadavg").Trim().Split(' ');
-
-            var tasks = loadParts[3].Split('/');
-            int running = int.Parse(tasks[0]);
-            int total = int.Parse(tasks[1]);
-
-            return new SystemInfoSnapshot(
-                kernel, hostname, uptime,
-                running, total);
+            throw new NotImplementedException();
         }
         catch (Exception ex)
         {

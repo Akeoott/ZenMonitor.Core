@@ -44,6 +44,10 @@ public static class DependencyInjection
         {
             LinuxRegistration.Register(services, out gpuNotSupported);
         }
+        else if (OperatingSystem.IsWindows())
+        {
+            WindowsRegistration.Register(services, out gpuNotSupported);
+        }
         else
         {
             NullRegistration.Register(services);

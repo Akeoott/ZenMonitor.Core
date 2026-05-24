@@ -8,23 +8,19 @@ using System.Runtime.Versioning;
 using ZenMonitor.Core.Interfaces;
 using ZenMonitor.Core.Models;
 
-namespace ZenMonitor.Core.Linux.Services;
+namespace ZenMonitor.Core.Linux.ServiceAbstraction;
 
 /// <summary>
 /// Provides system-level helper operations that are abstracted for testability.
-/// Wraps process execution and time utilities.
 /// </summary>
 [ExcludeFromCodeCoverage]
 [SupportedOSPlatform("linux")]
-public class Helper : IHelper
+public class Linux : ILinux
 {
-    /// <summary>Returns the current UTC date and time.</summary>
+    /// <inheritdoc />
     public DateTime UtcNow => DateTime.UtcNow;
 
-    /// <summary>
-    /// Runs an external process with the given filename and arguments.
-    /// Captures standard output, standard error, and the exit code.
-    /// </summary>
+    /// <inheritdoc />
     public ProcessResult RunProcess(string fileName, string arguments)
     {
         var startInfo = new ProcessStartInfo

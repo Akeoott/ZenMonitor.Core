@@ -17,19 +17,19 @@ namespace ZenMonitor.Core.Linux.Services;
 /// information from <c>df</c> and disk I/O stats from <c>/proc/diskstats</c>.
 /// </summary>
 [SupportedOSPlatform("linux")]
-public class Drive(ILogger<Drive> logger, IFileSystem fileSystem, IHelper helper) : IDrive
+public class Drive(ILogger<Drive> logger, IFileSystem fileSystem, IServiceAbstraction helper) : IDrive
 {
     private readonly ILogger<Drive> _logger = logger;
     private readonly IFileSystem _fileSystem = fileSystem;
-    private readonly IHelper _helper = helper;
+    private readonly IServiceAbstraction _helper = helper;
     private DriveInfoSnapshot _snapshot = new([]);
 
     private readonly Dictionary<string, (long ioTime, DateTime time)> _previousDiskStats = [];
 
-    /// <summary>Updates all cached drive metrics by reading from system files.</summary>
+    /// <inheritdoc />
     public void Update() => _snapshot = FetchDriveInfo();
 
-    /// <summary>Returns information about all mounted filesystems.</summary>
+    /// <inheritdoc />
     public DriveMountInfo[] GetMountInfos() => _snapshot.MountInfos;
 
     private DriveInfoSnapshot FetchDriveInfo()
@@ -102,7 +102,7 @@ public class Drive(ILogger<Drive> logger, IFileSystem fileSystem, IHelper helper
 
                 if (_previousDiskStats.TryGetValue(name, out var prev))
                 {
-                    double deltaTime = (_helper.UtcNow - prev.time).TotalMilliseconds;
+                    double deltaTime = (_helper.Linux.UtcNow - prev.time).TotalMilliseconds;
                     double deltaIo = ioTime - prev.ioTime;
                     double usage = deltaTime > 0 ? deltaIo / deltaTime * 100 : 0;
                     ioUsages[name] = usage;
@@ -112,7 +112,7 @@ public class Drive(ILogger<Drive> logger, IFileSystem fileSystem, IHelper helper
                     ioUsages[name] = 0;
                 }
 
-                _previousDiskStats[name] = (ioTime, _helper.UtcNow);
+                _previousDiskStats[name] = (ioTime, _helper.Linux.UtcNow);
             }
         }
 
@@ -121,7 +121,7 @@ public class Drive(ILogger<Drive> logger, IFileSystem fileSystem, IHelper helper
 
     private string RunDf(string arguments)
     {
-        var result = _helper.RunProcess("df", arguments);
+        var result = _helper.Linux.RunProcess("df", arguments);
         if (result.ExitCode != 0)
         {
             _logger.LogError("df failed: {Error}", result.StandardError);

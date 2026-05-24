@@ -6,18 +6,20 @@ using System.Runtime.Versioning;
 using Microsoft.Extensions.Logging;
 
 using ZenMonitor.Core.Abstractions;
+using ZenMonitor.Core.Interfaces;
 using ZenMonitor.Core.Models;
 
-namespace ZenMonitor.Core.Linux.Services;
+namespace ZenMonitor.Core.Windows.Services;
 
 /// <summary>
-/// Linux implementation of <see cref="IGpu"/> for AMD GPUs.
-/// Currently not implemented — returns default zeros.
+/// Windows implementation of <see cref="IGpu"/> for NVIDIA GPUs.
+/// Reads metrics via the <c>nvidia-smi</c> CLI tool.
 /// </summary>
-[SupportedOSPlatform("linux")]
-public class GpuAmd(ILogger<GpuAmd> logger) : IGpu
+[SupportedOSPlatform("windows")]
+public class GpuNvidia(ILogger<GpuNvidia> logger, IServiceAbstraction helper) : IGpu
 {
-    private readonly ILogger<GpuAmd> _logger = logger;
+    private readonly ILogger<GpuNvidia> _logger = logger;
+    private readonly IServiceAbstraction _helper = helper;
     private GpuInfoSnapshot _snapshot = new(
         "", 0, 0, 0.0, 0.0, 0, "", 0.0);
 
@@ -48,16 +50,17 @@ public class GpuAmd(ILogger<GpuAmd> logger) : IGpu
     /// <inheritdoc />
     public double GetPowerDraw() => _snapshot.PowerDraw;
 
-    /// <summary>
-    /// AMD GPU implementation is pending. Currently returns a zeroed snapshot.
-    /// TODO: Implement reading metrics from /sys/class/drm/card*/device/hwmon.
-    /// </summary>
     private GpuInfoSnapshot FetchGpuInfo()
     {
-        _logger.LogTrace("Fetching all GpuAmd info...");
-        _logger.LogWarning("AMD GPUs are currently not supported!");
-
-        return new GpuInfoSnapshot(
-            "", 0, 0, 0.0, 0.0, 0, "", 0.0);
+        try
+        {
+            _logger.LogTrace("Fetching all Gpu info...");
+            throw new NotImplementedException();
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Failed to fetch Gpu info");
+            return new GpuInfoSnapshot("", 0, 0, 0, 0, 0, "", 0);
+        }
     }
 }

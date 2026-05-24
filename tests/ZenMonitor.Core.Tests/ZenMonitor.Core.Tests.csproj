@@ -28,6 +28,7 @@
   <ItemGroup>
     <ProjectReference Include="..\..\src\ZenMonitor.Core\ZenMonitor.Core.csproj" />
     <ProjectReference Include="..\..\src\ZenMonitor.Core.Linux\ZenMonitor.Core.Linux.csproj" />
+    <ProjectReference Include="..\..\src\ZenMonitor.Core.Windows\ZenMonitor.Core.Windows.csproj" />
   </ItemGroup>
 
   <ItemGroup>

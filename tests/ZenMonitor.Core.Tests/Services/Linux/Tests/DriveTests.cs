@@ -22,13 +22,13 @@ public class DriveTests
 {
     private readonly Mock<ILogger<Drive>> _mockLogger;
     private readonly MockFileSystem _mockFileSystem;
-    private readonly Mock<IHelper> _mockHelper;
+    private readonly Mock<IServiceAbstraction> _mockHelper;
 
     public DriveTests()
     {
         _mockLogger = new Mock<ILogger<Drive>>();
         _mockFileSystem = new MockFileSystem();
-        _mockHelper = new Mock<IHelper>();
+        _mockHelper = new Mock<IServiceAbstraction>();
     }
 
     private Drive CreateDrive() => new(_mockLogger.Object, _mockFileSystem, _mockHelper.Object);
@@ -38,9 +38,9 @@ public class DriveTests
     {
         // Arrange
         _mockFileSystem.AddFile("/proc/diskstats", new MockFileData(TestData.DiskStats1()));
-        _mockHelper.Setup(h => h.RunProcess("df", "-T -B1"))
+        _mockHelper.Setup(h => h.Linux.RunProcess("df", "-T -B1"))
                    .Returns(new ProcessResult(0, TestData.DfOutput(), ""));
-        _mockHelper.Setup(c => c.UtcNow).Returns(new DateTime(2026, 1, 1, 0, 0, 1));
+        _mockHelper.Setup(c => c.Linux.UtcNow).Returns(new DateTime(2026, 1, 1, 0, 0, 1));
 
         var drive = CreateDrive();
 
@@ -60,7 +60,7 @@ public class DriveTests
 
         // Arrange
         _mockFileSystem.AddFile("/proc/diskstats", new MockFileData(TestData.DiskStats2()));
-        _mockHelper.Setup(c => c.UtcNow).Returns(new DateTime(2026, 1, 1, 0, 0, 5));
+        _mockHelper.Setup(c => c.Linux.UtcNow).Returns(new DateTime(2026, 1, 1, 0, 0, 5));
 
         // Act
         drive.Update();
