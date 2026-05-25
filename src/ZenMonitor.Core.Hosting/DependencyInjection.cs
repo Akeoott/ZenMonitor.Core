@@ -7,6 +7,7 @@ using Microsoft.Extensions.DependencyInjection;
 
 using ZenMonitor.Core.Abstractions;
 using ZenMonitor.Core.Hosting.Registration;
+using ZenMonitor.Core.Interfaces;
 using ZenMonitor.Core.Services;
 
 namespace ZenMonitor.Core.Hosting;
