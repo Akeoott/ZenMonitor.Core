@@ -33,14 +33,25 @@ public class CpuTests
 
     private Cpu CreateCpu() => new(_mockLogger.Object, _mockHelper.Object);
 
-    [Fact]
-    public void GetCpuName_ReturnsCpuName()
+    private void SetupStdCpuInfo(string name = "Test CPU", int coreCount = 2, int baseMhz = 3600)
     {
-        _mockWindows.Setup(w => w.GetProcessorName()).Returns("AMD Ryzen 7 7800X3D 8-Core Processor");
-        _mockWindows.Setup(w => w.GetProcessorCount()).Returns(8);
-        _mockWindows.Setup(w => w.GetProcessorBaseFrequencyMHz()).Returns(4200);
-        _mockWindows.Setup(w => w.GetSystemTimes()).Returns(new CpuTickInfo(1000, 2000, 3000));
-        _mockWindows.Setup(w => w.GetPerCoreTimes()).Returns([.. Enumerable.Repeat(new CpuTickInfo(100, 200, 300), 8)]);
+        _mockWindows.Setup(w => w.GetProcessorName()).Returns(name);
+        _mockWindows.Setup(w => w.GetProcessorCount()).Returns(coreCount);
+        _mockWindows.Setup(w => w.GetProcessorBaseFrequencyMHz()).Returns(baseMhz);
+    }
+
+    private void SetupStdTicks(long idle = 1000, long kernel = 2000, long user = 3000, int cores = 2)
+    {
+        _mockWindows.Setup(w => w.GetSystemTimes()).Returns(new CpuTickInfo(idle, kernel, user));
+        _mockWindows.Setup(w => w.GetPerCoreTimes()).Returns(
+            [.. Enumerable.Repeat(new CpuTickInfo(100, 200, 300), cores)]);
+    }
+
+    [Fact]
+    public void Expected_CpuNameAndSpeed()
+    {
+        SetupStdCpuInfo("AMD Ryzen 7 7800X3D 8-Core Processor", 8, 4200);
+        SetupStdTicks(cores: 8);
         _mockWindows.Setup(w => w.GetCpuTemperature()).Returns(0);
         _mockWindows.Setup(w => w.GetCpuPowerDraw()).Returns(0);
 
@@ -48,122 +59,82 @@ public class CpuTests
         cpu.Update();
 
         Assert.Equal("AMD Ryzen 7 7800X3D 8-Core Processor", cpu.GetCpuName());
+        Assert.Equal(4200, cpu.GetCpuSpeed());
     }
 
     [Fact]
-    public void GetCpuSpeed_ReturnsAverageCpuSpeed()
+    public void Expected_CpuUsageDelta()
     {
-        _mockWindows.Setup(w => w.GetProcessorName()).Returns("Test CPU");
-        _mockWindows.Setup(w => w.GetProcessorCount()).Returns(4);
-        _mockWindows.Setup(w => w.GetProcessorBaseFrequencyMHz()).Returns(3600);
-        _mockWindows.Setup(w => w.GetSystemTimes()).Returns(new CpuTickInfo(1000, 2000, 3000));
-        _mockWindows.Setup(w => w.GetPerCoreTimes()).Returns([.. Enumerable.Repeat(new CpuTickInfo(100, 200, 300), 4)]);
+        SetupStdCpuInfo();
         _mockWindows.Setup(w => w.GetCpuTemperature()).Returns(0);
         _mockWindows.Setup(w => w.GetCpuPowerDraw()).Returns(0);
 
-        var cpu = CreateCpu();
-        cpu.Update();
-
-        Assert.Equal(3600, cpu.GetCpuSpeed());
-    }
-
-    [Fact]
-    public void GetCpuUsage_ReturnsCpuUsage()
-    {
-        // First snapshot: first call returns 0%
-        _mockWindows.Setup(w => w.GetProcessorName()).Returns("Test CPU");
-        _mockWindows.Setup(w => w.GetProcessorCount()).Returns(2);
-        _mockWindows.Setup(w => w.GetProcessorBaseFrequencyMHz()).Returns(3600);
-        _mockWindows.Setup(w => w.GetSystemTimes()).Returns(new CpuTickInfo(1000, 2000, 3000));
-        _mockWindows.Setup(w => w.GetPerCoreTimes()).Returns([
-            new CpuTickInfo(100, 200, 300),
-            new CpuTickInfo(150, 250, 350)
-        ]);
-        _mockWindows.Setup(w => w.GetCpuTemperature()).Returns(0);
-        _mockWindows.Setup(w => w.GetCpuPowerDraw()).Returns(0);
-
+        // First snapshot: returns 0%
+        SetupStdTicks(1000, 2000, 3000, 2);
         var cpu = CreateCpu();
         cpu.Update();
 
         Assert.Equal(0, cpu.GetCpuUsage());
 
-        // Second snapshot: diffTotal = (2100+3100) - (2000+3000) = 200
-        // diffIdle = 1100 - 1000 = 100
-        // usage = (200-100)/200*100 = 50%
-        _mockWindows.Setup(w => w.GetSystemTimes()).Returns(new CpuTickInfo(1100, 2100, 3100));
-        _mockWindows.Setup(w => w.GetPerCoreTimes()).Returns([
-            new CpuTickInfo(110, 210, 310),
-            new CpuTickInfo(160, 260, 360)
-        ]);
-
+        // Second snapshot: diffTotal = (2100+3100)-(2000+3000) = 200, diffIdle = 1100-1000 = 100, usage = (200-100)/200*100 = 50%
+        SetupStdTicks(1100, 2100, 3100, 2);
         cpu.Update();
 
         Assert.Equal(50, cpu.GetCpuUsage());
     }
 
     [Fact]
-    public void GetCoreUsages_ReturnsCoreUsages()
+    public void Expected_CoreUsages()
     {
-        _mockWindows.Setup(w => w.GetProcessorName()).Returns("Test CPU");
-        _mockWindows.Setup(w => w.GetProcessorCount()).Returns(2);
-        _mockWindows.Setup(w => w.GetProcessorBaseFrequencyMHz()).Returns(3600);
-        _mockWindows.Setup(w => w.GetSystemTimes()).Returns(new CpuTickInfo(1000, 2000, 3000));
-        _mockWindows.Setup(w => w.GetPerCoreTimes()).Returns([
-            new CpuTickInfo(100, 200, 300),
-            new CpuTickInfo(150, 250, 350)
-        ]);
+        SetupStdCpuInfo();
         _mockWindows.Setup(w => w.GetCpuTemperature()).Returns(0);
         _mockWindows.Setup(w => w.GetCpuPowerDraw()).Returns(0);
 
+        // First snapshot: per-core ticks (idle: 100, kernel: 200, user: 300) each
+        _mockWindows.Setup(w => w.GetSystemTimes()).Returns(new CpuTickInfo(1000, 2000, 3000));
+        _mockWindows.Setup(w => w.GetPerCoreTimes()).Returns([
+            new CpuTickInfo(100, 200, 300),
+            new CpuTickInfo(100, 200, 300)
+        ]);
         var cpu = CreateCpu();
         cpu.Update();
 
         Assert.Equal([new CpuCoreUsage(0, 0), new CpuCoreUsage(1, 0)], cpu.GetCoreUsages());
 
-        // Second snapshot with known delta => 50% each
+        // Second snapshot: per-core ticks (idle: 110, kernel: 210, user: 310) each
+        // diffTotal = (210+310)-(200+300) = 20, diffIdle = 110-100 = 10
+        // usage = (20-10)/20*100 = 50%
         _mockWindows.Setup(w => w.GetSystemTimes()).Returns(new CpuTickInfo(1100, 2100, 3100));
         _mockWindows.Setup(w => w.GetPerCoreTimes()).Returns([
             new CpuTickInfo(110, 210, 310),
-            new CpuTickInfo(160, 260, 360)
+            new CpuTickInfo(110, 210, 310)
         ]);
-
         cpu.Update();
 
         Assert.Equal([new CpuCoreUsage(0, 50), new CpuCoreUsage(1, 50)], cpu.GetCoreUsages());
     }
 
     [Fact]
-    public void GetCpuTemp_ReturnsCpuTemp()
+    public void Expected_TemperatureAndPowerDraw()
     {
-        _mockWindows.Setup(w => w.GetProcessorName()).Returns("Test CPU");
-        _mockWindows.Setup(w => w.GetProcessorCount()).Returns(2);
-        _mockWindows.Setup(w => w.GetProcessorBaseFrequencyMHz()).Returns(3600);
-        _mockWindows.Setup(w => w.GetSystemTimes()).Returns(new CpuTickInfo(1000, 2000, 3000));
-        _mockWindows.Setup(w => w.GetPerCoreTimes()).Returns([
-            new CpuTickInfo(100, 200, 300),
-            new CpuTickInfo(150, 250, 350)
-        ]);
+        SetupStdCpuInfo();
+        SetupStdTicks();
         _mockWindows.Setup(w => w.GetCpuTemperature()).Returns(65);
-        _mockWindows.Setup(w => w.GetCpuPowerDraw()).Returns(0);
+        _mockWindows.Setup(w => w.GetCpuPowerDraw()).Returns(46.03);
 
         var cpu = CreateCpu();
         cpu.Update();
 
         Assert.Equal(65, cpu.GetCpuTemp());
         Assert.Equal([new CpuCoreTemp(0, 65), new CpuCoreTemp(1, 65)], cpu.GetCoreTemps());
+        Assert.Equal(46.03, cpu.GetPowerDraw());
     }
 
     [Fact]
-    public void GetCpuTemp_ReturnsZeroWhenNoSensor()
+    public void Edge_TemperatureZeroWhenNoSensor()
     {
-        _mockWindows.Setup(w => w.GetProcessorName()).Returns("Test CPU");
-        _mockWindows.Setup(w => w.GetProcessorCount()).Returns(2);
-        _mockWindows.Setup(w => w.GetProcessorBaseFrequencyMHz()).Returns(3600);
-        _mockWindows.Setup(w => w.GetSystemTimes()).Returns(new CpuTickInfo(1000, 2000, 3000));
-        _mockWindows.Setup(w => w.GetPerCoreTimes()).Returns([
-            new CpuTickInfo(100, 200, 300),
-            new CpuTickInfo(150, 250, 350)
-        ]);
+        SetupStdCpuInfo();
+        SetupStdTicks();
         _mockWindows.Setup(w => w.GetCpuTemperature()).Returns(0);
         _mockWindows.Setup(w => w.GetCpuPowerDraw()).Returns(0);
 
@@ -175,27 +146,7 @@ public class CpuTests
     }
 
     [Fact]
-    public void GetPowerDraw_ReturnsPowerDraw()
-    {
-        _mockWindows.Setup(w => w.GetProcessorName()).Returns("Test CPU");
-        _mockWindows.Setup(w => w.GetProcessorCount()).Returns(2);
-        _mockWindows.Setup(w => w.GetProcessorBaseFrequencyMHz()).Returns(3600);
-        _mockWindows.Setup(w => w.GetSystemTimes()).Returns(new CpuTickInfo(1000, 2000, 3000));
-        _mockWindows.Setup(w => w.GetPerCoreTimes()).Returns([
-            new CpuTickInfo(100, 200, 300),
-            new CpuTickInfo(150, 250, 350)
-        ]);
-        _mockWindows.Setup(w => w.GetCpuTemperature()).Returns(0);
-        _mockWindows.Setup(w => w.GetCpuPowerDraw()).Returns(46.03);
-
-        var cpu = CreateCpu();
-        cpu.Update();
-
-        Assert.Equal(46.03, cpu.GetPowerDraw());
-    }
-
-    [Fact]
-    public void Update_ReturnsErrorSnapshotOnFailure()
+    public void Error_ReturnsErrorSnapshotOnFailure()
     {
         _mockWindows.Setup(w => w.GetProcessorName()).Throws<InvalidOperationException>();
 
@@ -209,5 +160,19 @@ public class CpuTests
         Assert.Equal([], cpu.GetCoreSpeeds());
         Assert.Equal([], cpu.GetCoreUsages());
         Assert.Equal([], cpu.GetCoreTemps());
+    }
+
+    [Fact]
+    public void Error_PowerDrawHandlesException()
+    {
+        SetupStdCpuInfo();
+        SetupStdTicks();
+        _mockWindows.Setup(w => w.GetCpuTemperature()).Returns(0);
+        _mockWindows.Setup(w => w.GetCpuPowerDraw()).Throws<Exception>();
+
+        var cpu = CreateCpu();
+        cpu.Update();
+
+        Assert.Equal(0, cpu.GetPowerDraw());
     }
 }

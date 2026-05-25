@@ -360,7 +360,7 @@ public class Cpu(ILogger<Cpu> logger, IFileSystem fileSystem, IServiceAbstractio
     #region PowerDraw
     private double ReadPowerDraw()
     {
-        if (!_fileSystem.File.Exists(EnergyUjPath)) return 1.0;
+        if (!_fileSystem.File.Exists(EnergyUjPath)) return 0.0;
 
         try
         {

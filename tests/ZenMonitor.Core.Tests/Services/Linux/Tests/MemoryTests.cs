@@ -29,107 +29,80 @@ public class MemoryTests
 
     private Memory CreateMemory() => new(_mockLogger.Object, _mockFileSystem);
 
+    private void AddStdMemInfo() =>
+        _mockFileSystem.AddFile("/proc/meminfo", new MockFileData(TestData.MemInfo()));
+
     [Fact]
-    public void Update_ParsesMemInfoCorrectly()
+    public void Expected_AllMemoryMetrics()
     {
-        string meminfo = TestData.MemInfo();
-        _mockFileSystem.AddFile("/proc/meminfo", new MockFileData(meminfo));
+        AddStdMemInfo();
 
         var memory = CreateMemory();
-
         memory.Update();
 
-        Assert.NotEqual(0, memory.GetMemTotal());
+        Assert.Equal(30.5, memory.GetMemTotal());
+        Assert.Equal(1.73, memory.GetMemFree());
+        Assert.Equal(16.81, memory.GetMemAvailable());
+        Assert.Equal(13.69, memory.GetMemUsed());
+        Assert.Equal(16.57, memory.GetCached());
+        Assert.Equal(30.5, memory.GetSwapTotal());
+        Assert.Equal(30.5, memory.GetSwapFree());
     }
 
     [Fact]
-    public void GetMemTotal_ReturnsMemTotal()
+    public void Error_MissingMeminfo()
     {
-        string meminfo = TestData.MemInfo();
-        _mockFileSystem.AddFile("/proc/meminfo", new MockFileData(meminfo));
-
         var memory = CreateMemory();
         memory.Update();
 
-        double expected = 30.5;
-        Assert.Equal(expected, memory.GetMemTotal());
+        Assert.Equal(0, memory.GetMemTotal());
+        Assert.Equal(0, memory.GetMemFree());
+        Assert.Equal(0, memory.GetMemAvailable());
+        Assert.Equal(0, memory.GetMemUsed());
+        Assert.Equal(0, memory.GetCached());
+        Assert.Equal(0, memory.GetSwapTotal());
+        Assert.Equal(0, memory.GetSwapFree());
     }
 
     [Fact]
-    public void GetMemFree_ReturnsMemFree()
+    public void Error_MissingRequiredKeys()
     {
-        string meminfo = TestData.MemInfo();
-        _mockFileSystem.AddFile("/proc/meminfo", new MockFileData(meminfo));
+        // Provide meminfo but without MemTotal
+        _mockFileSystem.AddFile("/proc/meminfo", new MockFileData(
+            "MemFree:       1813564 kB\n" +
+            "MemAvailable:  17630756 kB\n" +
+            "Cached:        17376204 kB\n" +
+            "SwapTotal:     31985660 kB\n" +
+            "SwapFree:      31985392 kB\n"
+        ));
 
         var memory = CreateMemory();
         memory.Update();
 
-        double expected = 1.73;
-        Assert.Equal(expected, memory.GetMemFree());
+        Assert.Equal(0, memory.GetMemTotal());
+        Assert.Equal(0, memory.GetMemFree());
+        Assert.Equal(0, memory.GetMemAvailable());
+        Assert.Equal(0, memory.GetMemUsed());
+        Assert.Equal(0, memory.GetCached());
+        Assert.Equal(0, memory.GetSwapTotal());
+        Assert.Equal(0, memory.GetSwapFree());
     }
 
     [Fact]
-    public void GetMemAvailable_ReturnsMemAvailable()
+    public void Error_UnparseableValue()
     {
-        string meminfo = TestData.MemInfo();
-        _mockFileSystem.AddFile("/proc/meminfo", new MockFileData(meminfo));
+        _mockFileSystem.AddFile("/proc/meminfo", new MockFileData(
+            "MemTotal:      notanumber kB\n" +
+            "MemFree:       1813564 kB\n" +
+            "MemAvailable:  17630756 kB\n" +
+            "Cached:        17376204 kB\n" +
+            "SwapTotal:     31985660 kB\n" +
+            "SwapFree:      31985392 kB\n"
+        ));
 
         var memory = CreateMemory();
         memory.Update();
 
-        double expected = 16.81;
-        Assert.Equal(expected, memory.GetMemAvailable());
-    }
-
-    [Fact]
-    public void GetMemUsed_ReturnsMemUsed()
-    {
-        string meminfo = TestData.MemInfo();
-        _mockFileSystem.AddFile("/proc/meminfo", new MockFileData(meminfo));
-
-        var memory = CreateMemory();
-        memory.Update();
-
-        double expected = 13.69;
-        Assert.Equal(expected, memory.GetMemUsed());
-    }
-
-    [Fact]
-    public void GetCached_ReturnsCached()
-    {
-        string meminfo = TestData.MemInfo();
-        _mockFileSystem.AddFile("/proc/meminfo", new MockFileData(meminfo));
-
-        var memory = CreateMemory();
-        memory.Update();
-
-        double expected = 16.57;
-        Assert.Equal(expected, memory.GetCached());
-    }
-
-    [Fact]
-    public void GetSwapTotal_ReturnsSwapTotal()
-    {
-        string meminfo = TestData.MemInfo();
-        _mockFileSystem.AddFile("/proc/meminfo", new MockFileData(meminfo));
-
-        var memory = CreateMemory();
-        memory.Update();
-
-        double expected = 30.5;
-        Assert.Equal(expected, memory.GetSwapTotal());
-    }
-
-    [Fact]
-    public void GetSwapFree_ReturnsSwapFree()
-    {
-        string meminfo = TestData.MemInfo();
-        _mockFileSystem.AddFile("/proc/meminfo", new MockFileData(meminfo));
-
-        var memory = CreateMemory();
-        memory.Update();
-
-        double expected = 30.5;
-        Assert.Equal(expected, memory.GetSwapFree());
+        Assert.Equal(0, memory.GetMemTotal());
     }
 }
