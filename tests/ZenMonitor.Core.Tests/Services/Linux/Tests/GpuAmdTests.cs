@@ -25,18 +25,15 @@ public class GpuAmdTests
     }
 
     /// <summary>
-    /// GpuAmd is not implemented, as long as this is so, it must return empty strings
+    /// GpuAmd is not implemented, so it must return empty strings and zeros.
     /// </summary>
     [Fact]
-    public void Update_ReturnEmpryStringsFromGpuAmd()
+    public void Expected_ReturnsEmptySnapshot()
     {
-        // Arrange
         var gpu = new GpuAmd(_mockLogger.Object);
 
-        // Act
         gpu.Update();
 
-        // Assert
         Assert.Equal("", gpu.GetGpuName());
         Assert.Equal(0, gpu.GetUsageGpu());
         Assert.Equal(0, gpu.GetUsageMemory());
@@ -45,5 +42,14 @@ public class GpuAmdTests
         Assert.Equal(0, gpu.GetTemperatureGpu());
         Assert.Equal("", gpu.GetPowerState());
         Assert.Equal(0.0, gpu.GetPowerDraw());
+    }
+
+    [Fact]
+    public void Expected_DoesNotThrow()
+    {
+        var gpu = new GpuAmd(_mockLogger.Object);
+
+        var exception = Record.Exception(() => gpu.Update());
+        Assert.Null(exception);
     }
 }
