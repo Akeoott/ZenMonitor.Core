@@ -56,9 +56,9 @@ This project is in early development. The API surface and project layout are not
 
 Key milestones being worked on:
 - [x] Define hardware abstraction interfaces
-- [ ] Implement main platform services
-  - [ ] Linux (Currentlz missing network implementation)
-  - [ ] Windows (Only CPU service is implemented)
+- [ ] Fully implement main platform services
+  - [x] Linux
+  - [ ] Windows (Only CPU service is implemented, others are missing)
 - [x] Publish initial NuGet packages
 
 ---

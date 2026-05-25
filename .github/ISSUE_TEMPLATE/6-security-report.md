@@ -82,7 +82,7 @@ The data that must NOT be posted here:
 <!-- Fill in the relevant fields. Remove any that are not applicable. -->
 
 * **OS:** <!-- e.g. Ubuntu 24.04 x86_64 / Windows 11 23H2 -->
-* **Application version:** <!-- e.g. v1.0.3, commit hash, or `main` -->
+* **Application version:** <!-- e.g. v1.1.0, commit hash, or `main` -->
 
 ---
 
