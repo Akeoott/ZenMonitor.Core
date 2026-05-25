@@ -5,6 +5,7 @@ using System.IO.Abstractions;
 
 using Microsoft.Extensions.DependencyInjection;
 
+using ZenMonitor.Core.Abstractions;
 using ZenMonitor.Core.Hosting.Registration;
 using ZenMonitor.Core.Interfaces;
 using ZenMonitor.Core.Services;
@@ -60,6 +61,7 @@ public static class DependencyInjection
             NullRegistration.Register(services);
         }
 
+        services.AddSingleton<IHardwareMonitor, HardwareMonitor>();
         return services;
     }
 }

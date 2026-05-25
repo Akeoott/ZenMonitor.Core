@@ -56,8 +56,6 @@ internal static class WindowsRegistration
                 _ => new NullGpu(),
             };
         });
-
-        services.AddSingleton<IHardwareMonitor, HardwareMonitor>();
     }
 
     private static GpuVendor DetectGpuVendor()
