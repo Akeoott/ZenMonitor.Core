@@ -1,0 +1,35 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": ".NET (TRACE)",
+            "type": "coreclr",
+            "request": "launch",
+            "program": "${workspaceFolder}tests/ZenMonitor.Core.Debug/bin/Debug/net10.0/ZenMonitor.Core.Debug.dll",
+            "args": [
+                "t"
+            ],
+            "cwd": "${workspaceFolder}"
+        },
+        {
+            "name": ".NET (DEBUG)",
+            "type": "coreclr",
+            "request": "launch",
+            "program": "${workspaceFolder}tests/ZenMonitor.Core.Debug/bin/Debug/net10.0/ZenMonitor.Core.Debug.dll",
+            "args": [
+                "d"
+            ],
+            "cwd": "${workspaceFolder}"
+        },
+        {
+            "name": ".NET (INFO)",
+            "type": "coreclr",
+            "request": "launch",
+            "program": "${workspaceFolder}tests/ZenMonitor.Core.Debug/bin/Debug/net10.0/ZenMonitor.Core.Debug.dll",
+            "args": [
+                "i"
+            ],
+            "cwd": "${workspaceFolder}"
+        }
+    ]
+}

@@ -1,9 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
 <Solution>
-  <Project Path="src\ZenMonitor.Core\ZenMonitor.Core.csproj" />
-  <Project Path="src\ZenMonitor.Core.Linux\ZenMonitor.Core.Linux.csproj" />
   <Folder Name="/src/">
+    <Project Path="src/ZenMonitor.Core/ZenMonitor.Core.csproj" />
+    <Project Path="src/ZenMonitor.Core.Hosting/ZenMonitor.Core.Hosting.csproj" />
+    <Project Path="src/ZenMonitor.Core.Linux/ZenMonitor.Core.Linux.csproj" />
     <Project Path="src/ZenMonitor.Core.Windows/ZenMonitor.Core.Windows.csproj" />
   </Folder>
-  <Project Path="src\ZenMonitor.Core.Hosting\ZenMonitor.Core.Hosting.csproj" />
-  <Project Path="tests\ZenMonitor.Core.Tests\ZenMonitor.Core.Tests.csproj" />
+  <Folder Name="/tests/">
+    <Project Path="tests/ZenMonitor.Core.Debug/ZenMonitor.Core.Debug.csproj" />
+    <Project Path="tests/ZenMonitor.Core.Tests/ZenMonitor.Core.Tests.csproj" />
+  </Folder>
 </Solution>
