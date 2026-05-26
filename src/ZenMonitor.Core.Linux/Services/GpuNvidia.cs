@@ -58,8 +58,7 @@ public class GpuNvidia(ILogger<GpuNvidia> logger, IServiceAbstraction helper) : 
         try
         {
             csv = RunNvidiaSmi(
-           "--query-gpu=name,utilization.gpu,utilization.memory,memory.used,memory.total,temperature.gpu,pstate,power.draw" +
-           "--format=csv,noheader,nounits");
+           "--query-gpu=name,utilization.gpu,utilization.memory,memory.used,memory.total,temperature.gpu,pstate,power.draw --format=csv,noheader,nounits");
 
             string[] part = [.. csv.Split(',').Select(p => p.Trim())];
 
