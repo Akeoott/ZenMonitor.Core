@@ -16,6 +16,7 @@ internal sealed class Program
     #region Init
     internal static async Task<int> Main(string[] args)
     {
+        LogEventLevel logLevel;
         if (args == null || args.Length == 0)
         {
             Console.WriteLine(
@@ -28,10 +29,13 @@ internal sealed class Program
                 e | error
                 c | critical
             """);
-            return 1;
+            logLevel = LogEventLevel.Information;
+        }
+        else
+        {
+            logLevel = ParseSerilogLevel(args[0]);
         }
 
-        var logLevel = ParseSerilogLevel(args[0]);
         const string logFilePath = "logs/ZenMonitor.Core.log";
 
         ConfigureLogging(logLevel, logFilePath);
