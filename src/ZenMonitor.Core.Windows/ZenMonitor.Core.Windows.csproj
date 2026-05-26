@@ -10,7 +10,7 @@
 
     <!-- NuGet Package Metadata -->
     <PackageId>ZenMonitor.Core.Windows</PackageId>
-    <Version>1.1.1-alpha</Version>
+    <Version>1.1.2-alpha</Version>
     <Authors>ZenMonitor Contributors</Authors>
     <Description>Windows platform services and implementations for ZenMonitor.Core.</Description>
     <PackageLicenseExpression>LGPL-3.0-or-later</PackageLicenseExpression>

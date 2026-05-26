@@ -96,7 +96,7 @@ services.AddZenMonitor();
 ### Testing and starting development:
 
 Please read [CONTRIBUTING.md](https://github.com/Akeoott/ZenMonitor.Core?tab=contributing-ov-file) for more details.
-y
+
 ---
 
 ## License
