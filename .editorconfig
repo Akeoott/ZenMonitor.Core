@@ -20,6 +20,7 @@ indent_size = 4
 
 [*.cs]
 # Styling
+charset = utf-8
 end_of_line = crlf
 insert_final_newline = true
 indent_style = space
@@ -50,7 +51,7 @@ dotnet_diagnostic.OLOC001.words_in_name = 5
 dotnet_diagnostic.OLOC001.license_header = // Copyright (c) Ame (Akeoot/Akeoott) <akeoot@pm.me>. Licensed under the LGPL-3.0 Licence.\n// See the LICENCE file in the repository root for full licence text.
 
 [*.{csproj,props,targets}]
-charset = utf-8-bom
+charset = utf-8
 end_of_line = crlf
 indent_style = space
 indent_size = 2
