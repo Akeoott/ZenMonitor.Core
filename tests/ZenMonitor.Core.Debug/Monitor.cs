@@ -8,14 +8,14 @@ using ZenMonitor.Core.Models;
 
 namespace ZenMonitor.Core.Debug;
 
-public class Monitor(ILogger<Monitor> logger, IHardwareMonitor monitor)
+internal sealed class Monitor(ILogger<Monitor> logger, IHardwareMonitor monitor)
 {
     private readonly ILogger<Monitor> _logger = logger;
     private readonly IHardwareMonitor _monitor = monitor;
 
     private readonly SemaphoreSlim _dataReadyEvent = new(0, int.MaxValue);
 
-    public async Task InitMonitor(int loopDelay, CancellationToken cts)
+    internal async Task InitMonitor(int loopDelay, CancellationToken cts)
     {
         await Task.WhenAll(RunBackend(loopDelay, cts), RunDashboard(cts));
     }

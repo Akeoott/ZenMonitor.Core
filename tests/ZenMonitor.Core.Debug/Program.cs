@@ -70,7 +70,7 @@ internal sealed class Program
     #endregion
 
     #region Dependency Injection
-    internal static ServiceProvider BuildServiceProvider(out bool gpuNotSupported)
+    private static ServiceProvider BuildServiceProvider(out bool gpuNotSupported)
     {
         var services = new ServiceCollection();
 
@@ -90,7 +90,7 @@ internal sealed class Program
     #endregion
 
     #region Logging Config
-    internal static void ConfigureLogging(LogEventLevel logLevel, string logFilePath)
+    private static void ConfigureLogging(LogEventLevel logLevel, string logFilePath)
     {
         Directory.CreateDirectory("logs");
         File.WriteAllText(logFilePath, string.Empty);
@@ -106,7 +106,7 @@ internal sealed class Program
         Log.Logger = loggerConfig.CreateLogger();
     }
 
-    internal static LogEventLevel ParseSerilogLevel(string level)
+    private static LogEventLevel ParseSerilogLevel(string level)
     {
         return level?.ToLowerInvariant() switch
         {
