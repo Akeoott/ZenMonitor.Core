@@ -19,9 +19,9 @@ Core hardware abstraction interfaces, models, and platform services powering the
 
 ---
 
-## Architecture
+## Structure
 
-The library is split across four projects:
+The repo is split across five projects:
 
 | Project | Description |
 |---------|-------------|
@@ -29,24 +29,36 @@ The library is split across four projects:
 | `ZenMonitor.Core.Hosting` | DI registration extensions (`AddZenMonitor()`) that auto-detect the OS and register the correct platform services. This is optional but recommended. |
 | `ZenMonitor.Core.Linux` | Linux-specific platform implementations for all interfaces. |
 | `ZenMonitor.Core.Windows` | Windows-specific platform implementations for all interfaces. |
+| `ZenMonitor.Core.Debug` | Quick debugging interface providing all info out of the box to the terminal with logging. |
 | `ZenMonitor.Core.Tests` | xUnit test suite. |
 
-### Interface Pattern
+## NuGet Packages
+
+Four NuGet packages are built and published:
+- `ZenMonitor.Core` — interfaces, models, Null services.
+- `ZenMonitor.Core.Hosting` — DI registration helpers.
+- `ZenMonitor.Core.Linux` — Linux platform services.
+- `ZenMonitor.Core.Windows` — Windows platform services.
+
+Use `using ZenMonitor.Core.Hosting;` for initialization and DI,<br>
+and use `using ZenMonitor.Core;` for using core components of this package.
+
+## Hardware Interfaces
 
 Each hardware component is defined as an interface in the `Abstractions` namespace, with a corresponding Null-object service in `Services` (used as fallback when no platform implementation is available). The Linux project provides real implementations, while Windows support is currently under developments.
 
 `IHardwareMonitor` aggregates all interfaces together as properties, providing a single entry point for consumers to simplify usage.
 
-### NuGet Packages
+Each interface exposes a `void Update()` method plus typed getters:
 
-Four NuGet packages are built and published:
-- `ZenMonitor.Core` — interfaces, models, Null services.
-- `ZenMonitor.Core.Linux` — Linux platform services.
-- `ZenMonitor.Core.Windows` — Windows platform services.
-- `ZenMonitor.Core.Hosting` — DI registration helpers.
-
-Use `using ZenMonitor.Core.Hosting;` for initialization and DI,<br>
-and use `using ZenMonitor.Core;` for using core components of this package.
+| Interface | Provides |
+|-----------|----------|
+| `ICpu`             | CPU usage, temperature, frequency etc. |
+| `IDrive`           | Disk I/O, partition usage etc. |
+| `IGpu`             | GPU utilization, VRAM etc. |
+| `IMemory`          | RAM usage, swap etc. |
+| `INetwork`         | Network throughput, interfaces etc. |
+| `ISystem`          | OS info, uptime, hostname etc. |
 
 ---
 
@@ -65,6 +77,8 @@ Key milestones being worked on:
 
 ## Getting Started
 
+### Using the package:
+
 ```bash
 # Add the packages to your project
 dotnet add package ZenMonitor.Core # Main components
@@ -79,6 +93,10 @@ services.AddZenMonitor();
 // You could also skip dependency injection entirely, tho its not recommended.
 ```
 
+### Testing and starting development:
+
+Please read [CONTRIBUTING.md](https://github.com/Akeoott/ZenMonitor.Core?tab=contributing-ov-file) for more details.
+y
 ---
 
 ## License

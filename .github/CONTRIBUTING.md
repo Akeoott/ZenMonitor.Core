@@ -39,10 +39,20 @@ Please follow it in all your interactions with the project.
 ```bash
 dotnet restore
 dotnet build
-dotnet test
+
+# Open the debug interface which provides you with all live values,
+# gathered from your computer.
+dotnet run --project tests/ZenMonitor.Core.Debug/ -- [logLevel]
+# logLevel can be one of the following values:
+# trace/debug/info/warning/error/critical
+
+
 # Platform specific tests may fail,
 # depending on what platform you're on.
+dotnet test
 ```
+
+Most structural details are in the [README.md](https://github.com/Akeoott/ZenMonitor.Core?tab=readme-ov-file) at the moment.
 
 </details>
 
@@ -79,6 +89,8 @@ namespace ZenMonitor.Core.Interfaces;
 - No warnings on build. Run `dotnet build` before pushing.
 - Keep interfaces focused — each interface should have a single responsibility.
 - Use the `Update()` pattern: each service exposes a `void Update()` method that refreshes its internal snapshot.
+- Pay attention to the static code analysis from [CodeFactor](https://www.codefactor.io/repository/github/akeoott/ZenMonitor.Core).
+- Keep an eye on unit test coverage from [CodeCov](https://app.codecov.io/gh/Akeoott/ZenMonitor.Core) and make sure it does not drop significantly.
 
 </details>
 
@@ -124,7 +136,9 @@ Patch coverage is set to `informational: true` (see `.github/codecov.yml`), so a
 
 > [!NOTE]
 > In tests, we want deterministic data,<br>
-> checking for exact values instead of simple null checks etc.
+> checking for exact values instead of simple null checks etc.<br>
+> When writing tests, please also include non "happy path" tests.
+> This means testing edge cases and not just intended flow.
 
 </details>
 
@@ -176,7 +190,8 @@ Scopes indicate which part of the project the commit touches. Be as specific as 
 ```
 feat(interfaces): add ICpu interface with temperature and frequency getters
 
-feat(services, linux): implement ICpu for Linux using /proc/stat parsing
+chore(project): add launch configs
+- add `.vscode/launch.json` with debug profiles for cli, gui, debug, and trace modes
 ```
 
 ### Signed Commits
