@@ -101,24 +101,37 @@ public class Cpu(ILogger<Cpu> logger, IFileSystem fileSystem, IServiceAbstractio
         var speeds = new List<CpuCoreSpeed>();
         int coreIndex = 0;
 
-        foreach (var line in _fileSystem.File.ReadLines("/proc/cpuinfo"))
+        using var stream = _fileSystem.FileStream.New("/proc/cpuinfo", FileMode.Open, FileAccess.Read, FileShare.Read);
+        using var reader = new StreamReader(stream);
+
+        string? line;
+        while ((line = reader.ReadLine()) != null)
         {
-            if (line.StartsWith("model name") && cpuName == "Unknown CPU")
+            ReadOnlySpan<char> lineSpan = line.AsSpan();
+
+            if (lineSpan.StartsWith("model name") && cpuName == "Unknown CPU")
             {
-                var parts = line.Split(':', 2);
-                if (parts.Length == 2)
-                    cpuName = parts[1].Trim();
-            }
-            else if (line.StartsWith("cpu MHz"))
-            {
-                var parts = line.Split(':', 2);
-                if (parts.Length == 2 && double.TryParse(parts[1].Trim(), out double mhz))
+                int colonIndex = lineSpan.IndexOf(':');
+                if (colonIndex != -1)
                 {
-                    speeds.Add(new CpuCoreSpeed(coreIndex, mhz));
-                    coreIndex++;
+                    cpuName = lineSpan[(colonIndex + 1)..].Trim().ToString();
+                }
+            }
+            else if (lineSpan.StartsWith("cpu MHz"))
+            {
+                int colonIndex = lineSpan.IndexOf(':');
+                if (colonIndex != -1)
+                {
+                    var speedValue = lineSpan[(colonIndex + 1)..].Trim();
+                    if (double.TryParse(speedValue, out double mhz))
+                    {
+                        speeds.Add(new CpuCoreSpeed(coreIndex, mhz));
+                        coreIndex++;
+                    }
                 }
             }
         }
+
         return (cpuName, speeds.ToArray());
     }
     #endregion

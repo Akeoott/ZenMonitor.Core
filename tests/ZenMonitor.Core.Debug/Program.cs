@@ -63,7 +63,6 @@ internal sealed class Program
         catch (OperationCanceledException)
         {
             Console.WriteLine("\n[Ctrl+C detected] Shutting down... Byebye!");
-            Log.CloseAndFlush();
             return 0;
         }
         finally
