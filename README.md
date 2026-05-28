@@ -44,6 +44,9 @@ services.AddZenMonitor();
 // Skipping dependency injection is possible but not recommended.
 ```
 
+> [!IMPORTANT]
+> See [CONTRIBUTING.md](https://github.com/Akeoott/ZenMonitor/blob/main/.github/CONTRIBUTING.md) for the contribution workflow and our [Code of Conduct](https://github.com/Akeoott/ZenMonitor/blob/main/.github/CODE_OF_CONDUCT.md).
+
 ## Technical Details
 
 - **Stack**: C# 100%, .NET 10.0.203
