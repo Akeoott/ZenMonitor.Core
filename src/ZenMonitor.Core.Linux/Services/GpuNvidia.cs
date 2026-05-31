@@ -16,10 +16,10 @@ namespace ZenMonitor.Core.Linux.Services;
 /// Reads metrics via the <c>nvidia-smi</c> CLI tool.
 /// </summary>
 [SupportedOSPlatform("linux")]
-public class GpuNvidia(ILogger<GpuNvidia> logger, IServiceAbstraction helper) : IGpu
+public class GpuNvidia(ILogger<GpuNvidia> logger, IAbstractionsLinux helper) : IGpu
 {
     private readonly ILogger<GpuNvidia> _logger = logger;
-    private readonly IServiceAbstraction _helper = helper;
+    private readonly IAbstractionsLinux _helper = helper;
     private GpuInfoSnapshot _snapshot = new(
         "", 0, 0, 0.0, 0.0, 0, "", 0.0);
 
@@ -86,7 +86,7 @@ public class GpuNvidia(ILogger<GpuNvidia> logger, IServiceAbstraction helper) : 
 
     private string RunNvidiaSmi(string arguments)
     {
-        ProcessResult result = _helper.Linux.RunProcess("nvidia-smi", arguments);
+        ProcessResult result = _helper.RunProcess("nvidia-smi", arguments);
 
         if (result.ExitCode != 0)
         {

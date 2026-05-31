@@ -9,17 +9,8 @@
 
     <!-- NuGet Package Metadata -->
     <PackageId>ZenMonitor.Core.Hosting</PackageId>
-    <Version>1.1.2-alpha</Version>
-    <Authors>ZenMonitor Contributors</Authors>
     <Description>Auto-detection and DI registration for ZenMonitor.Core platform services.</Description>
-    <PackageLicenseExpression>LGPL-3.0-or-later</PackageLicenseExpression>
-    <PackageProjectUrl>https://github.com/Akeoott/ZenMonitor.Core</PackageProjectUrl>
-    <RepositoryUrl>https://github.com/Akeoott/ZenMonitor.Core.git</RepositoryUrl>
-    <RepositoryType>git</RepositoryType>
     <PackageTags>system-monitoring;telemetry;hardware;hosting;di</PackageTags>
-    <PackageReadmeFile>README.md</PackageReadmeFile>
-    <IncludeSymbols>true</IncludeSymbols>
-    <SymbolPackageFormat>snupkg</SymbolPackageFormat>
   </PropertyGroup>
 
   <ItemGroup>
@@ -31,8 +22,6 @@
     <ProjectReference Include="..\ZenMonitor.Core\ZenMonitor.Core.csproj" />
     <ProjectReference Include="..\ZenMonitor.Core.Linux\ZenMonitor.Core.Linux.csproj" />
     <ProjectReference Include="..\ZenMonitor.Core.Windows\ZenMonitor.Core.Windows.csproj" />
-    <None Include="..\..\README.md" Pack="true" PackagePath="\" />
-    <None Include="..\..\LICENSE" Pack="true" PackagePath="\" />
   </ItemGroup>
 
 </Project>

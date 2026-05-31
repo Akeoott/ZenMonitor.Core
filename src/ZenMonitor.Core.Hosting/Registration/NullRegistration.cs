@@ -14,10 +14,7 @@ namespace ZenMonitor.Core.Hosting.Registration;
 /// </summary>
 internal static class NullRegistration
 {
-    /// <summary>
-    /// Registers all Null hardware monitoring services into the DI container.
-    /// </summary>
-    public static void Register(IServiceCollection services)
+    internal static void Register(IServiceCollection services)
     {
         services.AddSingleton<ICpu, NullCpu>();
         services.AddSingleton<IDrive, NullDrive>();

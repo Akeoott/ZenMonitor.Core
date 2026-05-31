@@ -16,10 +16,10 @@ namespace ZenMonitor.Core.Windows.Services;
 /// Currently not implemented — returns default zeros.
 /// </summary>
 [SupportedOSPlatform("windows")]
-public class GpuAmd(ILogger<GpuAmd> logger, IServiceAbstraction helper) : IGpu
+public class GpuAmd(ILogger<GpuAmd> logger, IAbstractionsWindows helper) : IGpu
 {
     private readonly ILogger<GpuAmd> _logger = logger;
-    private readonly IServiceAbstraction _helper = helper;
+    private readonly IAbstractionsWindows _helper = helper;
     private GpuInfoSnapshot _snapshot = new(
         "", 0, 0, 0.0, 0.0, 0, "", 0.0);
 

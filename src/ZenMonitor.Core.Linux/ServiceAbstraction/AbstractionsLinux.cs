@@ -15,7 +15,7 @@ namespace ZenMonitor.Core.Linux.ServiceAbstraction;
 /// </summary>
 [ExcludeFromCodeCoverage]
 [SupportedOSPlatform("linux")]
-public class Linux : ILinux
+public class AbstractionsLinux : IAbstractionsLinux
 {
     /// <inheritdoc />
     public DateTime UtcNow => DateTime.UtcNow;

@@ -16,10 +16,10 @@ namespace ZenMonitor.Core.Windows.Services;
 /// Reads metrics via the <c>nvidia-smi</c> CLI tool.
 /// </summary>
 [SupportedOSPlatform("windows")]
-public class GpuNvidia(ILogger<GpuNvidia> logger, IServiceAbstraction helper) : IGpu
+public class GpuNvidia(ILogger<GpuNvidia> logger, IAbstractionsWindows helper) : IGpu
 {
     private readonly ILogger<GpuNvidia> _logger = logger;
-    private readonly IServiceAbstraction _helper = helper;
+    private readonly IAbstractionsWindows _helper = helper;
     private GpuInfoSnapshot _snapshot = new(
         "", 0, 0, 0.0, 0.0, 0, "", 0.0);
 

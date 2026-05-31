@@ -17,12 +17,12 @@ namespace ZenMonitor.Core.Linux.Services;
 /// <c>/proc</c> and <c>/sys</c> filesystems.
 /// </summary>
 [SupportedOSPlatform("linux")]
-public class Cpu(ILogger<Cpu> logger, IFileSystem fileSystem, IServiceAbstraction helper) : ICpu
+public class Cpu(ILogger<Cpu> logger, IFileSystem fileSystem, IAbstractionsLinux helper) : ICpu
 {
     private const string EnergyUjPath = "/sys/class/powercap/intel-rapl:0/energy_uj";
     private readonly ILogger<Cpu> _logger = logger;
     private readonly IFileSystem _fileSystem = fileSystem;
-    private readonly IServiceAbstraction _helper = helper;
+    private readonly IAbstractionsLinux _helper = helper;
     private CpuInfoSnapshot _snapshot = new("", 0, 0, 0, 0, [], [], []);
 
     private long[] _currentTotalTicks = [];
@@ -378,7 +378,7 @@ public class Cpu(ILogger<Cpu> logger, IFileSystem fileSystem, IServiceAbstractio
         try
         {
             double energyUj = double.Parse(_fileSystem.File.ReadAllText(EnergyUjPath).Trim());
-            DateTime now = _helper.Linux.UtcNow;
+            DateTime now = _helper.UtcNow;
 
             double power = 0;
             if (_prevEnergyUj > 0)

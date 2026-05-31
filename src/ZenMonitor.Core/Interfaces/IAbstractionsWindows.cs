@@ -12,7 +12,7 @@ namespace ZenMonitor.Core.Interfaces;
 /// to be mockable in tests.
 /// </summary>
 [SupportedOSPlatform("windows")]
-public interface IWindows
+public interface IAbstractionsWindows
 {
     /// <summary>Returns the CPU processor model name.</summary>
     string GetProcessorName();

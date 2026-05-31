@@ -1,0 +1,21 @@
+<Project>
+
+  <PropertyGroup>
+    <!-- Shared NuGet packaging metadata for all projects -->
+    <Version>1.2.0-alpha</Version>
+    <Authors>Akeoott</Authors>
+    <PackageLicenseExpression>LGPL-3.0-or-later</PackageLicenseExpression>
+    <PackageProjectUrl>https://github.com/Akeoott/ZenMonitor.Core</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/Akeoott/ZenMonitor.Core.git</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+    <IncludeSymbols>true</IncludeSymbols>
+    <SymbolPackageFormat>snupkg</SymbolPackageFormat>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Include="$(MSBuildThisFileDirectory)README.md" Pack="true" PackagePath="\" />
+    <None Include="$(MSBuildThisFileDirectory)LICENSE" Pack="true" PackagePath="\" />
+  </ItemGroup>
+
+</Project>

@@ -7,7 +7,7 @@ using System.Runtime.Versioning;
 namespace ZenMonitor.Core.Windows.ServiceAbstraction;
 
 [SupportedOSPlatform("windows")]
-public partial class Windows
+public partial class AbstractionsWindows
 {
     #region Cpu
     [StructLayout(LayoutKind.Sequential)]
