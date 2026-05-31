@@ -16,7 +16,7 @@ jobs:
           token: ${{ secrets.RELEASE_PIPELINE_PAT }}
 
       - name: Get next version
-        uses: smlx/ccv-action@7318e2f25a52dcd550e75384b84983973251a1f8
+        uses: smlx/ccv@7318e2f25a52dcd550e75384b84983973251a1f8
         id: ccv
 
       - name: Generate changelog
