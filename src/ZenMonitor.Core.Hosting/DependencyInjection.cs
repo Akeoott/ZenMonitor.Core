@@ -17,7 +17,6 @@ namespace ZenMonitor.Core.Hosting;
 /// </summary>
 public static class DependencyInjection
 {
-
     /// <summary>
     /// Registers the appropriate OS-specific hardware monitoring services.
     /// Equivalent to the overload accepting <c>gpuNotSupported</c>, discarding that output.
