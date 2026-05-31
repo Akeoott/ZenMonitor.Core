@@ -21,15 +21,15 @@ jobs:
 
       - name: Generate changelog
         uses: orhun/git-cliff-action@f50e11560dce63f7c33227798f90b924471a88b5
+        id: cliff
         with:
           args: --unreleased --strip all
-          output: temp_changelog.md
 
       - name: Create Draft Release and Tag
         uses: softprops/action-gh-release@b4309332981a82ec1c5618f44dd2e27cc8bfbfda
         with:
           name: "Release ${{ steps.ccv.outputs.next-version }}"
           tag_name: ${{ steps.ccv.outputs.next-version }}
-          body_path: temp_changelog.md
+          body: ${{ steps.cliff.outputs.content }}
           draft: true
           token: ${{ secrets.RELEASE_PIPELINE_PAT }}
