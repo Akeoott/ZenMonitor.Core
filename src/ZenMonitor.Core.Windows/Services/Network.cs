@@ -4,6 +4,7 @@
 using System.Runtime.Versioning;
 
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging.Abstractions;
 
 using ZenMonitor.Core.Abstractions;
 using ZenMonitor.Core.Models;
@@ -16,7 +17,7 @@ namespace ZenMonitor.Core.Windows.Services;
 [SupportedOSPlatform("windows")]
 public class Network(ILogger<Network> logger) : INetwork
 {
-    private readonly ILogger<Network> _logger = logger;
+    private readonly ILogger<Network> _logger = logger ?? NullLogger<Network>.Instance;
     private NetworkInfoSnapshot _snapshot = new(0, 0, []);
 
     /// <inheritdoc />

@@ -17,42 +17,35 @@ namespace ZenMonitor.Core.Hosting;
 /// </summary>
 public static class DependencyInjection
 {
-    /// <summary>
-    /// Registers the appropriate OS-specific hardware monitoring services.
-    /// Equivalent to the overload accepting <c>gpuNotSupported</c>, discarding that output.
-    /// </summary>
-    public static IServiceCollection AddZenMonitor(this IServiceCollection services) => AddZenMonitor(services, out _);
-
-    /// <summary>
-    /// Detects the current OS and GPU vendor, then registers the appropriate
-    /// hardware monitoring services into the DI container.
-    /// </summary>
     /// <param name="services">The service collection to register with.</param>
-    /// <param name="gpuNotSupported">
-    /// <c>true</c> if no supported GPU was detected and the Null GPU fallback was used.
-    /// Callers can use this to show a warning to the user.
-    /// </param>
-    public static IServiceCollection AddZenMonitor(this IServiceCollection services, out bool gpuNotSupported)
+    extension(IServiceCollection services)
     {
-        services.AddLogging();
-        services.AddSingleton<IFileSystem, FileSystem>();
-
-        gpuNotSupported = false;
-
-        if (OperatingSystem.IsLinux())
+        /// <summary>
+        /// Detects the current OS and GPU vendor, then registers the appropriate
+        /// hardware monitoring services into the DI container.
+        /// </summary>
+        public IServiceCollection AddZenMonitor()
         {
-            LinuxRegistration.Register(services, out gpuNotSupported);
-        }
-        else if (OperatingSystem.IsWindows())
-        {
-            WindowsRegistration.Register(services, out gpuNotSupported);
-        }
-        else
-        {
-            NullRegistration.Register(services);
-        }
+            services.AddSingleton<IFileSystem, FileSystem>();
 
-        services.AddSingleton<IHardwareMonitor, HardwareMonitor>();
-        return services;
+            if (OperatingSystem.IsLinux())
+            {
+                LinuxRegistration.Register(services);
+            }
+            else if (OperatingSystem.IsWindows())
+            {
+                WindowsRegistration.Register(services);
+            }
+            else
+            {
+                NullRegistration.Register(services);
+            }
+
+            services.AddSingleton<IHardwareMonitor, HardwareMonitor>();
+            return services;
+        }
     }
+
+    internal static bool HasLogging(IServiceCollection services)
+        => services.Any(d => d.ServiceType.Name == "ILoggerFactory");
 }

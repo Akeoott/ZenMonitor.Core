@@ -5,6 +5,7 @@ using System.IO.Abstractions;
 using System.Runtime.Versioning;
 
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging.Abstractions;
 
 using ZenMonitor.Core.Abstractions;
 using ZenMonitor.Core.Models;
@@ -18,8 +19,7 @@ namespace ZenMonitor.Core.Linux.Services;
 [SupportedOSPlatform("linux")]
 public class Memory(ILogger<Memory> logger, IFileSystem fileSystem) : IMemory
 {
-    private readonly ILogger<Memory> _logger = logger;
-    private readonly IFileSystem _fileSystem = fileSystem;
+    private readonly ILogger<Memory> _logger = logger ?? NullLogger<Memory>.Instance;
     private MemoryInfoSnapshot _snapshot = new(0, 0, 0, 0, 0, 0, 0);
 
     /// <inheritdoc />
@@ -55,7 +55,7 @@ public class Memory(ILogger<Memory> logger, IFileSystem fileSystem) : IMemory
             var values = new Dictionary<string, double>(StringComparer.Ordinal);
             const double KB_TO_GIB = 1.0 / 1_048_576;
 
-            foreach (var line in _fileSystem.File.ReadLines("/proc/meminfo"))
+            foreach (var line in fileSystem.File.ReadLines("/proc/meminfo"))
             {
                 int colon = line.IndexOf(':');
                 if (colon < 0) continue;

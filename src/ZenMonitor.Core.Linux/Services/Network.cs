@@ -5,6 +5,7 @@ using System.IO.Abstractions;
 using System.Runtime.Versioning;
 
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging.Abstractions;
 
 using ZenMonitor.Core.Abstractions;
 using ZenMonitor.Core.Interfaces;
@@ -19,9 +20,7 @@ namespace ZenMonitor.Core.Linux.Services;
 [SupportedOSPlatform("linux")]
 public class Network(ILogger<Network> logger, IFileSystem fileSystem, IAbstractionsLinux helper) : INetwork
 {
-    private readonly ILogger<Network> _logger = logger;
-    private readonly IFileSystem _fileSystem = fileSystem;
-    private readonly IAbstractionsLinux _helper = helper;
+    private readonly ILogger<Network> _logger = logger ?? NullLogger<Network>.Instance;
     private NetworkInfoSnapshot _snapshot = new(0, 0, []);
 
     private readonly Dictionary<string, (long rx, long tx, DateTime time)> _previousNetStats = [];
@@ -70,7 +69,7 @@ public class Network(ILogger<Network> logger, IFileSystem fileSystem, IAbstracti
 
         try
         {
-            lines = [.. _fileSystem.File.ReadLines("/proc/net/dev")];
+            lines = [.. fileSystem.File.ReadLines("/proc/net/dev")];
         }
         catch (Exception ex)
         {
@@ -111,7 +110,7 @@ public class Network(ILogger<Network> logger, IFileSystem fileSystem, IAbstracti
 
             if (_previousNetStats.TryGetValue(interfaceName, out var prev))
             {
-                double deltaSec = (_helper.UtcNow - prev.time).TotalSeconds;
+                double deltaSec = (helper.UtcNow - prev.time).TotalSeconds;
                 if (deltaSec > 0)
                 {
                     long deltaRx = rxBytes - prev.rx;
@@ -125,7 +124,7 @@ public class Network(ILogger<Network> logger, IFileSystem fileSystem, IAbstracti
                 }
             }
 
-            _previousNetStats[interfaceName] = (rxBytes, txBytes, _helper.UtcNow);
+            _previousNetStats[interfaceName] = (rxBytes, txBytes, helper.UtcNow);
 
             networks.Add(new ConnectedNetworks(
                 interfaceName,
@@ -145,10 +144,10 @@ public class Network(ILogger<Network> logger, IFileSystem fileSystem, IAbstracti
         try
         {
             string operStatePath = $"/sys/class/net/{interfaceName}/operstate";
-            if (!_fileSystem.File.Exists(operStatePath))
+            if (!fileSystem.File.Exists(operStatePath))
                 return false;
 
-            string state = _fileSystem.File.ReadAllText(operStatePath).Trim();
+            string state = fileSystem.File.ReadAllText(operStatePath).Trim();
             return string.Equals(state, "up", StringComparison.OrdinalIgnoreCase);
         }
         catch (Exception ex)

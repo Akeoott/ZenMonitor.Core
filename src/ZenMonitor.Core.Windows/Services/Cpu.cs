@@ -4,6 +4,7 @@
 using System.Runtime.Versioning;
 
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging.Abstractions;
 
 using ZenMonitor.Core.Abstractions;
 using ZenMonitor.Core.Interfaces;
@@ -18,8 +19,7 @@ namespace ZenMonitor.Core.Windows.Services;
 [SupportedOSPlatform("windows")]
 public class Cpu(ILogger<Cpu> logger, IAbstractionsWindows helper) : ICpu
 {
-    private readonly ILogger<Cpu> _logger = logger;
-    private readonly IAbstractionsWindows _helper = helper;
+    private readonly ILogger<Cpu> _logger = logger ?? NullLogger<Cpu>.Instance;
     private CpuInfoSnapshot _snapshot = new("", 0, 0, 0, 0, [], [], []);
 
     private CpuTickInfo _previousTotalTicks = new(0, 0, 0);
@@ -90,9 +90,9 @@ public class Cpu(ILogger<Cpu> logger, IAbstractionsWindows helper) : ICpu
     #region CpuInfo
     private (string cpuName, CpuCoreSpeed[] coreSpeeds) ReadCpuInfo()
     {
-        string cpuName = _helper.GetProcessorName();
-        int coreCount = _helper.GetProcessorCount();
-        int baseMhz = _helper.GetProcessorBaseFrequencyMHz();
+        string cpuName = helper.GetProcessorName();
+        int coreCount = helper.GetProcessorCount();
+        int baseMhz = helper.GetProcessorBaseFrequencyMHz();
 
         var speeds = new CpuCoreSpeed[coreCount];
         for (int i = 0; i < coreCount; i++)
@@ -105,8 +105,8 @@ public class Cpu(ILogger<Cpu> logger, IAbstractionsWindows helper) : ICpu
     #region CpuUsages
     private (int totalUsage, CpuCoreUsage[] coreUsages) ReadCpuUsages()
     {
-        CpuTickInfo currentTotal = _helper.GetSystemTimes();
-        CpuTickInfo[] currentCore = _helper.GetPerCoreTimes();
+        CpuTickInfo currentTotal = helper.GetSystemTimes();
+        CpuTickInfo[] currentCore = helper.GetPerCoreTimes();
 
         int totalUsage = 0;
         CpuCoreUsage[] coreUsages;
@@ -162,7 +162,7 @@ public class Cpu(ILogger<Cpu> logger, IAbstractionsWindows helper) : ICpu
     #region CpuTemps
     private (int overallTemp, CpuCoreTemp[] coreTemps) ReadCpuTemps(int coreCount)
     {
-        int overall = _helper.GetCpuTemperature(); // Windows only provides overall temp.
+        int overall = helper.GetCpuTemperature(); // Windows only provides overall temp.
 
         var coreTemps = new CpuCoreTemp[coreCount];
         for (int i = 0; i < coreCount; i++)
@@ -177,7 +177,7 @@ public class Cpu(ILogger<Cpu> logger, IAbstractionsWindows helper) : ICpu
     {
         try
         {
-            return _helper.GetCpuPowerDraw();
+            return helper.GetCpuPowerDraw();
         }
         catch (Exception ex)
         {

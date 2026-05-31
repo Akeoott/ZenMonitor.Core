@@ -4,6 +4,7 @@
 using System.Runtime.Versioning;
 
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging.Abstractions;
 
 using ZenMonitor.Core.Abstractions;
 using ZenMonitor.Core.Models;
@@ -17,9 +18,8 @@ namespace ZenMonitor.Core.Linux.Services;
 [SupportedOSPlatform("linux")]
 public class GpuAmd(ILogger<GpuAmd> logger) : IGpu
 {
-    private readonly ILogger<GpuAmd> _logger = logger;
-    private GpuInfoSnapshot _snapshot = new(
-        "", 0, 0, 0.0, 0.0, 0, "", 0.0);
+    private readonly ILogger<GpuAmd> _logger = logger ?? NullLogger<GpuAmd>.Instance;
+    private GpuInfoSnapshot _snapshot = new("", 0, 0, 0.0, 0.0, 0, "", 0.0);
 
     /// <inheritdoc />
     public void Update() => _snapshot = FetchGpuInfo();

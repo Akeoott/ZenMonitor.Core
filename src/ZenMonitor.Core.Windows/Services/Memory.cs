@@ -5,6 +5,7 @@ using System.IO.Abstractions;
 using System.Runtime.Versioning;
 
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging.Abstractions;
 
 using ZenMonitor.Core.Abstractions;
 using ZenMonitor.Core.Models;
@@ -18,8 +19,7 @@ namespace ZenMonitor.Core.Windows.Services;
 [SupportedOSPlatform("windows")]
 public class Memory(ILogger<Memory> logger, IFileSystem fileSystem) : IMemory
 {
-    private readonly ILogger<Memory> _logger = logger;
-    private readonly IFileSystem _fileSystem = fileSystem;
+    private readonly ILogger<Memory> _logger = logger ?? NullLogger<Memory>.Instance;
     private MemoryInfoSnapshot _snapshot = new(0, 0, 0, 0, 0, 0, 0);
 
     /// <inheritdoc />

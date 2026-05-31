@@ -5,6 +5,7 @@ using System.IO.Abstractions;
 using System.Runtime.Versioning;
 
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging.Abstractions;
 
 using ZenMonitor.Core.Abstractions;
 using ZenMonitor.Core.Models;
@@ -18,10 +19,8 @@ namespace ZenMonitor.Core.Linux.Services;
 [SupportedOSPlatform("linux")]
 public class System(ILogger<System> logger, IFileSystem fileSystem) : ISystem
 {
-    private readonly ILogger<System> _logger = logger;
-    private readonly IFileSystem _fileSystem = fileSystem;
-    private SystemInfoSnapshot _snapshot = new(
-        "", "", 0, 0, 0);
+    private readonly ILogger<System> _logger = logger ?? NullLogger<System>.Instance;
+    private SystemInfoSnapshot _snapshot = new("", "", 0, 0, 0);
 
     /// <inheritdoc />
     public void Update() => _snapshot = FetchSystemInfo();
@@ -47,13 +46,13 @@ public class System(ILogger<System> logger, IFileSystem fileSystem) : ISystem
         {
             _logger.LogTrace("Fetching all System info...");
 
-            string kernel = _fileSystem.File.ReadAllText("/proc/sys/kernel/osrelease").Trim();
-            string hostname = _fileSystem.File.ReadAllText("/proc/sys/kernel/hostname").Trim();
+            string kernel = fileSystem.File.ReadAllText("/proc/sys/kernel/osrelease").Trim();
+            string hostname = fileSystem.File.ReadAllText("/proc/sys/kernel/hostname").Trim();
 
-            var uptimeParts = _fileSystem.File.ReadAllText("/proc/uptime").Trim().Split(' ');
+            var uptimeParts = fileSystem.File.ReadAllText("/proc/uptime").Trim().Split(' ');
             double uptime = double.Parse(uptimeParts[0]);
 
-            var loadParts = _fileSystem.File.ReadAllText("/proc/loadavg").Trim().Split(' ');
+            var loadParts = fileSystem.File.ReadAllText("/proc/loadavg").Trim().Split(' ');
 
             var tasks = loadParts[3].Split('/');
             int running = int.Parse(tasks[0]);

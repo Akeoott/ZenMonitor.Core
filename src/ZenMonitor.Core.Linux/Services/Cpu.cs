@@ -5,6 +5,7 @@ using System.IO.Abstractions;
 using System.Runtime.Versioning;
 
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging.Abstractions;
 
 using ZenMonitor.Core.Abstractions;
 using ZenMonitor.Core.Interfaces;
@@ -19,10 +20,7 @@ namespace ZenMonitor.Core.Linux.Services;
 [SupportedOSPlatform("linux")]
 public class Cpu(ILogger<Cpu> logger, IFileSystem fileSystem, IAbstractionsLinux helper) : ICpu
 {
-    private const string EnergyUjPath = "/sys/class/powercap/intel-rapl:0/energy_uj";
-    private readonly ILogger<Cpu> _logger = logger;
-    private readonly IFileSystem _fileSystem = fileSystem;
-    private readonly IAbstractionsLinux _helper = helper;
+    private readonly ILogger<Cpu> _logger = logger ?? NullLogger<Cpu>.Instance;
     private CpuInfoSnapshot _snapshot = new("", 0, 0, 0, 0, [], [], []);
 
     private long[] _currentTotalTicks = [];
@@ -30,6 +28,7 @@ public class Cpu(ILogger<Cpu> logger, IFileSystem fileSystem, IAbstractionsLinux
     private long[][] _currentCoreTicks = [];
     private long[][] _previousCoreTicks = [];
 
+    private const string EnergyUjPath = "/sys/class/powercap/intel-rapl:0/energy_uj";
     private double _prevEnergyUj;
     private DateTime _prevEnergyTime;
 
@@ -101,7 +100,7 @@ public class Cpu(ILogger<Cpu> logger, IFileSystem fileSystem, IAbstractionsLinux
         var speeds = new List<CpuCoreSpeed>();
         int coreIndex = 0;
 
-        using var stream = _fileSystem.FileStream.New("/proc/cpuinfo", FileMode.Open, FileAccess.Read, FileShare.Read);
+        using var stream = fileSystem.FileStream.New("/proc/cpuinfo", FileMode.Open, FileAccess.Read, FileShare.Read);
         using var reader = new StreamReader(stream);
 
         string? line;
@@ -185,7 +184,7 @@ public class Cpu(ILogger<Cpu> logger, IFileSystem fileSystem, IAbstractionsLinux
 
     private void ReadCurrentTicks()
     {
-        var lines = _fileSystem.File.ReadLines("/proc/stat").Where(l => l.StartsWith("cpu"));
+        var lines = fileSystem.File.ReadLines("/proc/stat").Where(l => l.StartsWith("cpu"));
         bool first = true;
 
         var coreTickList = new List<long[]>();
@@ -239,12 +238,12 @@ public class Cpu(ILogger<Cpu> logger, IFileSystem fileSystem, IAbstractionsLinux
 
         try
         {
-            foreach (var hwmonDir in _fileSystem.Directory.GetDirectories("/sys/class/hwmon"))
+            foreach (var hwmonDir in fileSystem.Directory.GetDirectories("/sys/class/hwmon"))
             {
-                string nameFile = _fileSystem.Path.Combine(hwmonDir, "name");
-                if (!_fileSystem.File.Exists(nameFile)) continue;
+                string nameFile = fileSystem.Path.Combine(hwmonDir, "name");
+                if (!fileSystem.File.Exists(nameFile)) continue;
 
-                string name = _fileSystem.File.ReadAllText(nameFile).Trim();
+                string name = fileSystem.File.ReadAllText(nameFile).Trim();
                 if (name == "coretemp")
                 {
                     var (devOverall, devTemps) = ReadIntelTemps(hwmonDir);
@@ -292,16 +291,16 @@ public class Cpu(ILogger<Cpu> logger, IFileSystem fileSystem, IAbstractionsLinux
 
         try
         {
-            foreach (var inputFile in _fileSystem.Directory.GetFiles(hwmonDir, "temp*_input"))
+            foreach (var inputFile in fileSystem.Directory.GetFiles(hwmonDir, "temp*_input"))
             {
-                string prefix = _fileSystem.Path.GetFileName(inputFile).Replace("_input", "");
-                string labelFile = _fileSystem.Path.Combine(hwmonDir, $"{prefix}_label");
+                string prefix = fileSystem.Path.GetFileName(inputFile).Replace("_input", "");
+                string labelFile = fileSystem.Path.Combine(hwmonDir, $"{prefix}_label");
 
-                if (!int.TryParse(_fileSystem.File.ReadAllText(inputFile).Trim(), out int millideg))
+                if (!int.TryParse(fileSystem.File.ReadAllText(inputFile).Trim(), out int millideg))
                     continue;
                 int temp = millideg / 1000;
 
-                string? label = _fileSystem.File.Exists(labelFile) ? _fileSystem.File.ReadAllText(labelFile).Trim() : null;
+                string? label = fileSystem.File.Exists(labelFile) ? fileSystem.File.ReadAllText(labelFile).Trim() : null;
 
                 if (label != null && (label.Contains("Package") || label == "CPU"))
                 {
@@ -334,16 +333,16 @@ public class Cpu(ILogger<Cpu> logger, IFileSystem fileSystem, IAbstractionsLinux
 
         try
         {
-            foreach (var inputFile in _fileSystem.Directory.GetFiles(hwmonDir, "temp*_input"))
+            foreach (var inputFile in fileSystem.Directory.GetFiles(hwmonDir, "temp*_input"))
             {
-                string prefix = _fileSystem.Path.GetFileName(inputFile).Replace("_input", "");
-                string labelFile = _fileSystem.Path.Combine(hwmonDir, $"{prefix}_label");
+                string prefix = fileSystem.Path.GetFileName(inputFile).Replace("_input", "");
+                string labelFile = fileSystem.Path.Combine(hwmonDir, $"{prefix}_label");
 
-                if (!int.TryParse(_fileSystem.File.ReadAllText(inputFile).Trim(), out int millideg))
+                if (!int.TryParse(fileSystem.File.ReadAllText(inputFile).Trim(), out int millideg))
                     continue;
                 int temp = millideg / 1000;
 
-                string? label = _fileSystem.File.Exists(labelFile) ? _fileSystem.File.ReadAllText(labelFile).Trim() : null;
+                string? label = fileSystem.File.Exists(labelFile) ? fileSystem.File.ReadAllText(labelFile).Trim() : null;
 
                 if (label != null && (label.Contains("Tctl") || label.Contains("Tdie")))
                 {
@@ -373,12 +372,12 @@ public class Cpu(ILogger<Cpu> logger, IFileSystem fileSystem, IAbstractionsLinux
     #region PowerDraw
     private double ReadPowerDraw()
     {
-        if (!_fileSystem.File.Exists(EnergyUjPath)) return 0.0;
+        if (!fileSystem.File.Exists(EnergyUjPath)) return 0.0;
 
         try
         {
-            double energyUj = double.Parse(_fileSystem.File.ReadAllText(EnergyUjPath).Trim());
-            DateTime now = _helper.UtcNow;
+            double energyUj = double.Parse(fileSystem.File.ReadAllText(EnergyUjPath).Trim());
+            DateTime now = helper.UtcNow;
 
             double power = 0;
             if (_prevEnergyUj > 0)

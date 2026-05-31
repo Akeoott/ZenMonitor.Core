@@ -4,6 +4,8 @@
 using System.Runtime.Versioning;
 
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging.Abstractions;
 using Microsoft.Win32;
 
 using ZenMonitor.Core.Abstractions;
@@ -11,6 +13,7 @@ using ZenMonitor.Core.Interfaces;
 using ZenMonitor.Core.Models;
 using ZenMonitor.Core.Services;
 using ZenMonitor.Core.Windows.ServiceAbstraction;
+using ZenMonitor.Core.Windows.Services;
 
 namespace ZenMonitor.Core.Hosting.Registration;
 
@@ -20,24 +23,38 @@ namespace ZenMonitor.Core.Hosting.Registration;
 [SupportedOSPlatform("windows")]
 internal static class WindowsRegistration
 {
-    internal static void Register(IServiceCollection services, out bool gpuNotSupported)
+    internal static void Register(IServiceCollection services)
     {
+        // If the consumer hasn't configured logging via AddLogging(), provide
+        // null logger singletons so ILogger<T> constructor params don't crash
+        // during DI resolution. When the consumer has configured logging, we
+        // skip this block so their open-generic ILogger<T> resolver takes full effect.
+        if (!DependencyInjection.HasLogging(services))
+        {
+            services.AddSingleton<ILogger<Cpu>>(NullLogger<Cpu>.Instance);
+            services.AddSingleton<ILogger<Drive>>(NullLogger<Drive>.Instance);
+            services.AddSingleton<ILogger<Memory>>(NullLogger<Memory>.Instance);
+            services.AddSingleton<ILogger<Network>>(NullLogger<Network>.Instance);
+            services.AddSingleton<ILogger<Windows.Services.System>>(NullLogger<Windows.Services.System>.Instance);
+            services.AddSingleton<ILogger<GpuAmd>>(NullLogger<GpuAmd>.Instance);
+            services.AddSingleton<ILogger<GpuNvidia>>(NullLogger<GpuNvidia>.Instance);
+        }
+
         services.AddSingleton<IAbstractionsWindows, AbstractionsWindows>();
-        services.AddSingleton<ICpu, Windows.Services.Cpu>();
-        services.AddSingleton<IDrive, Windows.Services.Drive>();
-        services.AddSingleton<IMemory, Windows.Services.Memory>();
-        services.AddSingleton<INetwork, Windows.Services.Network>();
+        services.AddSingleton<ICpu, Cpu>();
+        services.AddSingleton<IDrive, Drive>();
+        services.AddSingleton<IMemory, Memory>();
+        services.AddSingleton<INetwork, Network>();
         services.AddSingleton<ISystem, Windows.Services.System>();
 
         var vendor = DetectGpuVendor();
-        gpuNotSupported = vendor == GpuVendor.Unknown;
 
         services.AddSingleton<IGpu>(serviceProvider =>
         {
             return vendor switch
             {
-                GpuVendor.Nvidia => ActivatorUtilities.CreateInstance<Windows.Services.GpuNvidia>(serviceProvider),
-                GpuVendor.Amd => ActivatorUtilities.CreateInstance<Windows.Services.GpuAmd>(serviceProvider),
+                GpuVendor.Nvidia => ActivatorUtilities.CreateInstance<GpuNvidia>(serviceProvider),
+                GpuVendor.Amd => ActivatorUtilities.CreateInstance<GpuAmd>(serviceProvider),
                 _ => new NullGpu(),
             };
         });

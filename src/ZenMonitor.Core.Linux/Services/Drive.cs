@@ -5,6 +5,7 @@ using System.IO.Abstractions;
 using System.Runtime.Versioning;
 
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging.Abstractions;
 
 using ZenMonitor.Core.Abstractions;
 using ZenMonitor.Core.Interfaces;
@@ -19,9 +20,7 @@ namespace ZenMonitor.Core.Linux.Services;
 [SupportedOSPlatform("linux")]
 public class Drive(ILogger<Drive> logger, IFileSystem fileSystem, IAbstractionsLinux helper) : IDrive
 {
-    private readonly ILogger<Drive> _logger = logger;
-    private readonly IFileSystem _fileSystem = fileSystem;
-    private readonly IAbstractionsLinux _helper = helper;
+    private readonly ILogger<Drive> _logger = logger ?? NullLogger<Drive>.Instance;
     private DriveInfoSnapshot _snapshot = new([]);
 
     private readonly Dictionary<string, (long ioTime, DateTime time)> _previousDiskStats = [];
@@ -107,7 +106,7 @@ public class Drive(ILogger<Drive> logger, IFileSystem fileSystem, IAbstractionsL
         var ioUsages = new Dictionary<string, double>();
         try
         {
-            var lines = _fileSystem.File.ReadAllLines("/proc/diskstats");
+            var lines = fileSystem.File.ReadAllLines("/proc/diskstats");
 
             foreach (var line in lines)
             {
@@ -119,7 +118,7 @@ public class Drive(ILogger<Drive> logger, IFileSystem fileSystem, IAbstractionsL
 
                 if (_previousDiskStats.TryGetValue(name, out var prev))
                 {
-                    double deltaTime = (_helper.UtcNow - prev.time).TotalMilliseconds;
+                    double deltaTime = (helper.UtcNow - prev.time).TotalMilliseconds;
                     double deltaIo = ioTime - prev.ioTime;
                     double usage = deltaTime > 0 ? deltaIo / deltaTime * 100 : 0;
                     ioUsages[name] = usage;
@@ -129,7 +128,7 @@ public class Drive(ILogger<Drive> logger, IFileSystem fileSystem, IAbstractionsL
                     ioUsages[name] = 0;
                 }
 
-                _previousDiskStats[name] = (ioTime, _helper.UtcNow);
+                _previousDiskStats[name] = (ioTime, helper.UtcNow);
             }
         }
         catch (FileNotFoundException ex)
@@ -143,7 +142,7 @@ public class Drive(ILogger<Drive> logger, IFileSystem fileSystem, IAbstractionsL
 
     private string RunDf(string arguments)
     {
-        var result = _helper.RunProcess("df", arguments);
+        var result = helper.RunProcess("df", arguments);
         try
         {
             if (result.ExitCode != 0)
