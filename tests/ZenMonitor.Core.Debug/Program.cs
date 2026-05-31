@@ -40,7 +40,7 @@ internal sealed class Program
 
         ConfigureLogging(logLevel, logFilePath);
 
-        using var serviceProvider = BuildServiceProvider(out bool gpuNotSupported);
+        using var serviceProvider = BuildServiceProvider();
         var logger = serviceProvider.GetRequiredService<ILogger<Program>>();
 
         try
@@ -73,7 +73,7 @@ internal sealed class Program
     #endregion
 
     #region Dependency Injection
-    private static ServiceProvider BuildServiceProvider(out bool gpuNotSupported)
+    private static ServiceProvider BuildServiceProvider()
     {
         var services = new ServiceCollection();
 
@@ -84,7 +84,7 @@ internal sealed class Program
         });
 
         // All ZenMonitor platform services (Linux/Win detection, GPU auto-detect)
-        services.AddZenMonitor(out gpuNotSupported);
+        services.AddZenMonitor();
 
         services.AddTransient<Monitor>();
 

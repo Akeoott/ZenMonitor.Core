@@ -4,6 +4,7 @@
 using System.Runtime.Versioning;
 
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging.Abstractions;
 
 using ZenMonitor.Core.Abstractions;
 using ZenMonitor.Core.Interfaces;
@@ -18,10 +19,8 @@ namespace ZenMonitor.Core.Linux.Services;
 [SupportedOSPlatform("linux")]
 public class GpuNvidia(ILogger<GpuNvidia> logger, IAbstractionsLinux helper) : IGpu
 {
-    private readonly ILogger<GpuNvidia> _logger = logger;
-    private readonly IAbstractionsLinux _helper = helper;
-    private GpuInfoSnapshot _snapshot = new(
-        "", 0, 0, 0.0, 0.0, 0, "", 0.0);
+    private readonly ILogger<GpuNvidia> _logger = logger ?? NullLogger<GpuNvidia>.Instance;
+    private GpuInfoSnapshot _snapshot = new("", 0, 0, 0.0, 0.0, 0, "", 0.0);
 
     /// <inheritdoc />
     public void Update() => _snapshot = FetchGpuInfo();
@@ -86,7 +85,7 @@ public class GpuNvidia(ILogger<GpuNvidia> logger, IAbstractionsLinux helper) : I
 
     private string RunNvidiaSmi(string arguments)
     {
-        ProcessResult result = _helper.RunProcess("nvidia-smi", arguments);
+        ProcessResult result = helper.RunProcess("nvidia-smi", arguments);
 
         if (result.ExitCode != 0)
         {

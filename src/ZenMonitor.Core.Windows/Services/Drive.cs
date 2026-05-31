@@ -4,6 +4,7 @@
 using System.Runtime.Versioning;
 
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging.Abstractions;
 
 using ZenMonitor.Core.Abstractions;
 using ZenMonitor.Core.Interfaces;
@@ -18,8 +19,7 @@ namespace ZenMonitor.Core.Windows.Services;
 [SupportedOSPlatform("windows")]
 public class Drive(ILogger<Drive> logger, IAbstractionsWindows helper) : IDrive
 {
-    private readonly ILogger<Drive> _logger = logger;
-    private readonly IAbstractionsWindows _helper = helper;
+    private readonly ILogger<Drive> _logger = logger ?? NullLogger<Drive>.Instance;
     private DriveInfoSnapshot _snapshot = new([]);
 
     /// <inheritdoc />

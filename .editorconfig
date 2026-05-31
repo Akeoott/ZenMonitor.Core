@@ -50,6 +50,10 @@ csharp_preserve_single_line_blocks = true
 dotnet_diagnostic.OLOC001.words_in_name = 5
 dotnet_diagnostic.OLOC001.license_header = // Copyright (c) Ame (Akeoot/Akeoott) <akeoot@pm.me>. Licensed under the LGPL-3.0 Licence.\n// See the LICENCE file in the repository root for full licence text.
 
+#! Remove later
+# CS9113: Parameter is unread.
+dotnet_diagnostic.CS9113.severity = suggestion
+
 [*.{csproj,props,targets}]
 charset = utf-8
 end_of_line = crlf
