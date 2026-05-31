@@ -17,11 +17,11 @@ namespace ZenMonitor.Core.Linux.Services;
 /// information from <c>df</c> and disk I/O stats from <c>/proc/diskstats</c>.
 /// </summary>
 [SupportedOSPlatform("linux")]
-public class Drive(ILogger<Drive> logger, IFileSystem fileSystem, IServiceAbstraction helper) : IDrive
+public class Drive(ILogger<Drive> logger, IFileSystem fileSystem, IAbstractionsLinux helper) : IDrive
 {
     private readonly ILogger<Drive> _logger = logger;
     private readonly IFileSystem _fileSystem = fileSystem;
-    private readonly IServiceAbstraction _helper = helper;
+    private readonly IAbstractionsLinux _helper = helper;
     private DriveInfoSnapshot _snapshot = new([]);
 
     private readonly Dictionary<string, (long ioTime, DateTime time)> _previousDiskStats = [];
@@ -119,7 +119,7 @@ public class Drive(ILogger<Drive> logger, IFileSystem fileSystem, IServiceAbstra
 
                 if (_previousDiskStats.TryGetValue(name, out var prev))
                 {
-                    double deltaTime = (_helper.Linux.UtcNow - prev.time).TotalMilliseconds;
+                    double deltaTime = (_helper.UtcNow - prev.time).TotalMilliseconds;
                     double deltaIo = ioTime - prev.ioTime;
                     double usage = deltaTime > 0 ? deltaIo / deltaTime * 100 : 0;
                     ioUsages[name] = usage;
@@ -129,7 +129,7 @@ public class Drive(ILogger<Drive> logger, IFileSystem fileSystem, IServiceAbstra
                     ioUsages[name] = 0;
                 }
 
-                _previousDiskStats[name] = (ioTime, _helper.Linux.UtcNow);
+                _previousDiskStats[name] = (ioTime, _helper.UtcNow);
             }
         }
         catch (FileNotFoundException ex)
@@ -143,7 +143,7 @@ public class Drive(ILogger<Drive> logger, IFileSystem fileSystem, IServiceAbstra
 
     private string RunDf(string arguments)
     {
-        var result = _helper.Linux.RunProcess("df", arguments);
+        var result = _helper.RunProcess("df", arguments);
         try
         {
             if (result.ExitCode != 0)

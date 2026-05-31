@@ -9,17 +9,8 @@
 
     <!-- NuGet Package Metadata -->
     <PackageId>ZenMonitor.Core.Linux</PackageId>
-    <Version>1.1.2-alpha</Version>
-    <Authors>ZenMonitor Contributors</Authors>
     <Description>Linux platform services and implementations for ZenMonitor.Core.</Description>
-    <PackageLicenseExpression>LGPL-3.0-or-later</PackageLicenseExpression>
-    <PackageProjectUrl>https://github.com/Akeoott/ZenMonitor.Core</PackageProjectUrl>
-    <RepositoryUrl>https://github.com/Akeoott/ZenMonitor.Core.git</RepositoryUrl>
-    <RepositoryType>git</RepositoryType>
     <PackageTags>system-monitoring;telemetry;linux;hardware</PackageTags>
-    <PackageReadmeFile>README.md</PackageReadmeFile>
-    <IncludeSymbols>true</IncludeSymbols>
-    <SymbolPackageFormat>snupkg</SymbolPackageFormat>
   </PropertyGroup>
 
   <ItemGroup>
@@ -30,8 +21,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\ZenMonitor.Core\ZenMonitor.Core.csproj" />
-    <None Include="..\..\README.md" Pack="true" PackagePath="\" />
-    <None Include="..\..\LICENSE" Pack="true" PackagePath="\" />
   </ItemGroup>
 
 </Project>

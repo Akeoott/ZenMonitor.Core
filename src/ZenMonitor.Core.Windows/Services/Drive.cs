@@ -13,13 +13,13 @@ namespace ZenMonitor.Core.Windows.Services;
 
 /// <summary>
 /// Windows implementation of <see cref="IDrive"/> that reads Drive metrics
-/// via native Win32 API calls through <see cref="IWindows"/>.
+/// via native Win32 API calls through <see cref="IAbstractionsWindows"/>.
 /// </summary>
 [SupportedOSPlatform("windows")]
-public class Drive(ILogger<Drive> logger, IServiceAbstraction helper) : IDrive
+public class Drive(ILogger<Drive> logger, IAbstractionsWindows helper) : IDrive
 {
     private readonly ILogger<Drive> _logger = logger;
-    private readonly IServiceAbstraction _helper = helper;
+    private readonly IAbstractionsWindows _helper = helper;
     private DriveInfoSnapshot _snapshot = new([]);
 
     /// <inheritdoc />

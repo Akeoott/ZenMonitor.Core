@@ -13,13 +13,13 @@ namespace ZenMonitor.Core.Windows.Services;
 
 /// <summary>
 /// Windows implementation of <see cref="ICpu"/> that reads CPU metrics
-/// via native Win32 API calls through <see cref="IWindows"/>.
+/// via native Win32 API calls through <see cref="IAbstractionsWindows"/>.
 /// </summary>
 [SupportedOSPlatform("windows")]
-public class Cpu(ILogger<Cpu> logger, IServiceAbstraction helper) : ICpu
+public class Cpu(ILogger<Cpu> logger, IAbstractionsWindows helper) : ICpu
 {
     private readonly ILogger<Cpu> _logger = logger;
-    private readonly IServiceAbstraction _helper = helper;
+    private readonly IAbstractionsWindows _helper = helper;
     private CpuInfoSnapshot _snapshot = new("", 0, 0, 0, 0, [], [], []);
 
     private CpuTickInfo _previousTotalTicks = new(0, 0, 0);
@@ -90,9 +90,9 @@ public class Cpu(ILogger<Cpu> logger, IServiceAbstraction helper) : ICpu
     #region CpuInfo
     private (string cpuName, CpuCoreSpeed[] coreSpeeds) ReadCpuInfo()
     {
-        string cpuName = _helper.Windows.GetProcessorName();
-        int coreCount = _helper.Windows.GetProcessorCount();
-        int baseMhz = _helper.Windows.GetProcessorBaseFrequencyMHz();
+        string cpuName = _helper.GetProcessorName();
+        int coreCount = _helper.GetProcessorCount();
+        int baseMhz = _helper.GetProcessorBaseFrequencyMHz();
 
         var speeds = new CpuCoreSpeed[coreCount];
         for (int i = 0; i < coreCount; i++)
@@ -105,8 +105,8 @@ public class Cpu(ILogger<Cpu> logger, IServiceAbstraction helper) : ICpu
     #region CpuUsages
     private (int totalUsage, CpuCoreUsage[] coreUsages) ReadCpuUsages()
     {
-        CpuTickInfo currentTotal = _helper.Windows.GetSystemTimes();
-        CpuTickInfo[] currentCore = _helper.Windows.GetPerCoreTimes();
+        CpuTickInfo currentTotal = _helper.GetSystemTimes();
+        CpuTickInfo[] currentCore = _helper.GetPerCoreTimes();
 
         int totalUsage = 0;
         CpuCoreUsage[] coreUsages;
@@ -162,7 +162,7 @@ public class Cpu(ILogger<Cpu> logger, IServiceAbstraction helper) : ICpu
     #region CpuTemps
     private (int overallTemp, CpuCoreTemp[] coreTemps) ReadCpuTemps(int coreCount)
     {
-        int overall = _helper.Windows.GetCpuTemperature(); // Windows only provides overall temp.
+        int overall = _helper.GetCpuTemperature(); // Windows only provides overall temp.
 
         var coreTemps = new CpuCoreTemp[coreCount];
         for (int i = 0; i < coreCount; i++)
@@ -177,7 +177,7 @@ public class Cpu(ILogger<Cpu> logger, IServiceAbstraction helper) : ICpu
     {
         try
         {
-            return _helper.Windows.GetCpuPowerDraw();
+            return _helper.GetCpuPowerDraw();
         }
         catch (Exception ex)
         {

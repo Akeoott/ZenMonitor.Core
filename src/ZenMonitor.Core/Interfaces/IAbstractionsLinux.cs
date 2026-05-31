@@ -11,7 +11,7 @@ namespace ZenMonitor.Core.Interfaces;
 /// Abstraction for system-level operations that need to be mockable in tests.
 /// </summary>
 [SupportedOSPlatform("linux")]
-public interface ILinux
+public interface IAbstractionsLinux
 {
     /// <summary>Gets the current UTC date and time.</summary>
     DateTime UtcNow { get; }

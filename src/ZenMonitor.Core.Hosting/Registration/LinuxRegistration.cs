@@ -6,38 +6,22 @@ using System.Runtime.Versioning;
 using Microsoft.Extensions.DependencyInjection;
 
 using ZenMonitor.Core.Abstractions;
+using ZenMonitor.Core.Interfaces;
+using ZenMonitor.Core.Linux.ServiceAbstraction;
 using ZenMonitor.Core.Models;
 using ZenMonitor.Core.Services;
 
 namespace ZenMonitor.Core.Hosting.Registration;
 
 /// <summary>
-/// Registers all Linux-specific ZenMonitor services,
-/// including GPU vendor auto-detection.
+/// Registers all Linux-specific ZenMonitor services.
 /// </summary>
 [SupportedOSPlatform("linux")]
 internal static class LinuxRegistration
 {
-    /// <summary>
-    /// Registers Linux hardware monitoring services into the DI container.
-    /// Automatically detects NVIDIA vs AMD GPU to select the correct implementation.
-    /// </summary>
-    public static void Register(IServiceCollection services)
+    internal static void Register(IServiceCollection services, out bool gpuNotSupported)
     {
-        Register(services, out _);
-    }
-
-    /// <summary>
-    /// Registers Linux hardware monitoring services into the DI container.
-    /// Automatically detects NVIDIA vs AMD GPU to select the correct implementation.
-    /// </summary>
-    /// <param name="services">The service collection to register with.</param>
-    /// <param name="gpuNotSupported">
-    /// <c>true</c> if GPU vendor could not be detected and NullGpu was used.
-    /// </param>
-    public static void Register(IServiceCollection services, out bool gpuNotSupported)
-    {
-        // Platform-level services
+        services.AddSingleton<IAbstractionsLinux, AbstractionsLinux>();
         services.AddSingleton<ICpu, Linux.Services.Cpu>();
         services.AddSingleton<IDrive, Linux.Services.Drive>();
         services.AddSingleton<IMemory, Linux.Services.Memory>();
@@ -96,7 +80,6 @@ internal static class LinuxRegistration
         {
             // Ignore detection errors, fall back to NullGpu
         }
-
         return GpuVendor.Unknown;
     }
 }

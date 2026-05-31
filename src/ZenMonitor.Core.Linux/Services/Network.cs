@@ -17,11 +17,11 @@ namespace ZenMonitor.Core.Linux.Services;
 /// from <c>/proc/net/dev</c> and <c>/sys/class/net/*/operstate</c>.
 /// </summary>
 [SupportedOSPlatform("linux")]
-public class Network(ILogger<Network> logger, IFileSystem fileSystem, IServiceAbstraction helper) : INetwork
+public class Network(ILogger<Network> logger, IFileSystem fileSystem, IAbstractionsLinux helper) : INetwork
 {
     private readonly ILogger<Network> _logger = logger;
     private readonly IFileSystem _fileSystem = fileSystem;
-    private readonly IServiceAbstraction _helper = helper;
+    private readonly IAbstractionsLinux _helper = helper;
     private NetworkInfoSnapshot _snapshot = new(0, 0, []);
 
     private readonly Dictionary<string, (long rx, long tx, DateTime time)> _previousNetStats = [];
@@ -111,7 +111,7 @@ public class Network(ILogger<Network> logger, IFileSystem fileSystem, IServiceAb
 
             if (_previousNetStats.TryGetValue(interfaceName, out var prev))
             {
-                double deltaSec = (_helper.Linux.UtcNow - prev.time).TotalSeconds;
+                double deltaSec = (_helper.UtcNow - prev.time).TotalSeconds;
                 if (deltaSec > 0)
                 {
                     long deltaRx = rxBytes - prev.rx;
@@ -125,7 +125,7 @@ public class Network(ILogger<Network> logger, IFileSystem fileSystem, IServiceAb
                 }
             }
 
-            _previousNetStats[interfaceName] = (rxBytes, txBytes, _helper.Linux.UtcNow);
+            _previousNetStats[interfaceName] = (rxBytes, txBytes, _helper.UtcNow);
 
             networks.Add(new ConnectedNetworks(
                 interfaceName,

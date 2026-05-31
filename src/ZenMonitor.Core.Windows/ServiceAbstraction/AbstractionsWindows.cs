@@ -14,12 +14,12 @@ using ZenMonitor.Core.Models;
 namespace ZenMonitor.Core.Windows.ServiceAbstraction;
 
 /// <summary>
-/// Windows implementation of <see cref="IWindows"/> using native Win32 API calls
+/// Windows implementation of <see cref="IAbstractionsWindows"/> using native Win32 API calls
 /// (P/Invoke) and WMI for hardware metrics.
 /// </summary>
 [ExcludeFromCodeCoverage]
 [SupportedOSPlatform("windows")]
-public partial class Windows : IWindows
+public partial class AbstractionsWindows : IAbstractionsWindows
 {
     #region Cpu
     /// <inheritdoc />

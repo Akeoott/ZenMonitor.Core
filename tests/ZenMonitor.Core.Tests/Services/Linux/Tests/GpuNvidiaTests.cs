@@ -20,12 +20,12 @@ namespace ZenMonitor.Core.Tests.Services.Linux.Tests;
 public class GpuNvidiaTests
 {
     private readonly Mock<ILogger<GpuNvidia>> _mockLogger;
-    private readonly Mock<IServiceAbstraction> _mockHelper;
+    private readonly Mock<IAbstractionsLinux> _mockHelper;
 
     public GpuNvidiaTests()
     {
         _mockLogger = new Mock<ILogger<GpuNvidia>>();
-        _mockHelper = new Mock<IServiceAbstraction>();
+        _mockHelper = new Mock<IAbstractionsLinux>();
     }
 
     [Fact]
@@ -33,7 +33,7 @@ public class GpuNvidiaTests
     {
         string output = "GeForce RTX 4090, 12, 6, 1024, 24576, 72, P0, 450.00";
         _mockHelper
-            .Setup(r => r.Linux.RunProcess("nvidia-smi", It.IsAny<string>()))
+            .Setup(r => r.RunProcess("nvidia-smi", It.IsAny<string>()))
             .Returns(new ProcessResult(0, output, string.Empty));
 
         var gpu = new GpuNvidia(_mockLogger.Object, _mockHelper.Object);
@@ -53,7 +53,7 @@ public class GpuNvidiaTests
     public void Error_NvidiaSmiFails_ReturnsEmptySnapshot()
     {
         _mockHelper
-            .Setup(r => r.Linux.RunProcess("nvidia-smi", It.IsAny<string>()))
+            .Setup(r => r.RunProcess("nvidia-smi", It.IsAny<string>()))
             .Returns(new ProcessResult(1, string.Empty, "Failed to query GPU"));
 
         var gpu = new GpuNvidia(_mockLogger.Object, _mockHelper.Object);
@@ -74,7 +74,7 @@ public class GpuNvidiaTests
     {
         // nvidia-smi returns output with only 2 fields — part[7] access would throw IndexOutOfRangeException
         _mockHelper
-            .Setup(r => r.Linux.RunProcess("nvidia-smi", It.IsAny<string>()))
+            .Setup(r => r.RunProcess("nvidia-smi", It.IsAny<string>()))
             .Returns(new ProcessResult(0, "NVIDIA GPU, 50", string.Empty));
 
         var gpu = new GpuNvidia(_mockLogger.Object, _mockHelper.Object);
@@ -95,7 +95,7 @@ public class GpuNvidiaTests
     {
         // nvidia-smi returns an empty string — hits the < 8 guard
         _mockHelper
-            .Setup(r => r.Linux.RunProcess("nvidia-smi", It.IsAny<string>()))
+            .Setup(r => r.RunProcess("nvidia-smi", It.IsAny<string>()))
             .Returns(new ProcessResult(0, "", string.Empty));
 
         var gpu = new GpuNvidia(_mockLogger.Object, _mockHelper.Object);
@@ -116,7 +116,7 @@ public class GpuNvidiaTests
     {
         // 8 CSV fields but numeric fields are garbage — exercises TryParse fallback to 0
         _mockHelper
-            .Setup(r => r.Linux.RunProcess("nvidia-smi", It.IsAny<string>()))
+            .Setup(r => r.RunProcess("nvidia-smi", It.IsAny<string>()))
             .Returns(new ProcessResult(0, "My GPU, abc, def, ghi, jkl, mno, P8, xyz", string.Empty));
 
         var gpu = new GpuNvidia(_mockLogger.Object, _mockHelper.Object);
