@@ -18,3 +18,15 @@ jobs:
       - name: Get next version
         uses: smlx/ccv@7318e2f25a52dcd550e75384b84983973251a1f8
         id: ccv
+
+      - name: Display version
+        run: echo "Next version is ${{ steps.ccv.outputs.next-version }}"
+
+      - name: Create Draft Release and Tag
+        uses: softprops/action-gh-release@b4309332981a82ec1c5618f44dd2e27cc8bfbfda
+        with:
+          name: "Release ${{ steps.ccv.outputs.next-version }}"
+          tag_name: ${{ steps.ccv.outputs.next-version }}
+          body: "Add changes here..."
+          draft: true
+          token: ${{ secrets.RELEASE_PIPELINE_PAT }}
