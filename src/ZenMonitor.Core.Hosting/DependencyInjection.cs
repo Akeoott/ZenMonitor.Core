@@ -34,6 +34,7 @@ public static class DependencyInjection
     /// </param>
     public static IServiceCollection AddZenMonitor(this IServiceCollection services, out bool gpuNotSupported)
     {
+        services.AddLogging();
         services.AddSingleton<IFileSystem, FileSystem>();
 
         gpuNotSupported = false;
