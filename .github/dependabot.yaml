@@ -32,9 +32,6 @@ updates:
       timezone: "Europe/Berlin"
     cooldown:
       default-days: 5
-      semver-major-days: 14
-      semver-minor-days: 7
-      semver-patch-days: 3
     labels:
       - "Type: Dependencies"
       - "Type: Security"
