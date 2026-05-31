@@ -1,4 +1,5 @@
 # Defines codeowners of sensitive files
 
 /.github/CODEOWNERS @Akeoott
+/.github/workflows/* @Akeoott
 /.github/dependabot.yaml @Akeoott
