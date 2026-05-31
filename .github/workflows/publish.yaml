@@ -1,32 +1,33 @@
 name: Publish NuGet Package
 
 on:
-  push:
-    tags:
-      - "*"
+  release:
+    types: [published]
 
 permissions:
   id-token: write
   contents: read
 
 jobs:
-  publish:
+  validate-and-publish:
     runs-on: ubuntu-latest
-    if: github.actor == 'Akeoott'
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v5
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd
 
       - name: Setup .NET
-        uses: actions/setup-dotnet@v5
+        uses: actions/setup-dotnet@9a946fdbd5fb07b82b2f5a4466058b876ab72bb2
         with:
-          dotnet-version: "10.0.203"
+          dotnet-version: "10.0.x"
+
+      - name: Restore
+        run: dotnet restore
 
       - name: Pack NuGet package
-        run: dotnet pack --configuration Release --output ./artifacts /p:PackageVersion=${{ github.ref_name }}
+        run: dotnet pack --configuration Release --output ./artifacts /p:PackageVersion=${{ github.event.release.tag_name }} --no-restore
 
-      - name: NuGet Login (OIDC Token Exchange)
-        uses: NuGet/login@v1
+      - name: NuGet Login (OIDC)
+        uses: NuGet/login@8d196754b4036150537f80ac539e15c2f1028841
         id: login
         with:
           user: "Akeoott"
