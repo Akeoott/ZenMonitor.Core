@@ -2,30 +2,17 @@
 # Used some of the config from https://github.com/ppy/osu >.< luv u ppy
 root = true
 
-# ================
-# General Settings
-
 [*]
 # Core settings
 charset = utf-8
 end_of_line = lf
 trim_trailing_whitespace = true
-
-# Default Indentation
 indent_style = space
 indent_size = 4
-
-# ==============================
-# C# (.NET SDK) Styling Settings
 
 [*.cs]
 # Styling
-charset = utf-8
-end_of_line = crlf
 insert_final_newline = true
-indent_style = space
-indent_size = 4
-trim_trailing_whitespace = true
 
 # File Header
 file_header_template = Copyright (c) Ame (Akeoot/Akeoott) <akeoot@pm.me>. Licensed under the LGPL-3.0 Licence.\nSee the LICENSE file in the repository root for full license text.
@@ -50,19 +37,7 @@ csharp_preserve_single_line_blocks = true
 dotnet_diagnostic.OLOC001.words_in_name = 5
 dotnet_diagnostic.OLOC001.license_header = // Copyright (c) Ame (Akeoot/Akeoott) <akeoot@pm.me>. Licensed under the LGPL-3.0 Licence.\n// See the LICENCE file in the repository root for full licence text.
 
-#! Remove later
-# CS9113: Parameter is unread.
-dotnet_diagnostic.CS9113.severity = suggestion
-
-[*.{csproj,props,targets}]
-charset = utf-8
-end_of_line = crlf
-indent_style = space
-indent_size = 2
-trim_trailing_whitespace = true
-
-# xml based files
-[*.{xml,axaml,slnx,csproj}]
+[*.{csproj,props,targets,json,jsonc,xml,axaml,slnx}]
 indent_style = space
 indent_size = 2
 
@@ -70,10 +45,3 @@ indent_size = 2
 insert_final_newline = true
 indent_style = space
 indent_size = 2
-trim_trailing_whitespace = true
-
-# =======================
-# Markdown and Text Files
-
-[*.{md,txt}]
-trim_trailing_whitespace = true
