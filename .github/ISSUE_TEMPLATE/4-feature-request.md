@@ -29,32 +29,32 @@ To expedite issue processing, please search open and closed issues before submit
 ## **Problem / Demand**
 <!-- A clear and concise description of what the problem is or what is missing. Ex. I'm always frustrated when [...] -->
 
-[replace with description]
+[Replace with description]
 
 ---
 
 ## **Preferred solution**
 <!-- A clear and concise description of what you want to happen. -->
 
-[replace with description]
+[Replace with description]
 
 ---
 
 ## **Alternative solutions**
 <!-- A clear and concise description of any alternative solutions or features you have considered. -->
 
-[replace with description]
+[Replace with description]
 
 ---
 
 ## **Impact**
 <!-- How many users would this benefit? Is it a niche use case or broadly useful? -->
 
-[replace with description]
+[Replace with description]
 
 ---
 
 ## **Additional context**
 <!-- Add any other context or screenshots about the feature request here. -->
 
-[replace with additional context]
+[Replace with additional context]

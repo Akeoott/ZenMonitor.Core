@@ -17,7 +17,7 @@ To expedite issue processing, please search open and closed issues before submit
 ## **Test file location**
 <!-- Which test file(s) are failing? Include the full path if possible, e.g. ZenMonitor.Tests/Services/Linux/CpuServiceTests.cs -->
 
-[replace with test file path(s)]
+[Replace with test file path(s)]
 
 ---
 
@@ -33,7 +33,7 @@ To expedite issue processing, please search open and closed issues before submit
 ## **Failure description**
 <!-- Describe what is failing and why. Include the error message or stack trace if available. -->
 
-[replace with description]
+[Replace with description]
 
 ---
 
@@ -53,4 +53,4 @@ To expedite issue processing, please search open and closed issues before submit
 ## **Additional context**
 <!-- Add any other context about the problem here. -->
 
-[replace with additional context]
+[Replace with additional context]

@@ -27,34 +27,34 @@ To expedite issue processing, please search open and closed issues before submit
 ---
 
 ## **Problem / Demand**
-<!-- A clear and concise description of what the problem is with the current behaviour. Ex. I'm always frustrated when [...] -->
+<!-- A clear and concise description of what the problem is with the current behavior. Ex. I'm always frustrated when [...] -->
 
-[replace with description]
+[Replace with description]
 
 ---
 
 ## **Preferred improvement**
 <!-- A clear and concise description of what you want to change or add. -->
 
-[replace with description]
+[Replace with description]
 
 ---
 
 ## **Alternative solutions**
 <!-- A clear and concise description of any alternative solutions or improvements you have considered. -->
 
-[replace with description]
+[Replace with description]
 
 ---
 
 ## **Impact**
 <!-- How many users would this benefit? Is it a niche use case or broadly useful? -->
 
-[replace with description]
+[Replace with description]
 
 ---
 
 ## **Additional context**
 <!-- Add any other context or screenshots about the enhancement here. -->
 
-[replace with additional context]
+[Replace with additional context]

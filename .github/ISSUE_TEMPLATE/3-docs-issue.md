@@ -17,25 +17,25 @@ To expedite issue processing, please search open and closed issues before submit
 ## **Location**
 <!-- Which file or page is the issue in? e.g. README.md, CONTRIBUTING.md, inline code comments, the GitHub wiki, etc. -->
 
-[replace with file or page location]
+[Replace with file or page location]
 
 ---
 
 ## **The issue**
 <!-- A clear and concise description of what is wrong or missing. -->
 
-[replace with description]
+[Replace with description]
 
 ---
 
 ## **Suggested fix**
 <!-- A clear and concise description of how it should read or what should be added. -->
 
-[replace with suggested fix]
+[Replace with suggested fix]
 
 ---
 
 ## **Additional context**
 <!-- Add any other context about the problem here. -->
 
-[replace with additional context]
+[Replace with additional context]

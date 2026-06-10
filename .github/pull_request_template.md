@@ -7,7 +7,7 @@ Thank you for contributing! Before submitting, please make sure you have read an
 ## **Related Issues**
 <!-- Link to any related issues using keywords like "Fixes #123" or "Closes #456". -->
 
-[replace with related issues, e.g. "Fixes #12"]
+[Replace with related issues, e.g. "Fixes #12"]
 
 ---
 
@@ -28,16 +28,16 @@ Thank you for contributing! Before submitting, please make sure you have read an
 ## **Summary**
 <!-- Provide a brief summary of the changes and the motivation behind them. -->
 
-[replace with summary]
+[Replace with summary]
 
 ---
 
 ## **Changes**
 <!-- List specific changes made to the code, including file paths where relevant. -->
 
-- [replace with change 1]
-- [replace with change 2]
-- [replace with change 3]
+- [Replace with change 1]
+- [Replace with change 2]
+- [Replace with change 3]
 
 ---
 
@@ -67,11 +67,11 @@ Thank you for contributing! Before submitting, please make sure you have read an
 - [ ] Yes (describe below)
 - [ ] No
 
-[replace with description if breaking]
+[Replace with description if breaking]
 
 ---
 
 ## **Additional context**
 <!-- Add any other context about the PR here, such as screenshots, design decisions, or dependencies. -->
 
-[replace with additional context]
+[Replace with additional context]

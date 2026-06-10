@@ -11,21 +11,21 @@ To expedite issue processing, please search open and closed issues before submit
 ## **Describe the issue**
 <!-- A clear and concise description of what the issue is. -->
 
-[replace with description]
+[Replace with description]
 
 ---
 
-### **Expected behaviour**
+### **Expected behavior**
 <!-- A clear and concise description of what you expected to happen. -->
 
-[replace with description]
+[Replace with description]
 
 ---
 
-### **Actual behaviour**
+### **Actual behavior**
 <!-- A clear and concise description of what is actually happening. -->
 
-[replace with description]
+[Replace with description]
 
 ---
 
@@ -46,4 +46,4 @@ To expedite issue processing, please search open and closed issues before submit
 ### **Additional context**
 <!-- Add any other context or additional information about the issue here. -->
 
-[replace with additional context]
+[Replace with additional context]

@@ -17,15 +17,15 @@ To expedite issue processing, please search open and closed issues before submit
 ## **Describe the bug**
 <!-- A clear and concise description of what the bug is. -->
 
-[replace with description]
+[Replace with description]
 
 ---
 
 ### **Is this a regression?**
-<!-- Did this behaviour used to work in the previous version? -->
+<!-- Did this behavior used to work in the previous version? -->
 
 - [ ] No, this is a new issue
-- [ ] Yes, it worked in version: [replace with last known working version]
+- [ ] Yes, it worked in version: [Replace with last known working version]
 
 ---
 
@@ -40,17 +40,17 @@ To expedite issue processing, please search open and closed issues before submit
 
 ---
 
-### **Expected behaviour**
+### **Expected behavior**
 <!-- A clear and concise description of what you expected to happen. -->
 
-[replace with expected behaviour]
+[Replace with expected behavior]
 
 ---
 
-### **Actual behaviour**
+### **Actual behavior**
 <!-- A clear and concise description of what is actually happening. -->
 
-[replace with actual behaviour]
+[Replace with actual behavior]
 
 ---
 
@@ -83,4 +83,4 @@ To expedite issue processing, please search open and closed issues before submit
 ### **Additional context**
 <!-- Add any other context about the problem here. -->
 
-[replace with additional context]
+[Replace with additional context]

@@ -22,7 +22,7 @@ To expedite issue processing, please search open and closed issues before submit
 ## **Question**
 <!-- A clear and concise description of what you need help with. -->
 
-[replace with your question]
+[Replace with your question]
 
 ---
 
@@ -46,11 +46,11 @@ To expedite issue processing, please search open and closed issues before submit
 - [ ] Checked the documentation
 - [ ] Tried something else (describe below)
 
-[replace with description of what you have tried]
+[Replace with description of what you have tried]
 
 ---
 
 ## **Additional context**
 <!-- Add any other context or information about your question here. -->
 
-[replace with additional context]
+[Replace with additional context]
