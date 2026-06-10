@@ -20,16 +20,9 @@ namespace ZenMonitor.Core.Tests.Services.Linux.Tests;
 [SupportedOSPlatform("linux")]
 public class CpuTests
 {
-    private readonly Mock<ILogger<Cpu>> _mockLogger;
-    private readonly MockFileSystem _mockFileSystem;
-    private readonly Mock<IAbstractionsLinux> _mockHelper;
-
-    public CpuTests()
-    {
-        _mockLogger = new Mock<ILogger<Cpu>>();
-        _mockFileSystem = new MockFileSystem();
-        _mockHelper = new Mock<IAbstractionsLinux>();
-    }
+    private readonly Mock<ILogger<Cpu>> _mockLogger = new();
+    private readonly MockFileSystem _mockFileSystem = new();
+    private readonly Mock<IAbstractionsLinux> _mockHelper = new();
 
     private Cpu CreateCpu() => new(_mockLogger.Object, _mockFileSystem, _mockHelper.Object);
 

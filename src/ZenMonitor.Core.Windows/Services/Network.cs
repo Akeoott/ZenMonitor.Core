@@ -15,7 +15,7 @@ namespace ZenMonitor.Core.Windows.Services;
 /// Windows implementation of <see cref="INetwork"/> that gets all network related telemetry.
 /// </summary>
 [SupportedOSPlatform("windows")]
-public class Network(ILogger<Network> logger) : INetwork
+public class Network(ILogger<Network>? logger) : INetwork
 {
     private readonly ILogger<Network> _logger = logger ?? NullLogger<Network>.Instance;
     private NetworkInfoSnapshot _snapshot = new(0, 0, []);

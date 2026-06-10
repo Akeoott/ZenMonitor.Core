@@ -17,12 +17,7 @@ namespace ZenMonitor.Core.Tests.Services.Linux.Tests;
 [SupportedOSPlatform("linux")]
 public class GpuAmdTests
 {
-    private readonly Mock<ILogger<GpuAmd>> _mockLogger;
-
-    public GpuAmdTests()
-    {
-        _mockLogger = new Mock<ILogger<GpuAmd>>();
-    }
+    private readonly Mock<ILogger<GpuAmd>> _mockLogger = new();
 
     /// <summary>
     /// GpuAmd is not implemented, so it must return empty strings and zeros.
@@ -49,7 +44,7 @@ public class GpuAmdTests
     {
         var gpu = new GpuAmd(_mockLogger.Object);
 
-        var exception = Record.Exception(() => gpu.Update());
+        var exception = Record.Exception(gpu.Update);
         Assert.Null(exception);
     }
 }

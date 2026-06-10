@@ -19,14 +19,8 @@ namespace ZenMonitor.Core.Tests.Services.Windows.Tests;
 [SupportedOSPlatform("windows")]
 public class CpuTests
 {
-    private readonly Mock<ILogger<Cpu>> _mockLogger;
-    private readonly Mock<IAbstractionsWindows> _mockHelper;
-
-    public CpuTests()
-    {
-        _mockLogger = new Mock<ILogger<Cpu>>();
-        _mockHelper = new Mock<IAbstractionsWindows>();
-    }
+    private readonly Mock<ILogger<Cpu>> _mockLogger = new();
+    private readonly Mock<IAbstractionsWindows> _mockHelper = new();
 
     private Cpu CreateCpu() => new(_mockLogger.Object, _mockHelper.Object);
 
@@ -67,14 +61,14 @@ public class CpuTests
         _mockHelper.Setup(w => w.GetCpuPowerDraw()).Returns(0);
 
         // First snapshot: returns 0%
-        SetupStdTicks(1000, 2000, 3000, 2);
+        SetupStdTicks();
         var cpu = CreateCpu();
         cpu.Update();
 
         Assert.Equal(0, cpu.GetCpuUsage());
 
         // Second snapshot: diffTotal = (2100+3100)-(2000+3000) = 200, diffIdle = 1100-1000 = 100, usage = (200-100)/200*100 = 50%
-        SetupStdTicks(1100, 2100, 3100, 2);
+        SetupStdTicks(1100, 2100, 3100);
         cpu.Update();
 
         Assert.Equal(50, cpu.GetCpuUsage());

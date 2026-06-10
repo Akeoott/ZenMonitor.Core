@@ -17,7 +17,7 @@ namespace ZenMonitor.Core.Windows.Services;
 /// from <c>/proc/meminfo</c>.
 /// </summary>
 [SupportedOSPlatform("windows")]
-public class Memory(ILogger<Memory> logger, IFileSystem fileSystem) : IMemory
+public class Memory(ILogger<Memory>? logger) : IMemory
 {
     private readonly ILogger<Memory> _logger = logger ?? NullLogger<Memory>.Instance;
     private MemoryInfoSnapshot _snapshot = new(0, 0, 0, 0, 0, 0, 0);

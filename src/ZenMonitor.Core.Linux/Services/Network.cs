@@ -18,7 +18,7 @@ namespace ZenMonitor.Core.Linux.Services;
 /// from <c>/proc/net/dev</c> and <c>/sys/class/net/*/operstate</c>.
 /// </summary>
 [SupportedOSPlatform("linux")]
-public class Network(ILogger<Network> logger, IFileSystem fileSystem, IAbstractionsLinux helper) : INetwork
+public class Network(ILogger<Network>? logger, IFileSystem fileSystem, IAbstractionsLinux helper) : INetwork
 {
     private readonly ILogger<Network> _logger = logger ?? NullLogger<Network>.Instance;
     private NetworkInfoSnapshot _snapshot = new(0, 0, []);
@@ -78,9 +78,9 @@ public class Network(ILogger<Network> logger, IFileSystem fileSystem, IAbstracti
         }
 
         // Skip the two header lines
-        for (int i = 2; i < lines.Length; i++)
+        for (var i = 2; i < lines.Length; i++)
         {
-            string line = lines[i].Trim();
+            var line = lines[i].Trim();
             if (string.IsNullOrEmpty(line))
                 continue;
 
@@ -88,7 +88,7 @@ public class Network(ILogger<Network> logger, IFileSystem fileSystem, IAbstracti
             if (parts.Length != 2)
                 continue;
 
-            string interfaceName = parts[0].Trim();
+            var interfaceName = parts[0].Trim();
 
             // Skip loopback
             if (interfaceName == "lo")
@@ -98,23 +98,23 @@ public class Network(ILogger<Network> logger, IFileSystem fileSystem, IAbstracti
             if (fields.Length < 10)
                 continue;
 
-            if (!long.TryParse(fields[0], out long rxBytes) ||
-                !long.TryParse(fields[8], out long txBytes))
+            if (!long.TryParse(fields[0], out var rxBytes) ||
+                !long.TryParse(fields[8], out var txBytes))
             {
                 continue;
             }
 
-            bool isUp = IsInterfaceUp(interfaceName);
+            var isUp = IsInterfaceUp(interfaceName);
             long downloadSpeed = 0;
             long uploadSpeed = 0;
 
             if (_previousNetStats.TryGetValue(interfaceName, out var prev))
             {
-                double deltaSec = (helper.UtcNow - prev.time).TotalSeconds;
+                var deltaSec = (helper.UtcNow - prev.time).TotalSeconds;
                 if (deltaSec > 0)
                 {
-                    long deltaRx = rxBytes - prev.rx;
-                    long deltaTx = txBytes - prev.tx;
+                    var deltaRx = rxBytes - prev.rx;
+                    var deltaTx = txBytes - prev.tx;
 
                     if (deltaRx < 0) deltaRx = 0;
                     if (deltaTx < 0) deltaTx = 0;
@@ -143,11 +143,11 @@ public class Network(ILogger<Network> logger, IFileSystem fileSystem, IAbstracti
     {
         try
         {
-            string operStatePath = $"/sys/class/net/{interfaceName}/operstate";
+            var operStatePath = $"/sys/class/net/{interfaceName}/operstate";
             if (!fileSystem.File.Exists(operStatePath))
                 return false;
 
-            string state = fileSystem.File.ReadAllText(operStatePath).Trim();
+            var state = fileSystem.File.ReadAllText(operStatePath).Trim();
             return string.Equals(state, "up", StringComparison.OrdinalIgnoreCase);
         }
         catch (Exception ex)

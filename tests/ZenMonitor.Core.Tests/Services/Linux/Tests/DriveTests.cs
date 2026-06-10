@@ -20,16 +20,9 @@ namespace ZenMonitor.Core.Tests.Services.Linux.Tests;
 [SupportedOSPlatform("linux")]
 public class DriveTests
 {
-    private readonly Mock<ILogger<Drive>> _mockLogger;
-    private readonly MockFileSystem _mockFileSystem;
-    private readonly Mock<IAbstractionsLinux> _mockHelper;
-
-    public DriveTests()
-    {
-        _mockLogger = new Mock<ILogger<Drive>>();
-        _mockFileSystem = new MockFileSystem();
-        _mockHelper = new Mock<IAbstractionsLinux>();
-    }
+    private readonly Mock<ILogger<Drive>> _mockLogger = new();
+    private readonly MockFileSystem _mockFileSystem = new();
+    private readonly Mock<IAbstractionsLinux> _mockHelper = new();
 
     private Drive CreateDrive() => new(_mockLogger.Object, _mockFileSystem, _mockHelper.Object);
 
@@ -52,7 +45,7 @@ public class DriveTests
         Assert.Equal(1000000000, mountInfos[0].TotalBytes);
         Assert.Equal(400000000, mountInfos[0].AvailableBytes);
         Assert.Equal(500000000, mountInfos[0].UsedBytes);
-        Assert.Equal(0, mountInfos[0].IOUsage);
+        Assert.Equal(0, mountInfos[0].IoUsage);
         Assert.Equal(0, mountInfos[0].Index);
 
         // Second call with updated diskstats produces IO delta
@@ -62,7 +55,7 @@ public class DriveTests
         drive.Update();
         mountInfos = drive.GetMountInfos();
 
-        Assert.Equal(0.375, mountInfos[0].IOUsage);
+        Assert.Equal(0.375, mountInfos[0].IoUsage);
     }
 
     [Fact]
@@ -106,7 +99,7 @@ public class DriveTests
         var mountInfos = drive.GetMountInfos();
         Assert.Single(mountInfos);
         Assert.Equal("/dev/sda1", mountInfos[0].DeviceName);
-        Assert.Equal(0, mountInfos[0].IOUsage);
+        Assert.Equal(0, mountInfos[0].IoUsage);
     }
 
     [Fact]
@@ -139,6 +132,6 @@ public class DriveTests
 
         // Drive still reports the mount info, but IO usage defaults to 0
         Assert.Single(mountInfos);
-        Assert.Equal(0, mountInfos[0].IOUsage);
+        Assert.Equal(0, mountInfos[0].IoUsage);
     }
 }

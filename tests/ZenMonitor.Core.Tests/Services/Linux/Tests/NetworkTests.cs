@@ -19,16 +19,9 @@ namespace ZenMonitor.Core.Tests.Services.Linux.Tests;
 [SupportedOSPlatform("linux")]
 public class NetworkTests
 {
-    private readonly Mock<ILogger<Network>> _mockLogger;
-    private readonly MockFileSystem _mockFileSystem;
-    private readonly Mock<IAbstractionsLinux> _mockHelper;
-
-    public NetworkTests()
-    {
-        _mockLogger = new Mock<ILogger<Network>>();
-        _mockFileSystem = new MockFileSystem();
-        _mockHelper = new Mock<IAbstractionsLinux>();
-    }
+    private readonly Mock<ILogger<Network>> _mockLogger = new();
+    private readonly MockFileSystem _mockFileSystem = new();
+    private readonly Mock<IAbstractionsLinux> _mockHelper = new();
 
     private Network CreateNetwork() => new(_mockLogger.Object, _mockFileSystem, _mockHelper.Object);
 

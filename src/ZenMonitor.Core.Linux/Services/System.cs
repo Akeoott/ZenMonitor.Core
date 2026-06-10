@@ -17,7 +17,7 @@ namespace ZenMonitor.Core.Linux.Services;
 /// from <c>/proc/sys</c>, <c>/proc/uptime</c>, and <c>/proc/loadavg</c>.
 /// </summary>
 [SupportedOSPlatform("linux")]
-public class System(ILogger<System> logger, IFileSystem fileSystem) : ISystem
+public class System(ILogger<System>? logger, IFileSystem fileSystem) : ISystem
 {
     private readonly ILogger<System> _logger = logger ?? NullLogger<System>.Instance;
     private SystemInfoSnapshot _snapshot = new("", "", 0, 0, 0);
@@ -46,17 +46,17 @@ public class System(ILogger<System> logger, IFileSystem fileSystem) : ISystem
         {
             _logger.LogTrace("Fetching all System info...");
 
-            string kernel = fileSystem.File.ReadAllText("/proc/sys/kernel/osrelease").Trim();
-            string hostname = fileSystem.File.ReadAllText("/proc/sys/kernel/hostname").Trim();
+            var kernel = fileSystem.File.ReadAllText("/proc/sys/kernel/osrelease").Trim();
+            var hostname = fileSystem.File.ReadAllText("/proc/sys/kernel/hostname").Trim();
 
             var uptimeParts = fileSystem.File.ReadAllText("/proc/uptime").Trim().Split(' ');
-            double uptime = double.Parse(uptimeParts[0]);
+            var uptime = double.Parse(uptimeParts[0]);
 
             var loadParts = fileSystem.File.ReadAllText("/proc/loadavg").Trim().Split(' ');
 
             var tasks = loadParts[3].Split('/');
-            int running = int.Parse(tasks[0]);
-            int total = int.Parse(tasks[1]);
+            var running = int.Parse(tasks[0]);
+            var total = int.Parse(tasks[1]);
 
             return new SystemInfoSnapshot(
                 kernel, hostname, uptime,

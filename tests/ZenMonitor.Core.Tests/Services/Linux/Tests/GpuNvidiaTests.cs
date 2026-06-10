@@ -19,19 +19,13 @@ namespace ZenMonitor.Core.Tests.Services.Linux.Tests;
 [SupportedOSPlatform("linux")]
 public class GpuNvidiaTests
 {
-    private readonly Mock<ILogger<GpuNvidia>> _mockLogger;
-    private readonly Mock<IAbstractionsLinux> _mockHelper;
-
-    public GpuNvidiaTests()
-    {
-        _mockLogger = new Mock<ILogger<GpuNvidia>>();
-        _mockHelper = new Mock<IAbstractionsLinux>();
-    }
+    private readonly Mock<ILogger<GpuNvidia>> _mockLogger = new();
+    private readonly Mock<IAbstractionsLinux> _mockHelper = new();
 
     [Fact]
     public void Expected_ReturnsParsedValues()
     {
-        string output = "GeForce RTX 4090, 12, 6, 1024, 24576, 72, P0, 450.00";
+        const string output = "GeForce RTX 4090, 12, 6, 1024, 24576, 72, P0, 450.00";
         _mockHelper
             .Setup(r => r.RunProcess("nvidia-smi", It.IsAny<string>()))
             .Returns(new ProcessResult(0, output, string.Empty));

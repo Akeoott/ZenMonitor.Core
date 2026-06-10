@@ -1,7 +1,6 @@
 // Copyright (c) Ame (Akeoot/Akeoott) <akeoot@pm.me>. Licensed under the LGPL-3.0 Licence.
 // See the LICENSE file in the repository root for full license text.
 
-using System.IO.Abstractions;
 using System.Runtime.Versioning;
 
 using Microsoft.Extensions.Logging;
@@ -17,7 +16,7 @@ namespace ZenMonitor.Core.Windows.Services;
 /// from <c>/proc/sys</c>, <c>/proc/uptime</c>, and <c>/proc/loadavg</c>.
 /// </summary>
 [SupportedOSPlatform("windows")]
-public class System(ILogger<System> logger, IFileSystem fileSystem) : ISystem
+public class System(ILogger<System>? logger) : ISystem
 {
     private readonly ILogger<System> _logger = logger ?? NullLogger<System>.Instance;
     private SystemInfoSnapshot _snapshot = new(

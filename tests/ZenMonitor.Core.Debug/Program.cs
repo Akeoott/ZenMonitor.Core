@@ -14,7 +14,7 @@ namespace ZenMonitor.Core.Debug;
 internal sealed class Program
 {
     #region Init
-    internal static async Task<int> Main(string[] args)
+    internal static async Task<int> Main(string[]? args)
     {
         LogEventLevel logLevel;
         if (args == null || args.Length == 0)
@@ -40,13 +40,13 @@ internal sealed class Program
 
         ConfigureLogging(logLevel, logFilePath);
 
-        using var serviceProvider = BuildServiceProvider();
+        await using var serviceProvider = BuildServiceProvider();
         var logger = serviceProvider.GetRequiredService<ILogger<Program>>();
 
         try
         {
-            using var cts = new CancellationTokenSource();
-            Console.CancelKeyPress += (sender, eventArgs) =>
+            var cts = new CancellationTokenSource();
+            Console.CancelKeyPress += (_, eventArgs) =>
             {
                 logger.LogWarning("[Ctrl+C detected] Shutting down...");
                 eventArgs.Cancel = true;
@@ -62,12 +62,12 @@ internal sealed class Program
         }
         catch (OperationCanceledException)
         {
-            Console.WriteLine("\n[Ctrl+C detected] Shutting down... Byebye!");
+            Console.WriteLine("\n[Ctrl+C detected] Shutting down... Bye bye!");
             return 0;
         }
         finally
         {
-            Log.CloseAndFlush();
+            await Log.CloseAndFlushAsync();
         }
     }
     #endregion
@@ -109,7 +109,7 @@ internal sealed class Program
         Log.Logger = loggerConfig.CreateLogger();
     }
 
-    private static LogEventLevel ParseSerilogLevel(string level)
+    private static LogEventLevel ParseSerilogLevel(string? level)
     {
         return level?.ToLowerInvariant() switch
         {
