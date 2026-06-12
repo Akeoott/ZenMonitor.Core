@@ -17,7 +17,7 @@ namespace ZenMonitor.Core.Windows.Services;
 /// via native Win32 API calls through <see cref="IAbstractionsWindows"/>.
 /// </summary>
 [SupportedOSPlatform("windows")]
-public class Drive(ILogger<Drive> logger, IAbstractionsWindows helper) : IDrive
+public class Drive(ILogger<Drive>? logger) : IDrive
 {
     private readonly ILogger<Drive> _logger = logger ?? NullLogger<Drive>.Instance;
     private DriveInfoSnapshot _snapshot = new([]);

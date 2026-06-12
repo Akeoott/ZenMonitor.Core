@@ -4,15 +4,11 @@
 using Microsoft.Extensions.Logging;
 
 using ZenMonitor.Core.Abstractions;
-using ZenMonitor.Core.Models;
 
 namespace ZenMonitor.Core.Debug;
 
 internal sealed class Monitor(ILogger<Monitor> logger, IHardwareMonitor monitor)
 {
-    private readonly ILogger<Monitor> _logger = logger;
-    private readonly IHardwareMonitor _monitor = monitor;
-
     private readonly SemaphoreSlim _dataReadyEvent = new(0, int.MaxValue);
 
     internal async Task InitMonitor(int loopDelay, CancellationToken cts)
@@ -31,68 +27,65 @@ internal sealed class Monitor(ILogger<Monitor> logger, IHardwareMonitor monitor)
                 Console.Write("\n\n========================DEBUG========================\n\n\n");
 
                 Console.WriteLine("CPU INFORMATION");
-                Console.WriteLine($"  Name: {_monitor.Cpu.GetCpuName()}");
-                Console.Write($"  Speed (MHz): C0 {_monitor.Cpu.GetCpuSpeed()}");
-                CpuCoreSpeed[] cpuCoreSpeed = _monitor.Cpu.GetCoreSpeeds();
-                for (int i = 0; i < cpuCoreSpeed.Length; i++)
+                Console.WriteLine($"  Name: {monitor.Cpu.GetCpuName()}");
+                Console.Write($"  Speed (MHz): C0 {monitor.Cpu.GetCpuSpeed()}");
+                var cpuCoreSpeed = monitor.Cpu.GetCoreSpeeds();
+                foreach (var speed in cpuCoreSpeed)
                 {
-                    CpuCoreSpeed speed = cpuCoreSpeed[i];
                     Console.Write($", C{speed.Index + 1} {speed.Speed}");
                 }
                 Console.WriteLine();
 
-                Console.Write($"  Usage (%): C0 {_monitor.Cpu.GetCpuUsage()}");
-                CpuCoreUsage[] cpuCoreUsage = _monitor.Cpu.GetCoreUsages();
-                for (int i = 0; i < cpuCoreUsage.Length; i++)
+                Console.Write($"  Usage (%): C0 {monitor.Cpu.GetCpuUsage()}");
+                var cpuCoreUsage = monitor.Cpu.GetCoreUsages();
+                foreach (var usage in cpuCoreUsage)
                 {
-                    CpuCoreUsage? usage = cpuCoreUsage[i];
                     Console.Write($", C{usage.Index + 1} {usage.Usage}");
                 }
                 Console.WriteLine();
 
-                Console.Write($"  Temperature (°C): C0 {_monitor.Cpu.GetCpuTemp()}");
-                CpuCoreTemp[] cpuCoreTemp = _monitor.Cpu.GetCoreTemps();
-                for (int i = 0; i < cpuCoreTemp.Length; i++)
+                Console.Write($"  Temperature (°C): C0 {monitor.Cpu.GetCpuTemp()}");
+                var cpuCoreTemp = monitor.Cpu.GetCoreTemps();
+                foreach (var temp in cpuCoreTemp)
                 {
-                    CpuCoreTemp? temp = cpuCoreTemp[i];
                     Console.Write($", C{temp.Index + 1} {temp.Temp}");
                 }
                 Console.WriteLine();
-                Console.WriteLine($"  Power Draw (W): {_monitor.Cpu.GetPowerDraw()}\n");
+                Console.WriteLine($"  Power Draw (W): {monitor.Cpu.GetPowerDraw()}\n");
 
                 Console.WriteLine("DRIVE INFORMATION");
-                var mountInfos = _monitor.Drive.GetMountInfos();
+                var mountInfos = monitor.Drive.GetMountInfos();
                 foreach (var mount in mountInfos)
                 {
-                    double usagePercent = mount.TotalBytes > 0 ? (double)mount.UsedBytes / mount.TotalBytes * 100 : 0;
-                    Console.WriteLine($"  {mount.MountPoint}: {mount.DeviceName} ({mount.FileSystem}) - {usagePercent:F1}% used ({mount.UsedBytes}/{mount.TotalBytes} bytes), IO: {mount.IOUsage:F1}%");
+                    var usagePercent = mount.TotalBytes > 0 ? (double)mount.UsedBytes / mount.TotalBytes * 100 : 0;
+                    Console.WriteLine($"  {mount.MountPoint}: {mount.DeviceName} ({mount.FileSystem}) - {usagePercent:F1}% used ({mount.UsedBytes}/{mount.TotalBytes} bytes), IO: {mount.IoUsage:F1}%");
                 }
                 Console.WriteLine();
 
                 Console.WriteLine("GPU INFORMATION");
-                Console.WriteLine($"  Name: {_monitor.Gpu.GetGpuName()}");
-                Console.WriteLine($"  GPU Usage (%): {_monitor.Gpu.GetUsageGpu()}");
-                Console.WriteLine($"  Memory Usage (%): {_monitor.Gpu.GetUsageMemory()}");
-                Console.WriteLine($"  Memory Used: {_monitor.Gpu.GetMemoryUsed()}");
-                Console.WriteLine($"  Memory Total: {_monitor.Gpu.GetMemoryTotal()}");
-                Console.WriteLine($"  Temperature (°C): {_monitor.Gpu.GetTemperatureGpu()}");
-                Console.WriteLine($"  Power State: {_monitor.Gpu.GetPowerState()}");
-                Console.WriteLine($"  Power Draw (W): {_monitor.Gpu.GetPowerDraw()}\n");
+                Console.WriteLine($"  Name: {monitor.Gpu.GetGpuName()}");
+                Console.WriteLine($"  GPU Usage (%): {monitor.Gpu.GetUsageGpu()}");
+                Console.WriteLine($"  Memory Usage (%): {monitor.Gpu.GetUsageMemory()}");
+                Console.WriteLine($"  Memory Used: {monitor.Gpu.GetMemoryUsed()}");
+                Console.WriteLine($"  Memory Total: {monitor.Gpu.GetMemoryTotal()}");
+                Console.WriteLine($"  Temperature (°C): {monitor.Gpu.GetTemperatureGpu()}");
+                Console.WriteLine($"  Power State: {monitor.Gpu.GetPowerState()}");
+                Console.WriteLine($"  Power Draw (W): {monitor.Gpu.GetPowerDraw()}\n");
 
                 Console.WriteLine("MEMORY INFORMATION");
-                Console.WriteLine($"  Total: {_monitor.Memory.GetMemTotal()}");
-                Console.WriteLine($"  Free: {_monitor.Memory.GetMemFree()}");
-                Console.WriteLine($"  Available: {_monitor.Memory.GetMemAvailable()}");
-                Console.WriteLine($"  Used: {_monitor.Memory.GetMemUsed()}");
-                Console.WriteLine($"  Cached: {_monitor.Memory.GetCached()}");
-                Console.WriteLine($"  Swap Total: {_monitor.Memory.GetSwapTotal()}");
-                Console.WriteLine($"  Swap Free: {_monitor.Memory.GetSwapFree()}\n");
+                Console.WriteLine($"  Total: {monitor.Memory.GetMemTotal()}");
+                Console.WriteLine($"  Free: {monitor.Memory.GetMemFree()}");
+                Console.WriteLine($"  Available: {monitor.Memory.GetMemAvailable()}");
+                Console.WriteLine($"  Used: {monitor.Memory.GetMemUsed()}");
+                Console.WriteLine($"  Cached: {monitor.Memory.GetCached()}");
+                Console.WriteLine($"  Swap Total: {monitor.Memory.GetSwapTotal()}");
+                Console.WriteLine($"  Swap Free: {monitor.Memory.GetSwapFree()}\n");
 
                 Console.WriteLine("NETWORK INFORMATION");
-                Console.WriteLine($"  Download in bytes: {_monitor.Network.GetDownloadSpeed()}");
-                Console.WriteLine($"  Upload in bytes: {_monitor.Network.GetUploadSpeed()}");
+                Console.WriteLine($"  Download in bytes: {monitor.Network.GetDownloadSpeed()}");
+                Console.WriteLine($"  Upload in bytes: {monitor.Network.GetUploadSpeed()}");
 
-                var networks = _monitor.Network.GetNetworks();
+                var networks = monitor.Network.GetNetworks();
                 foreach (var network in networks)
                 {
                     Console.WriteLine($"  {network.Name} {network.IsUp}, Upload (Speed {network.UploadSpeed} / Total {network.TotalBytesUploaded}), Download (Speed {network.DownloadSpeed} / Total {network.TotalBytesDownloaded})");
@@ -100,11 +93,11 @@ internal sealed class Monitor(ILogger<Monitor> logger, IHardwareMonitor monitor)
                 Console.WriteLine();
 
                 Console.WriteLine("SYSTEM INFORMATION");
-                Console.WriteLine($"  Kernel: {_monitor.System.GetKernelVersion()}");
-                Console.WriteLine($"  Hostname: {_monitor.System.GetHostname()}");
-                Console.WriteLine($"  Uptime (s): {_monitor.System.GetUptimeSeconds()}");
-                Console.WriteLine($"  Running Tasks: {_monitor.System.GetRunningTasks()}");
-                Console.WriteLine($"  Total Tasks: {_monitor.System.GetTotalTasks()}\n");
+                Console.WriteLine($"  Kernel: {monitor.System.GetKernelVersion()}");
+                Console.WriteLine($"  Hostname: {monitor.System.GetHostname()}");
+                Console.WriteLine($"  Uptime (s): {monitor.System.GetUptimeSeconds()}");
+                Console.WriteLine($"  Running Tasks: {monitor.System.GetRunningTasks()}");
+                Console.WriteLine($"  Total Tasks: {monitor.System.GetTotalTasks()}\n");
             }
             catch (TaskCanceledException)
             {
@@ -119,13 +112,13 @@ internal sealed class Monitor(ILogger<Monitor> logger, IHardwareMonitor monitor)
         {
             while (!cts.IsCancellationRequested)
             {
-                _monitor.Cpu.Update();
-                _monitor.Drive.Update();
-                _monitor.Gpu.Update();
-                _monitor.Memory.Update();
-                _monitor.Network.Update();
-                _monitor.System.Update();
-                _logger.LogTrace("Done! Sending event to update interface.");
+                monitor.Cpu.Update();
+                monitor.Drive.Update();
+                monitor.Gpu.Update();
+                monitor.Memory.Update();
+                monitor.Network.Update();
+                monitor.System.Update();
+                logger.LogTrace("Done! Sending event to update interface.");
                 _dataReadyEvent.Release();
                 await Task.Delay(loopDelay, cts);
             }

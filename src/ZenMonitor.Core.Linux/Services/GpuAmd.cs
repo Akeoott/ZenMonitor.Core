@@ -16,7 +16,7 @@ namespace ZenMonitor.Core.Linux.Services;
 /// Currently not implemented — returns default zeros.
 /// </summary>
 [SupportedOSPlatform("linux")]
-public class GpuAmd(ILogger<GpuAmd> logger) : IGpu
+public class GpuAmd(ILogger<GpuAmd>? logger) : IGpu
 {
     private readonly ILogger<GpuAmd> _logger = logger ?? NullLogger<GpuAmd>.Instance;
     private GpuInfoSnapshot _snapshot = new("", 0, 0, 0.0, 0.0, 0, "", 0.0);

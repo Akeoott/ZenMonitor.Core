@@ -18,7 +18,7 @@ namespace ZenMonitor.Core.Linux.Services;
 /// information from <c>df</c> and disk I/O stats from <c>/proc/diskstats</c>.
 /// </summary>
 [SupportedOSPlatform("linux")]
-public class Drive(ILogger<Drive> logger, IFileSystem fileSystem, IAbstractionsLinux helper) : IDrive
+public class Drive(ILogger<Drive>? logger, IFileSystem fileSystem, IAbstractionsLinux helper) : IDrive
 {
     private readonly ILogger<Drive> _logger = logger ?? NullLogger<Drive>.Instance;
     private DriveInfoSnapshot _snapshot = new([]);
@@ -42,20 +42,20 @@ public class Drive(ILogger<Drive> logger, IFileSystem fileSystem, IAbstractionsL
 
     private DriveMountInfo[] ReadMountInfos()
     {
-        var ioUsages = ReadIOUsages();
-        string dfOutput = RunDf("-T -B1");
+        var ioUsages = ReadIoUsages();
+        var dfOutput = RunDf("-T -B1");
 
         try
         {
             if (string.IsNullOrEmpty(dfOutput))
             {
                 throw new InvalidOperationException(
-                    $"dfOutput is empty or null. Failed getting valid values to format DriveMountInfo[]");
+                    "dfOutput is empty or null. Failed getting valid values to format DriveMountInfo[]");
             }
 
             var lines = dfOutput.Split('\n', StringSplitOptions.RemoveEmptyEntries).Skip(1);
             var mountInfos = new List<DriveMountInfo>();
-            int index = 0;
+            var index = 0;
 
             HashSet<string> pseudoFileSystems = [
                 "tmpfs", "proc", "sysfs", "devtmpfs", "devpts",
@@ -68,23 +68,23 @@ public class Drive(ILogger<Drive> logger, IFileSystem fileSystem, IAbstractionsL
                 var parts = line.Split([' '], StringSplitOptions.RemoveEmptyEntries);
                 if (parts.Length < 7) continue;
 
-                string deviceName = parts[0];
-                string fileSystem = parts[1];
-                if (pseudoFileSystems.Contains(fileSystem)) continue;
+                var deviceName = parts[0];
+                var fileSystems = parts[1];
+                if (pseudoFileSystems.Contains(fileSystems)) continue;
 
-                long totalBytes = long.Parse(parts[2]);
-                long usedBytes = long.Parse(parts[3]);
-                long availableBytes = long.Parse(parts[4]);
-                string mountPoint = parts[6];
+                var totalBytes = long.Parse(parts[2]);
+                var usedBytes = long.Parse(parts[3]);
+                var availableBytes = long.Parse(parts[4]);
+                var mountPoint = parts[6];
 
-                string shortName = deviceName.StartsWith("/dev/") ? deviceName[5..] : deviceName;
-                double ioUsage = ioUsages.GetValueOrDefault(shortName, 0.0);
+                var shortName = deviceName.StartsWith("/dev/") ? deviceName[5..] : deviceName;
+                var ioUsage = ioUsages.GetValueOrDefault(shortName, 0.0);
 
                 mountInfos.Add(new DriveMountInfo(
                     index++,
                     mountPoint,
                     deviceName,
-                    fileSystem,
+                    fileSystems,
                     totalBytes,
                     availableBytes,
                     usedBytes,
@@ -101,7 +101,7 @@ public class Drive(ILogger<Drive> logger, IFileSystem fileSystem, IAbstractionsL
         }
     }
 
-    private Dictionary<string, double> ReadIOUsages()
+    private Dictionary<string, double> ReadIoUsages()
     {
         var ioUsages = new Dictionary<string, double>();
         try
@@ -113,14 +113,14 @@ public class Drive(ILogger<Drive> logger, IFileSystem fileSystem, IAbstractionsL
                 var parts = line.Split([' '], StringSplitOptions.RemoveEmptyEntries);
                 if (parts.Length < 14) continue;
 
-                string name = parts[2];
-                long ioTime = long.Parse(parts[12]);
+                var name = parts[2];
+                var ioTime = long.Parse(parts[12]);
 
                 if (_previousDiskStats.TryGetValue(name, out var prev))
                 {
-                    double deltaTime = (helper.UtcNow - prev.time).TotalMilliseconds;
+                    var deltaTime = (helper.UtcNow - prev.time).TotalMilliseconds;
                     double deltaIo = ioTime - prev.ioTime;
-                    double usage = deltaTime > 0 ? deltaIo / deltaTime * 100 : 0;
+                    var usage = deltaTime > 0 ? deltaIo / deltaTime * 100 : 0;
                     ioUsages[name] = usage;
                 }
                 else
@@ -145,14 +145,9 @@ public class Drive(ILogger<Drive> logger, IFileSystem fileSystem, IAbstractionsL
         var result = helper.RunProcess("df", arguments);
         try
         {
-            if (result.ExitCode != 0)
-            {
-                throw new InvalidOperationException($"df error: {result.StandardError}");
-            }
-            else
-            {
-                return result.StandardOutput;
-            }
+            return result.ExitCode != 0
+                ? throw new InvalidOperationException($"df error: {result.StandardError}")
+                : result.StandardOutput;
         }
         catch (InvalidOperationException ex)
         {

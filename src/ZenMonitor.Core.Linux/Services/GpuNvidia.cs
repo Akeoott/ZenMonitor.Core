@@ -17,7 +17,7 @@ namespace ZenMonitor.Core.Linux.Services;
 /// Reads metrics via the <c>nvidia-smi</c> CLI tool.
 /// </summary>
 [SupportedOSPlatform("linux")]
-public class GpuNvidia(ILogger<GpuNvidia> logger, IAbstractionsLinux helper) : IGpu
+public class GpuNvidia(ILogger<GpuNvidia>? logger, IAbstractionsLinux helper) : IGpu
 {
     private readonly ILogger<GpuNvidia> _logger = logger ?? NullLogger<GpuNvidia>.Instance;
     private GpuInfoSnapshot _snapshot = new("", 0, 0, 0.0, 0.0, 0, "", 0.0);
@@ -53,11 +53,10 @@ public class GpuNvidia(ILogger<GpuNvidia> logger, IAbstractionsLinux helper) : I
     {
         _logger.LogTrace("Fetching all GpuNvidia info...");
 
-        string csv = "";
         try
         {
-            csv = RunNvidiaSmi(
-           "--query-gpu=name,utilization.gpu,utilization.memory,memory.used,memory.total,temperature.gpu,pstate,power.draw --format=csv,noheader,nounits");
+            var csv = RunNvidiaSmi(
+                "--query-gpu=name,utilization.gpu,utilization.memory,memory.used,memory.total,temperature.gpu,pstate,power.draw --format=csv,noheader,nounits");
 
             string[] part = [.. csv.Split(',').Select(p => p.Trim())];
 
@@ -74,24 +73,21 @@ public class GpuNvidia(ILogger<GpuNvidia> logger, IAbstractionsLinux helper) : I
         catch (InvalidOperationException ex)
         {
             _logger.LogError(ex, "{exceptionMessage}", ex.Message);
-            return new("", 0, 0, 0.0, 0.0, 0, "", 0.0);
+            return new GpuInfoSnapshot("", 0, 0, 0.0, 0.0, 0, "", 0.0);
         }
         catch (Exception ex)
         {
             _logger.LogError(ex, "FetchGpuInfo failed unexpectedly.");
-            return new("", 0, 0, 0.0, 0.0, 0, "", 0.0);
+            return new GpuInfoSnapshot("", 0, 0, 0.0, 0.0, 0, "", 0.0);
         }
     }
 
     private string RunNvidiaSmi(string arguments)
     {
-        ProcessResult result = helper.RunProcess("nvidia-smi", arguments);
+        var result = helper.RunProcess("nvidia-smi", arguments);
 
-        if (result.ExitCode != 0)
-        {
-            throw new InvalidOperationException($"nvidia-smi error code {result.ExitCode}: {result.StandardError}");
-        }
-
-        return result.StandardOutput.Trim();
+        return result.ExitCode != 0
+            ? throw new InvalidOperationException($"nvidia-smi error code {result.ExitCode}: {result.StandardError}")
+            : result.StandardOutput.Trim();
     }
 }

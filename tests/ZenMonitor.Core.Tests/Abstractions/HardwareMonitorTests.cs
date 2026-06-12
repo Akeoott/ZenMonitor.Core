@@ -7,7 +7,7 @@ using ZenMonitor.Core.Abstractions;
 
 namespace ZenMonitor.Core.Tests.Abstractions;
 
-public class IHardwareMonitorTests
+public class HardwareMonitorTests
 {
     [Fact]
     public void IHardwareMonitor_Interface_Is_Valid_Aggregator()

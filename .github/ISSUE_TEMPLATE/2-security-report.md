@@ -1,5 +1,5 @@
 ---
-name: "⚠️ Security Report"
+name: "Security Report"
 about: "Report an issue to help the project improve."
 title: ""
 labels: "Type: Security"
@@ -28,7 +28,7 @@ data or sensible data, please do not post it here and directly email the develop
 You may post the issue with the least amount of
 sensible or private data as possible to help us manage the security issue, and
 with the extra data sent from your email to the developer (if any), we will deeply
-analyse and try to fix it as fast as possible.
+analyze and try to fix it as fast as possible.
 
 If you are in doubt about the data that you might post here (screenshots or media
 also, count as data), please directly email us.
@@ -40,35 +40,28 @@ The data that must NOT be posted here:
 * Health or financial information (including insurance information, social security numbers, etc.)
 * Information about political or religious affiliations
 * Information about race, ethnicity, sexual orientation, gender, or other identifying information that could be used for discriminatory purposes
-
 -->
 
-# **⚠️ Security Report**
-
-## **Describe the security issue**
-<!-- A clear and concise description of what the issue is. -->
-
-[replace with description]
+## **Description**
+<!-- A clear and concise description of what the security issue is. -->
 
 ---
 
-### **Expected behaviour**
+## **Expected behavior**
 <!-- A clear and concise description of what you expected to happen. -->
 
-[replace with description]
-
 ---
 
-### **Actual behaviour**
+## **Actual behavior**
 <!-- A clear and concise description of what is actually happening. -->
 
-[replace with description]
-
 ---
 
-### **Steps to reproduce**
-
-<!-- Steps to reproduce the error (add or remove as many steps as needed). -->
+## **Steps to reproduce**
+<!--
+If applicable, list the steps to reproduce the security issue
+(add or remove as many steps as needed).
+-->
 
 1.
 2.
@@ -77,16 +70,19 @@ The data that must NOT be posted here:
 
 ---
 
-### **Your environment**
+## **Screenshots / Logs**
+<!-- If applicable, add logs, screenshots or videos to help explain your problem. -->
 
+---
+
+## **Your environment**
 <!-- Fill in the relevant fields. Remove any that are not applicable. -->
 
 * **OS:** <!-- e.g. Ubuntu 24.04 x86_64 / Windows 11 23H2 -->
 * **Application version:** <!-- e.g. v1.1.0, commit hash, or `main` -->
+<!-- other details -->
 
 ---
 
-### **Additional context**
-<!-- Add any other context or additional information about the problem here. -->
-
-[replace with additional context]
+## **Additional context**
+<!-- Add any other context about the problem here. -->

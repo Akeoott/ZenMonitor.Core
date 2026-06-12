@@ -17,7 +17,7 @@ namespace ZenMonitor.Core.Linux.Services;
 /// from <c>/proc/meminfo</c>.
 /// </summary>
 [SupportedOSPlatform("linux")]
-public class Memory(ILogger<Memory> logger, IFileSystem fileSystem) : IMemory
+public class Memory(ILogger<Memory>? logger, IFileSystem fileSystem) : IMemory
 {
     private readonly ILogger<Memory> _logger = logger ?? NullLogger<Memory>.Instance;
     private MemoryInfoSnapshot _snapshot = new(0, 0, 0, 0, 0, 0, 0);
@@ -53,27 +53,27 @@ public class Memory(ILogger<Memory> logger, IFileSystem fileSystem) : IMemory
             _logger.LogTrace("Fetching all Memory info...");
 
             var values = new Dictionary<string, double>(StringComparer.Ordinal);
-            const double KB_TO_GIB = 1.0 / 1_048_576;
+            const double kbToGib = 1.0 / 1_048_576;
 
             foreach (var line in fileSystem.File.ReadLines("/proc/meminfo"))
             {
-                int colon = line.IndexOf(':');
+                var colon = line.IndexOf(':');
                 if (colon < 0) continue;
 
-                string key = line[..colon].Trim();
+                var key = line[..colon].Trim();
                 if (key != "MemTotal" && key != "MemFree" && key != "MemAvailable" &&
                     key != "Cached" && key != "SwapTotal" && key != "SwapFree")
                 {
                     continue;
                 }
 
-                string valuePart = line[(colon + 1)..].Trim();
-                int space = valuePart.IndexOf(' ');
-                string numberStr = space >= 0 ? valuePart[..space] : valuePart;
+                var valuePart = line[(colon + 1)..].Trim();
+                var space = valuePart.IndexOf(' ');
+                var numberStr = space >= 0 ? valuePart[..space] : valuePart;
 
-                if (double.TryParse(numberStr, out double kb))
+                if (double.TryParse(numberStr, out var kb))
                 {
-                    values[key] = Math.Round(kb * KB_TO_GIB, 2);
+                    values[key] = Math.Round(kb * kbToGib, 2);
                 }
                 else
                 {

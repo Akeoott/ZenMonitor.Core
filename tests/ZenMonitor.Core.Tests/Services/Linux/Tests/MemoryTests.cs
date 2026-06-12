@@ -18,14 +18,8 @@ namespace ZenMonitor.Core.Tests.Services.Linux.Tests;
 [SupportedOSPlatform("linux")]
 public class MemoryTests
 {
-    private readonly Mock<ILogger<Memory>> _mockLogger;
-    private readonly MockFileSystem _mockFileSystem;
-
-    public MemoryTests()
-    {
-        _mockLogger = new Mock<ILogger<Memory>>();
-        _mockFileSystem = new MockFileSystem();
-    }
+    private readonly Mock<ILogger<Memory>> _mockLogger = new();
+    private readonly MockFileSystem _mockFileSystem = new();
 
     private Memory CreateMemory() => new(_mockLogger.Object, _mockFileSystem);
 

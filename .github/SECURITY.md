@@ -41,9 +41,9 @@ If the issue does **not** expose sensitive data or reveal exploitable details, o
 
 If your report could disclose vulnerabilities, sensitive data, or enough detail for someone to reproduce an exploit, **do not** open a public issue. Instead:
 
-1. Send an email to **akeoot@pm.me**
+1. Email **akeoot@pm.me**
 2. Include **"SECURITY"** in the subject line
-3. Provide as much detail as possible: steps to reproduce, affected versions, potential impact, and any proof-of-concept code (minimised)
+3. Provide as much detail as possible: steps to reproduce, affected versions, potential impact, and any proof-of-concept code (minimized)
 
 ---
 
@@ -54,7 +54,7 @@ We will do our best to respond quickly and keep you informed:
 1. **Acknowledgement** — we will confirm receipt within 48–72 hours
 2. **Assessment** — we will triage the issue and determine severity (CVSS score) within 5 business days
 3. **Fix timeline** — after assessment, we will communicate an expected timeline. This depends on severity:
-   - **Critical / High** (CVSS 7.0–10.0) → prioritised immediately, patch release may follow
+   - **Critical / High** (CVSS 7.0–10.0) → prioritized immediately, patch release may follow
    - **Medium / Low** (CVSS 0.1–6.9) → addressed in the next regular release cycle
 
 ---

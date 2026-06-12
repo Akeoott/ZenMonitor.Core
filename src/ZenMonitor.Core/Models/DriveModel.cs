@@ -13,7 +13,7 @@ namespace ZenMonitor.Core.Models;
 /// <param name="TotalBytes">Total capacity in bytes.</param>
 /// <param name="AvailableBytes">Available free space in bytes.</param>
 /// <param name="UsedBytes">Used space in bytes.</param>
-/// <param name="IOUsage">Disk I/O usage percentage.</param>
+/// <param name="IoUsage">Disk I/O usage percentage.</param>
 public record DriveMountInfo(
     int Index,
     string MountPoint,
@@ -22,7 +22,7 @@ public record DriveMountInfo(
     long TotalBytes,
     long AvailableBytes,
     long UsedBytes,
-    double IOUsage
+    double IoUsage
 );
 
 /// <summary>

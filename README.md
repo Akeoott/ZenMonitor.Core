@@ -60,27 +60,27 @@ Each hardware component is defined as an interface in the `Abstractions` namespa
 
 Each interface exposes a `void Update()` method plus typed getters:
 
-| Interface | Provides |
-|-----------|----------|
-| `ICpu` | CPU usage, temperature, frequency etc. |
-| `IDrive` | Disk I/O, partition usage etc. |
-| `IGpu` | GPU utilization, VRAM etc. |
-| `IMemory` | RAM usage, swap etc. |
-| `INetwork` | Network throughput, interfaces etc. |
-| `ISystem` | OS info, uptime, hostname etc. |
+| Interface  | Provides                               |
+|------------|----------------------------------------|
+| `ICpu`     | CPU usage, temperature, frequency etc. |
+| `IDrive`   | Disk I/O, partition usage etc.         |
+| `IGpu`     | GPU utilization, VRAM etc.             |
+| `IMemory`  | RAM usage, swap etc.                   |
+| `INetwork` | Network throughput, interfaces etc.    |
+| `ISystem`  | OS info, uptime, hostname etc.         |
 
 ### Project Structure
 
 The repo is split across five projects:
 
-| Project | DescriptioSn |
-|---------|-------------|
-| `ZenMonitor.Core` | Hardware abstraction interfaces (`ICpu`, `IDrive`, `IGpu`, `IMemory`, `INetwork`, `ISystem`), data models, and Null-object fallback services. |
-| `ZenMonitor.Core.Hosting` | DI registration extensions (`AddZenMonitor.Core()`) that auto-detect the OS and register the correct platform services. This is optional but recommended. |
-| `ZenMonitor.Core.Linux` | Linux-specific platform implementations for all interfaces. |
-| `ZenMonitor.Core.Windows` | Windows-specific platform implementations for all interfaces. |
-| `ZenMonitor.Core.Debug` | Quick debugging interface providing all info out of the box to the terminal with logging. See [CONTRIBUTING.md](https://github.com/Akeoott/ZenMonitor.Core/blob/main/.github/CONTRIBUTING.md) for usage details. |
-| `ZenMonitor.Core.Tests` | xUnit test suite. |
+| Project                   | DescriptioSn                                                                                                                                                                                                     |
+|---------------------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `ZenMonitor.Core`         | Hardware abstraction interfaces (`ICpu`, `IDrive`, `IGpu`, `IMemory`, `INetwork`, `ISystem`), data models, and Null-object fallback services.                                                                    |
+| `ZenMonitor.Core.Hosting` | DI registration extensions (`AddZenMonitor.Core()`) that auto-detect the OS and register the correct platform services. This is optional but recommended.                                                        |
+| `ZenMonitor.Core.Linux`   | Linux-specific platform implementations for all interfaces.                                                                                                                                                      |
+| `ZenMonitor.Core.Windows` | Windows-specific platform implementations for all interfaces.                                                                                                                                                    |
+| `ZenMonitor.Core.Debug`   | Quick debugging interface providing all info out of the box to the terminal with logging. See [CONTRIBUTING.md](https://github.com/Akeoott/ZenMonitor.Core/blob/main/.github/CONTRIBUTING.md) for usage details. |
+| `ZenMonitor.Core.Tests`   | xUnit test suite.                                                                                                                                                                                                |
 
 ### NuGet Packages
 

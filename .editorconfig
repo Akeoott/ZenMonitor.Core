@@ -21,8 +21,6 @@ dotnet_diagnostic.IDE0073.severity = error
 # using
 dotnet_separate_import_directive_groups = true
 dotnet_sort_system_directives_first = true
-csharp_style_using_directive_placement = outside_namespace:suggestion
-csharp_style_namespace_declaration = file_scoped:suggestion
 
 # Code Block
 csharp_new_line_before_open_brace = all
@@ -33,15 +31,9 @@ csharp_new_line_before_members_in_object_initializers = true
 csharp_new_line_before_members_in_anonymous_types = true
 csharp_preserve_single_line_blocks = true
 
-# License header
-dotnet_diagnostic.OLOC001.words_in_name = 5
-dotnet_diagnostic.OLOC001.license_header = // Copyright (c) Ame (Akeoot/Akeoott) <akeoot@pm.me>. Licensed under the LGPL-3.0 Licence.\n// See the LICENCE file in the repository root for full licence text.
-
 [*.{csproj,props,targets,json,jsonc,xml,axaml,slnx}]
-indent_style = space
 indent_size = 2
 
 [*.{yaml,yml}]
 insert_final_newline = true
-indent_style = space
 indent_size = 2

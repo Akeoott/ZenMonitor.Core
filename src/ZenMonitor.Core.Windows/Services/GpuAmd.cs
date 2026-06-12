@@ -7,7 +7,6 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
 
 using ZenMonitor.Core.Abstractions;
-using ZenMonitor.Core.Interfaces;
 using ZenMonitor.Core.Models;
 
 namespace ZenMonitor.Core.Windows.Services;
@@ -17,7 +16,7 @@ namespace ZenMonitor.Core.Windows.Services;
 /// Currently not implemented — returns default zeros.
 /// </summary>
 [SupportedOSPlatform("windows")]
-public class GpuAmd(ILogger<GpuAmd> logger, IAbstractionsWindows helper) : IGpu
+public class GpuAmd(ILogger<GpuAmd>? logger) : IGpu
 {
     private readonly ILogger<GpuAmd> _logger = logger ?? NullLogger<GpuAmd>.Instance;
     private GpuInfoSnapshot _snapshot = new("", 0, 0, 0.0, 0.0, 0, "", 0.0);
@@ -50,7 +49,7 @@ public class GpuAmd(ILogger<GpuAmd> logger, IAbstractionsWindows helper) : IGpu
     public double GetPowerDraw() => _snapshot.PowerDraw;
 
     /// <summary>
-    /// AMD GPU implementation is pending. Currently returns a zeroed snapshot.
+    /// AMD GPU implementation is pending. Currently, returns a zeroed snapshot.
     /// </summary>
     private GpuInfoSnapshot FetchGpuInfo()
     {
