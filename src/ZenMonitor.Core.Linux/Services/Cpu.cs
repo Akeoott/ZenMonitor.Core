@@ -244,19 +244,19 @@ public class Cpu(ILogger<Cpu>? logger, IFileSystem fileSystem, IAbstractionsLinu
                 switch (name)
                 {
                     case "coretemp":
-                    {
-                        var (devOverall, devTemps) = ReadIntelTemps(hwmonDir);
-                        overall = devOverall != 0 ? devOverall : overall;
-                        rawSensorTemps.AddRange(devTemps);
-                        break;
-                    }
+                        {
+                            var (devOverall, devTemps) = ReadIntelTemps(hwmonDir);
+                            overall = devOverall != 0 ? devOverall : overall;
+                            rawSensorTemps.AddRange(devTemps);
+                            break;
+                        }
                     case "k10temp":
-                    {
-                        var (devOverall, devTemps) = ReadAmdTemps(hwmonDir);
-                        overall = devOverall != 0 ? devOverall : overall;
-                        rawSensorTemps.AddRange(devTemps);
-                        break;
-                    }
+                        {
+                            var (devOverall, devTemps) = ReadAmdTemps(hwmonDir);
+                            overall = devOverall != 0 ? devOverall : overall;
+                            rawSensorTemps.AddRange(devTemps);
+                            break;
+                        }
                 }
             }
         }
