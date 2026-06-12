@@ -16,6 +16,7 @@ insert_final_newline = true
 
 # File Header
 file_header_template = Copyright (c) Ame (Akeoot/Akeoott) <akeoot@pm.me>. Licensed under the LGPL-3.0 Licence.\nSee the LICENSE file in the repository root for full license text.
+dotnet_diagnostic.IDE0073.severity = error
 
 # using
 dotnet_separate_import_directive_groups = true
