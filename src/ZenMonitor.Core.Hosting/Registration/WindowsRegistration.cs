@@ -1,6 +1,8 @@
 // Copyright (c) Ame (Akeoot/Akeoott) <akeoot@pm.me>. Licensed under the LGPL-3.0 Licence.
 // See the LICENSE file in the repository root for full license text.
 
+#if PLATFORM_WINDOWS
+
 using System;
 using System.Runtime.Versioning;
 
@@ -95,3 +97,5 @@ internal static class WindowsRegistration
         return GpuVendor.Unknown;
     }
 }
+
+#endif

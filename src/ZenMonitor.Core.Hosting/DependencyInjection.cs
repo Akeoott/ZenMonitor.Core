@@ -30,19 +30,19 @@ public static class DependencyInjection
         {
             services.AddSingleton<IFileSystem, FileSystem>();
 
+#if PLATFORM_LINUX
             if (OperatingSystem.IsLinux())
             {
                 LinuxRegistration.Register(services);
             }
-            else if (OperatingSystem.IsWindows())
+#elif PLATFORM_WINDOWS
+            if (OperatingSystem.IsWindows())
             {
                 WindowsRegistration.Register(services);
             }
-            else
-            {
-                NullRegistration.Register(services);
-            }
-
+#else
+            NullRegistration.Register(services);
+#endif
             services.AddSingleton<IHardwareMonitor, HardwareMonitor>();
             return services;
         }
