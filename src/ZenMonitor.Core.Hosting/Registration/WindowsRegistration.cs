@@ -3,6 +3,7 @@
 
 #if PLATFORM_WINDOWS
 
+using System;
 using System.Runtime.Versioning;
 
 using Microsoft.Extensions.DependencyInjection;
