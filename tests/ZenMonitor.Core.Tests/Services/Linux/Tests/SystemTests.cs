@@ -2,7 +2,6 @@
 // See the LICENSE file in the repository root for full license text.
 
 using System.IO.Abstractions.TestingHelpers;
-using System.Runtime.Versioning;
 
 using Microsoft.Extensions.Logging;
 

@@ -4,7 +4,6 @@
 #if PLATFORM_LINUX
 
 using System.IO;
-using System.Runtime.Versioning;
 
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;

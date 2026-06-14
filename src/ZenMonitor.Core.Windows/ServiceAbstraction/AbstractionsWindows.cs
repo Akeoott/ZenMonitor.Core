@@ -1,11 +1,7 @@
 // Copyright (c) Ame (Akeoot/Akeoott) <akeoot@pm.me>. Licensed under the LGPL-3.0 Licence.
 // See the LICENSE file in the repository root for full license text.
 
-using System.Diagnostics.CodeAnalysis;
-using System.Linq;
 using System.Management;
-using System.Runtime.InteropServices;
-using System.Runtime.Versioning;
 
 using Microsoft.Win32;
 
