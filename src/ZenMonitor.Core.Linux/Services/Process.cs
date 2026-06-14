@@ -201,7 +201,7 @@ public class Process(ILogger<Process>? logger, IFileSystem fileSystem, IAbstract
             _cpuCache[pid] = prev;
 
             return deltaTime > 0 && deltaCpu >= 0
-                ? Math.Round((deltaCpu / deltaTime) / Environment.ProcessorCount * 100.0, 2) : 0;
+                ? Math.Round((deltaCpu / deltaTime) / helper.ProcessorCount * 100.0, 2) : 0;
         }
         catch (Exception ex)
         {

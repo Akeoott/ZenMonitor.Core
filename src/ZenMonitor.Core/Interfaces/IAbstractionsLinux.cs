@@ -14,6 +14,9 @@ public interface IAbstractionsLinux
     /// <summary>Gets the current UTC date and time.</summary>
     DateTime UtcNow { get; }
 
+    /// <summary>Gets the number of logical processors on the system.</summary>
+    int ProcessorCount { get; }
+
     /// <summary>
     /// Runs an external process and captures its output, error, and exit code.
     /// </summary>

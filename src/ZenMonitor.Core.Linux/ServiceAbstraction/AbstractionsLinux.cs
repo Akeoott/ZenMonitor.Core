@@ -19,6 +19,9 @@ public class AbstractionsLinux : IAbstractionsLinux
     public DateTime UtcNow => DateTime.UtcNow;
 
     /// <inheritdoc />
+    public int ProcessorCount => Environment.ProcessorCount;
+
+    /// <inheritdoc />
     public ProcessResult RunProcess(string fileName, string arguments)
     {
         var startInfo = new ProcessStartInfo
