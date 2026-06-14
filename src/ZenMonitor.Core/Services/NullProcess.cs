@@ -19,5 +19,5 @@ public class NullProcess : IProcess
     public int GetTotalProcesses() => 0;
 
     /// <summary>Returns an empty array.</summary>
-    public ProcessDetail[] GetProcesses() => [];
+    public ReadOnlySpan<ProcessDetail> GetProcesses() => [];
 }

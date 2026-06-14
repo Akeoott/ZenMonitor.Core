@@ -5,11 +5,18 @@ using ZenMonitor.Core.Models;
 
 namespace ZenMonitor.Core.Abstractions;
 
+/// <summary>
+/// Provides process monitoring capabilities, including enumeration of
+/// running processes and their resource usage.
+/// </summary>
 public interface IProcess
 {
+    /// <summary>Updates the internal process snapshot with the latest data from the system.</summary>
     void Update();
 
+    /// <summary>Returns the total number of processes detected during the last update.</summary>
     int GetTotalProcesses();
 
-    ProcessDetail[] GetProcesses();
+    /// <summary>Returns a read-only span of <see cref="ProcessDetail"/> records representing the current process snapshot.</summary>
+    ReadOnlySpan<ProcessDetail> GetProcesses();
 }

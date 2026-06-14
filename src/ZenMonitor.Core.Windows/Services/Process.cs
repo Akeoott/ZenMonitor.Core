@@ -9,17 +9,25 @@ using ZenMonitor.Core.Models;
 
 namespace ZenMonitor.Core.Windows.Services;
 
+/// <summary>
+/// Windows implementation of <see cref="IProcess"/> that provides process
+/// monitoring capabilities. Currently, returns an empty snapshot as the
+/// implementation is pending.
+/// </summary>
 [SupportedOSPlatform("windows")]
 public class Process(ILogger<Process>? logger) : IProcess
 {
     private readonly ILogger<Process> _logger = logger ?? NullLogger<Process>.Instance;
     private ProcessInfoSnapshot _snapshot = new(0, []);
 
+    /// <inheritdoc />
     public void Update() => _snapshot = FetchProcessInfo();
 
+    /// <inheritdoc />
     public int GetTotalProcesses() => _snapshot.TotalProcesses;
 
-    public ProcessDetail[] GetProcesses() => _snapshot.ProcessDetails;
+    /// <inheritdoc />
+    public ReadOnlySpan<ProcessDetail> GetProcesses() => _snapshot.ProcessDetails;
 
     private ProcessInfoSnapshot FetchProcessInfo()
     {

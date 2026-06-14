@@ -83,9 +83,19 @@ internal sealed class Monitor(ILogger<Monitor> logger, IHardwareMonitor monitor)
                 Console.WriteLine($"  Swap Total: {monitor.Memory.GetSwapTotal()}");
                 Console.WriteLine($"  Swap Free: {monitor.Memory.GetSwapFree()}\n");
 
+                // Hidden due to the MASSIVE output.
+                // Console.WriteLine("PROCESS INFORMATION");
+                // Console.WriteLine($"  Total Processes: {monitor.Process.GetTotalProcesses()}");
+                // var processes = monitor.Process.GetProcesses();
+                // foreach (var process in processes)
+                // {
+                //     Console.WriteLine($"  {process.Pid}, {process.Program}, {process.Command}, {process.State}, {process.Threads}, {process.User}, {process.MemoryUsage}, {process.CpuUsage}");
+                // }
+                // Console.WriteLine();
+
                 Console.WriteLine("NETWORK INFORMATION");
                 Console.WriteLine($"  Download in bytes: {monitor.Network.GetDownloadSpeed()}");
-                Console.WriteLine($"  Upload in bytes: {monitor.Network.GetUploadSpeed()}");
+                Console.WriteLine($"  Upload in bytes: {monitor.Network.GetUploadSpeed()}\n");
 
                 var networks = monitor.Network.GetNetworks();
                 foreach (var network in networks)

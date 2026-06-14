@@ -11,7 +11,6 @@ namespace ZenMonitor.Core.Windows.Services;
 
 /// <summary>
 /// Windows implementation of <see cref="IGpu"/> for NVIDIA GPUs.
-/// Reads metrics via the <c>nvidia-smi</c> CLI tool.
 /// </summary>
 [SupportedOSPlatform("windows")]
 public class GpuNvidia(ILogger<GpuNvidia>? logger) : IGpu
