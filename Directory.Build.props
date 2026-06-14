@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <!-- Shared NuGet packaging metadata for all projects -->
-    <Version>2.0.0-alpha.1</Version>
+    <Version>2.0.0-alpha.3</Version>
     <Authors>Akeoott</Authors>
     <PackageLicenseExpression>LGPL-3.0-or-later</PackageLicenseExpression>
     <PackageProjectUrl>https://github.com/Akeoott/ZenMonitor.Core</PackageProjectUrl>
