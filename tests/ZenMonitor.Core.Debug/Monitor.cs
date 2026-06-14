@@ -114,12 +114,7 @@ internal sealed class Monitor(ILogger<Monitor> logger, IHardwareMonitor monitor)
         {
             while (!cts.IsCancellationRequested)
             {
-                monitor.Cpu.Update();
-                monitor.Drive.Update();
-                monitor.Gpu.Update();
-                monitor.Memory.Update();
-                monitor.Network.Update();
-                monitor.System.Update();
+                monitor.UpdateAll();
                 logger.LogTrace("Done! Sending event to update interface.");
                 _dataReadyEvent.Release();
                 await Task.Delay(loopDelay, cts);

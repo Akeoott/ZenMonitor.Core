@@ -15,23 +15,39 @@ public sealed class HardwareMonitor(
     IGpu gpu,
     IMemory memory,
     INetwork network,
+    IProcess process,
     ISystem system) : IHardwareMonitor
 {
-    /// <summary>Gets the Null CPU monitoring service.</summary>
+    /// <inheritdoc />
+    public void UpdateAll()
+    {
+        Cpu.Update();
+        Drive.Update();
+        Gpu.Update();
+        Memory.Update();
+        Network.Update();
+        Process.Update();
+        System.Update();
+    }
+
+    /// <inheritdoc />
     public ICpu Cpu { get; } = cpu;
 
-    /// <summary>Gets the Null Drive monitoring service.</summary>
+    /// <inheritdoc />
     public IDrive Drive { get; } = drive;
 
-    /// <summary>Gets the Null GPU monitoring service.</summary>
+    /// <inheritdoc />
     public IGpu Gpu { get; } = gpu;
 
-    /// <summary>Gets the Null Memory monitoring service.</summary>
+    /// <inheritdoc />
     public IMemory Memory { get; } = memory;
 
-    /// <summary>Gets the Null Network monitoring service.</summary>
+    /// <inheritdoc />
     public INetwork Network { get; } = network;
 
-    /// <summary>Gets the Null System monitoring service.</summary>
+    /// <inheritdoc />
+    public IProcess Process { get; } = process;
+
+    /// <inheritdoc />
     public ISystem System { get; } = system;
 }

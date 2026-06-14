@@ -21,6 +21,7 @@ internal static class NullRegistration
         services.AddSingleton<IGpu, NullGpu>();
         services.AddSingleton<IMemory, NullMemory>();
         services.AddSingleton<INetwork, NullNetwork>();
+        services.AddSingleton<IProcess, NullProcess>();
         services.AddSingleton<ISystem, NullSystem>();
     }
 }

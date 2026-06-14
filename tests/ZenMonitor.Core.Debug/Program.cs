@@ -101,13 +101,11 @@ internal sealed class Program
         Directory.CreateDirectory("logs");
         File.WriteAllText(logFilePath, string.Empty);
 
-        var loggerConfig = new LoggerConfiguration()
-            .MinimumLevel.Is(logLevel)
-            .Enrich.WithProperty("RunId", Guid.NewGuid());
+        var loggerConfig = new LoggerConfiguration().MinimumLevel.Is(logLevel);
 
         loggerConfig.WriteTo.File(
             logFilePath,
-            outputTemplate: "{Timestamp:yyyy-MM-dd HH:mm:ss.fff zzz} [{Level:u3}] [{RunId}] [{SourceContext}] {Message:lj}{NewLine}{Exception}");
+            outputTemplate: "{Timestamp:yyyy-MM-dd HH:mm:ss.fff zzz} [{Level:u3}] [{SourceContext}] {Message:lj}{NewLine}{Exception}");
 
         Log.Logger = loggerConfig.CreateLogger();
     }

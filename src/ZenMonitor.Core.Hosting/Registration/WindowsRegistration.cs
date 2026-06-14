@@ -38,9 +38,11 @@ internal static class WindowsRegistration
             services.AddSingleton<ILogger<Drive>>(NullLogger<Drive>.Instance);
             services.AddSingleton<ILogger<Memory>>(NullLogger<Memory>.Instance);
             services.AddSingleton<ILogger<Network>>(NullLogger<Network>.Instance);
+            services.AddSingleton<ILogger<Process>>(NullLogger<Process>.Instance);
             services.AddSingleton<ILogger<Windows.Services.System>>(NullLogger<Windows.Services.System>.Instance);
-            services.AddSingleton<ILogger<GpuAmd>>(NullLogger<GpuAmd>.Instance);
+
             services.AddSingleton<ILogger<GpuNvidia>>(NullLogger<GpuNvidia>.Instance);
+            services.AddSingleton<ILogger<GpuAmd>>(NullLogger<GpuAmd>.Instance);
         }
 
         services.AddSingleton<IAbstractionsWindows, AbstractionsWindows>();
@@ -48,6 +50,7 @@ internal static class WindowsRegistration
         services.AddSingleton<IDrive, Drive>();
         services.AddSingleton<IMemory, Memory>();
         services.AddSingleton<INetwork, Network>();
+        services.AddSingleton<IProcess, Process>();
         services.AddSingleton<ISystem, Windows.Services.System>();
 
         var vendor = DetectGpuVendor();
