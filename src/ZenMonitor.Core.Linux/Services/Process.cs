@@ -66,7 +66,7 @@ public class Process(ILogger<Process>? logger, IFileSystem fileSystem, IAbstract
                 if (!fileSystem.File.Exists(statusPath))
                     continue;
 
-                activePids.Add(pid);
+                _ = activePids.Add(pid);
 
                 ParseStatusFile(statusPath, out var programName, out var state, out var threads, out var uid,
                     out var memUsageKb);
@@ -105,7 +105,7 @@ public class Process(ILogger<Process>? logger, IFileSystem fileSystem, IAbstract
         var deadPids = _cpuCache.Keys.Where(p => !activePids.Contains(p)).ToList();
         foreach (var deadPid in deadPids)
         {
-            _cpuCache.Remove(deadPid);
+            _ = _cpuCache.Remove(deadPid);
         }
     }
 
@@ -135,27 +135,27 @@ public class Process(ILogger<Process>? logger, IFileSystem fileSystem, IAbstract
                 }
                 else if (line.StartsWith("Threads:", StringComparison.Ordinal))
                 {
-                    int.TryParse(line["Threads:".Length..].Trim(), out threads);
+                    _ = int.TryParse(line["Threads:".Length..].Trim(), out threads);
                 }
                 else if (line.StartsWith("Uid:", StringComparison.Ordinal))
                 {
                     // Uid line contains: Real, Effective, Saved, File System UIDs separated by tabs
                     var parts = line["Uid:".Length..].Split('\t', StringSplitOptions.RemoveEmptyEntries);
                     if (parts.Length > 0)
-                        int.TryParse(parts[0].Trim(), out uid);
+                        _ = int.TryParse(parts[0].Trim(), out uid);
                 }
                 else if (line.StartsWith("VmRSS:", StringComparison.Ordinal))
                 {
                     // VmRSS line contains something like: "VmRSS:     17960 kB"
                     var parts = line["VmRSS:".Length..].Trim().Split(' ', StringSplitOptions.RemoveEmptyEntries);
                     if (parts.Length > 0)
-                        int.TryParse(parts[0], out vmRssKb);
+                        _ = int.TryParse(parts[0], out vmRssKb);
                 }
             }
         }
         catch (Exception ex)
         {
-            _logger.LogWarning(ex,"Something unexpected happened.");
+            _logger.LogWarning(ex, "Something unexpected happened.");
             // Fail "silently" and return defaults if a single file read locks up
         }
     }
@@ -204,7 +204,7 @@ public class Process(ILogger<Process>? logger, IFileSystem fileSystem, IAbstract
         }
         catch (Exception ex)
         {
-            _logger.LogWarning(ex,"Something unexpected happened.");
+            _logger.LogWarning(ex, "Something unexpected happened.");
             return 0;
         }
     }
@@ -219,7 +219,7 @@ public class Process(ILogger<Process>? logger, IFileSystem fileSystem, IAbstract
         }
         catch (Exception ex)
         {
-            _logger.LogWarning(ex,"Something unexpected happened.");
+            _logger.LogWarning(ex, "Something unexpected happened.");
             return string.Empty;
         }
     }
