@@ -40,7 +40,8 @@ services.AddZenMonitor();
 ```
 
 > [!IMPORTANT]
-> See [CONTRIBUTING.md](https://github.com/Akeoott/ZenMonitor.Core/blob/main/.github/CONTRIBUTING.md) for the contribution workflow and our [Code of Conduct](https://github.com/Akeoott/ZenMonitor.Core/blob/main/.github/CODE_OF_CONDUCT.md).
+> See [CONTRIBUTING.md](https://github.com/Akeoott/ZenMonitor.Core/blob/main/.github/CONTRIBUTING.md)
+> for the contribution workflow and our [Code of Conduct](https://github.com/Akeoott/ZenMonitor.Core/blob/main/.github/CODE_OF_CONDUCT.md).
 
 ## Technical Details
 
@@ -52,30 +53,34 @@ services.AddZenMonitor();
 
 ## Project Documentation
 
-### Hardware Interfaces
+### Interfaces
 
-Each hardware component is defined as an interface in the `Abstractions` namespace, with a corresponding Null-object service in `Services` (used as fallback when no platform implementation is available). The Linux project provides real implementations, while Windows support is under development.
+Each service is defined as an interface in the `Abstractions` namespace,
+with a corresponding Null-object service in `Services` (used as fallback when no platform implementation is available).
+The Linux project provides real implementations, while Windows support is under development.
 
-`IHardwareMonitor` aggregates all interfaces as properties, providing a single entry point for consumers to simplify usage.
+- ### `IHardwareMonitor`:
+  aggregates all interfaces as properties,
+  providing a single entry point for consumers to simplify usage.
 
-Each interface exposes a `void Update()` method plus typed getters:
-
-| Interface  | Provides                               |
-|------------|----------------------------------------|
-| `ICpu`     | CPU usage, temperature, frequency etc. |
-| `IDrive`   | Disk I/O, partition usage etc.         |
-| `IGpu`     | GPU utilization, VRAM etc.             |
-| `IMemory`  | RAM usage, swap etc.                   |
-| `INetwork` | Network throughput, interfaces etc.    |
-| `ISystem`  | OS info, uptime, hostname etc.         |
+  | Interface   | Provides                               |
+  |-------------|----------------------------------------|
+  | `UpdateAll` | Updates all records in all interfaces. |
+  | `ICpu`      | CPU usage, temperature, frequency etc. |
+  | `IDrive`    | Disk I/O, partition usage etc.         |
+  | `IGpu`      | GPU utilization, VRAM etc.             |
+  | `IMemory`   | RAM usage, swap etc.                   |
+  | `INetwork`  | Network throughput, interfaces etc.    |
+  | `IProcess`  | Details of processes etc.              |
+  | `ISystem`   | OS info, uptime, hostname etc.         |
 
 ### Project Structure
 
 The repo is split across five projects:
 
-| Project                   | DescriptioSn                                                                                                                                                                                                     |
+| Project                   | Descriptions                                                                                                                                                                                                     |
 |---------------------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| `ZenMonitor.Core`         | Hardware abstraction interfaces (`ICpu`, `IDrive`, `IGpu`, `IMemory`, `INetwork`, `ISystem`), data models, and Null-object fallback services.                                                                    |
+| `ZenMonitor.Core`         | Hardware abstraction interfaces, data models, and Null-object fallback services.                                                                                                                                 |
 | `ZenMonitor.Core.Hosting` | DI registration extensions (`AddZenMonitor.Core()`) that auto-detect the OS and register the correct platform services. This is optional but recommended.                                                        |
 | `ZenMonitor.Core.Linux`   | Linux-specific platform implementations for all interfaces.                                                                                                                                                      |
 | `ZenMonitor.Core.Windows` | Windows-specific platform implementations for all interfaces.                                                                                                                                                    |
