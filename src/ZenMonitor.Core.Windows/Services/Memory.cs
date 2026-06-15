@@ -10,8 +10,7 @@ using ZenMonitor.Core.Models;
 namespace ZenMonitor.Core.Windows.Services;
 
 /// <summary>
-/// Windows implementation of <see cref="IMemory"/> that reads memory metrics
-/// from <c>/proc/meminfo</c>.
+/// Windows implementation of <see cref="IMemory"/>
 /// </summary>
 [SupportedOSPlatform("windows")]
 public class Memory(ILogger<Memory>? logger) : IMemory

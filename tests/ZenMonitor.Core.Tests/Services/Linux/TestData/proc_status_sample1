@@ -1,0 +1,8 @@
+Name:	test-program
+State:	R (running)
+Tgid:	1234
+Pid:	1234
+PPid:	1
+Threads:	5
+Uid:	1000	1000	1000	1000
+VmRSS:	    10240 kB

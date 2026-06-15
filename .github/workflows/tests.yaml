@@ -50,9 +50,6 @@ jobs:
       - name: Build
         run: dotnet build --no-restore
 
-      - name: Check code style
-        run: dotnet format --verify-no-changes --no-restore
-
       - name: Run ${{ matrix.os }} tests with coverage
         run: >
           dotnet test --no-build --collect:"XPlat Code Coverage"

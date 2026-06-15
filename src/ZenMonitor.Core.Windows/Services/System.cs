@@ -10,8 +10,7 @@ using ZenMonitor.Core.Models;
 namespace ZenMonitor.Core.Windows.Services;
 
 /// <summary>
-/// Windows implementation of <see cref="ISystem"/> that reads system information
-/// from <c>/proc/sys</c>, <c>/proc/uptime</c>, and <c>/proc/loadavg</c>.
+/// Windows implementation of <see cref="ISystem"/>
 /// </summary>
 [SupportedOSPlatform("windows")]
 public class System(ILogger<System>? logger) : ISystem

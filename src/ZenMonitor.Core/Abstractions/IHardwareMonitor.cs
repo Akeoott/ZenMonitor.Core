@@ -10,6 +10,11 @@ namespace ZenMonitor.Core.Abstractions;
 /// </summary>
 public interface IHardwareMonitor
 {
+    /// <summary>
+    /// Runs Update() for every interface in IHardwareMonitor in alphabetical order.
+    /// </summary>
+    void UpdateAll();
+
     /// <summary>Gets the CPU monitoring service.</summary>
     ICpu Cpu { get; }
 
@@ -24,6 +29,9 @@ public interface IHardwareMonitor
 
     /// <summary>Gets the Network monitoring service.</summary>
     INetwork Network { get; }
+
+    /// <summary>Gets the Process monitoring service.</summary>
+    IProcess Process { get; }
 
     /// <summary>Gets the System monitoring service.</summary>
     ISystem System { get; }

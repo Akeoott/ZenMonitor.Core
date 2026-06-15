@@ -121,6 +121,26 @@ public static class TestData
     /// </summary>
     public static string OperstateEth0() => ReadFile("operstate_eth0");
 
+    /// <summary>
+    /// /proc/[pid]/status (PID 1234, name: test-program, 5 threads, uid 1000, VmRSS 10240 kB)
+    /// </summary>
+    public static string ProcStatusSample1() => ReadFile("proc_status_sample1");
+
+    /// <summary>
+    /// /proc/[pid]/stat (PID 1234, first snapshot: utime=1000, stime=500)
+    /// </summary>
+    public static string ProcStatSample1() => ReadFile("proc_stat_sample1");
+
+    /// <summary>
+    /// /proc/[pid]/stat (PID 1234, second snapshot: utime=1001, stime=500)
+    /// </summary>
+    public static string ProcStatSample2() => ReadFile("proc_stat_sample2");
+
+    /// <summary>
+    /// /etc/passwd with root(0), daemon(1), testuser(1000)
+    /// </summary>
+    public static string EtcPasswd() => ReadFile("etc_passwd");
+
     private static string ReadFile(string filename)
     {
         string path = Path.Combine(BaseDir, filename);
