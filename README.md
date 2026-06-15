@@ -78,14 +78,14 @@ The Linux project provides real implementations, while Windows support is under 
 
 The repo is split across five projects:
 
-| Project                   | Descriptions                                                                                                                                                                                                     |
-|---------------------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| `ZenMonitor.Core`         | Hardware abstraction interfaces, data models, and Null-object fallback services.                                                                                                                                 |
-| `ZenMonitor.Core.Hosting` | DI registration extensions (`AddZenMonitor.Core()`) that auto-detect the OS and register the correct platform services. This is optional but recommended.                                                        |
-| `ZenMonitor.Core.Linux`   | Linux-specific platform implementations for all interfaces.                                                                                                                                                      |
-| `ZenMonitor.Core.Windows` | Windows-specific platform implementations for all interfaces.                                                                                                                                                    |
-| `ZenMonitor.Core.Debug`   | Quick debugging interface providing all info out of the box to the terminal with logging. See [CONTRIBUTING.md](https://github.com/Akeoott/ZenMonitor.Core/blob/main/.github/CONTRIBUTING.md) for usage details. |
-| `ZenMonitor.Core.Tests`   | xUnit test suite.                                                                                                                                                                                                |
+| Project                   | Descriptions                                                                                                                                         |
+|---------------------------|------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `ZenMonitor.Core`         | Hardware abstraction interfaces, data models, and Null-object fallback services.                                                                     |
+| `ZenMonitor.Core.Hosting` | DI registration extensions (`AddZenMonitor()`) that auto-detect the OS and register the correct platform services. This is optional but recommended. |
+| `ZenMonitor.Core.Linux`   | Linux-specific platform implementations for all interfaces.                                                                                          |
+| `ZenMonitor.Core.Windows` | Windows-specific platform implementations for all interfaces.                                                                                        |
+| `ZenMonitor.Core.Debug`   | Quick debugging interface providing all info out of the box to the terminal with logging.                                                            |
+| `ZenMonitor.Core.Tests`   | xUnit test suite.                                                                                                                                    |
 
 ### NuGet Packages
 
