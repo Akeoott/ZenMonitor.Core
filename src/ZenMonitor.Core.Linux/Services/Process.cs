@@ -27,7 +27,6 @@ public class Process(ILogger<Process>? logger, IFileSystem fileSystem, IAbstract
     private Dictionary<int, string> _userMap = new();
     private DateTime _lastUserMapUpdate = DateTime.MinValue;
 
-
     /// <inheritdoc />
     public void Update() => FetchProcessInfo();
 
