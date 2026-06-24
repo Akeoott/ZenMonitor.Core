@@ -39,9 +39,9 @@ public static class DependencyInjection
                 WindowsRegistration.Register(services);
             }
 #else
-            NullRegistration.Register(services);
+            throw new PlatformNotSupportedException();
 #endif
-            services.AddSingleton<IHardwareMonitor, HardwareMonitor>();
+            services.AddSingleton<ISystemTelemetry, SystemTelemetry>();
             return services;
         }
     }

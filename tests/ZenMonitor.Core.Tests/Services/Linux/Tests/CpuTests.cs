@@ -9,9 +9,9 @@ using Moq;
 
 using Xunit;
 
-using ZenMonitor.Core.Interfaces;
-using ZenMonitor.Core.Linux.Services;
-using ZenMonitor.Core.Models;
+using ZenMonitor.Core.Linux.Services.Telemetry;
+using ZenMonitor.Core.Models.Telemetry;
+using ZenMonitor.Core.Utils;
 
 namespace ZenMonitor.Core.Tests.Services.Linux.Tests;
 
@@ -21,9 +21,9 @@ public class CpuTests
 {
     private readonly Mock<ILogger<Cpu>> _mockLogger = new();
     private readonly MockFileSystem _mockFileSystem = new();
-    private readonly Mock<IAbstractionsLinux> _mockHelper = new();
+    private readonly Mock<IUtilsLinux> _mockUtils = new();
 
-    private Cpu CreateCpu() => new(_mockLogger.Object, _mockFileSystem, _mockHelper.Object);
+    private Cpu CreateCpu() => new(_mockLogger.Object, _mockFileSystem, _mockUtils.Object);
 
     [Fact]
     public void Expected_CpuNameAndSpeed()
@@ -132,13 +132,13 @@ public class CpuTests
         _mockFileSystem.AddFile("/proc/cpuinfo", new MockFileData(TestData.CpuInfo()));
         _mockFileSystem.AddFile("/proc/stat", new MockFileData(TestData.Stat1()));
 
-        _mockHelper.Setup(c => c.UtcNow).Returns(new DateTime(2026, 1, 1, 0, 0, 1));
+        _mockUtils.Setup(c => c.UtcNow).Returns(new DateTime(2026, 1, 1, 0, 0, 1));
         _mockFileSystem.AddFile(energyUjPath, new MockFileData(TestData.EnergyUj1()));
         var cpu = CreateCpu();
 
         cpu.Update();
 
-        _mockHelper.Setup(c => c.UtcNow).Returns(new DateTime(2026, 1, 1, 0, 0, 6));
+        _mockUtils.Setup(c => c.UtcNow).Returns(new DateTime(2026, 1, 1, 0, 0, 6));
         _mockFileSystem.AddFile(energyUjPath, new MockFileData(TestData.EnergyUj2()));
 
         cpu.Update();
@@ -256,7 +256,7 @@ public class CpuTests
         _mockFileSystem.AddFile("/proc/stat", new MockFileData(TestData.Stat1()));
         _mockFileSystem.AddFile(energyUjPath, new MockFileData("not_a_number"));
 
-        _mockHelper.Setup(c => c.UtcNow).Returns(new DateTime(2026, 1, 1, 0, 0, 1));
+        _mockUtils.Setup(c => c.UtcNow).Returns(new DateTime(2026, 1, 1, 0, 0, 1));
         var cpu = CreateCpu();
 
         cpu.Update();

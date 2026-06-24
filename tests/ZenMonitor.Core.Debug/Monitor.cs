@@ -9,7 +9,7 @@ using ZenMonitor.Core.Abstractions;
 
 namespace ZenMonitor.Core.Debug;
 
-internal sealed class Monitor(ILogger<Monitor> logger, IHardwareMonitor monitor)
+internal sealed class Monitor(ILogger<Monitor> logger, ISystemTelemetry monitor)
 {
     private readonly SemaphoreSlim _dataReadyEvent = new(0, int.MaxValue);
 
@@ -84,14 +84,14 @@ internal sealed class Monitor(ILogger<Monitor> logger, IHardwareMonitor monitor)
                 Console.WriteLine($"  Swap Free: {monitor.Memory.GetSwapFree()}\n");
 
                 // Hidden due to the MASSIVE output.
-                // Console.WriteLine("PROCESS INFORMATION");
-                // Console.WriteLine($"  Total Processes: {monitor.Process.GetTotalProcesses()}");
-                // var processes = monitor.Process.GetProcesses();
-                // foreach (var process in processes)
-                // {
-                //     Console.WriteLine($"  {process.Pid}, {process.Program}, {process.Command}, {process.State}, {process.Threads}, {process.User}, {process.MemoryUsage}, {process.CpuUsage}");
-                // }
-                // Console.WriteLine();
+                Console.WriteLine("PROCESS INFORMATION");
+                Console.WriteLine($"  Total Processes: {monitor.Process.GetTotalProcesses()}");
+                var processes = monitor.Process.GetProcesses();
+                foreach (var process in processes)
+                {
+                    Console.WriteLine($"  {process.Pid}, {process.Program}, {process.Command}, {process.State}, {process.Threads}, {process.User}, {process.MemoryUsage}, {process.CpuUsage}");
+                }
+                Console.WriteLine();
 
                 Console.WriteLine("NETWORK INFORMATION");
                 Console.WriteLine($"  Download in bytes: {monitor.Network.GetDownloadSpeed()}");

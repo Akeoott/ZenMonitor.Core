@@ -9,8 +9,8 @@ using Moq;
 
 using Xunit;
 
-using ZenMonitor.Core.Interfaces;
-using ZenMonitor.Core.Linux.Services;
+using ZenMonitor.Core.Linux.Services.Telemetry;
+using ZenMonitor.Core.Utils;
 
 namespace ZenMonitor.Core.Tests.Services.Linux.Tests;
 
@@ -20,16 +20,16 @@ public class NetworkTests
 {
     private readonly Mock<ILogger<Network>> _mockLogger = new();
     private readonly MockFileSystem _mockFileSystem = new();
-    private readonly Mock<IAbstractionsLinux> _mockHelper = new();
+    private readonly Mock<IUtilsLinux> _mockUtils = new();
 
-    private Network CreateNetwork() => new(_mockLogger.Object, _mockFileSystem, _mockHelper.Object);
+    private Network CreateNetwork() => new(_mockLogger.Object, _mockFileSystem, _mockUtils.Object);
 
     [Fact]
     public void Expected_PerInterfaceMetricsAndAggregates()
     {
         _mockFileSystem.AddFile("/proc/net/dev", new MockFileData(TestData.NetDev1()));
         _mockFileSystem.AddFile("/sys/class/net/eth0/operstate", new MockFileData(TestData.OperstateEth0()));
-        _mockHelper.Setup(h => h.UtcNow).Returns(new DateTime(2026, 1, 1, 0, 0, 0));
+        _mockUtils.Setup(h => h.UtcNow).Returns(new DateTime(2026, 1, 1, 0, 0, 0));
 
         var network = CreateNetwork();
         network.Update();
@@ -43,7 +43,7 @@ public class NetworkTests
 
         // Second snapshot produces speed delta
         _mockFileSystem.AddFile("/proc/net/dev", new MockFileData(TestData.NetDev2()));
-        _mockHelper.Setup(h => h.UtcNow).Returns(new DateTime(2026, 1, 1, 0, 0, 2));
+        _mockUtils.Setup(h => h.UtcNow).Returns(new DateTime(2026, 1, 1, 0, 0, 2));
 
         network.Update();
         networks = network.GetNetworks();
@@ -65,7 +65,7 @@ public class NetworkTests
             " face |bytes    packets errs drop fifo frame compressed multicast|bytes    packets errs drop fifo colls carrier compressed\n" +
             "    lo:   500000     500    0    0    0    0          0         0   500000     500    0    0    0    0       0          0\n"
         ));
-        _mockHelper.Setup(h => h.UtcNow).Returns(new DateTime(2026, 1, 1, 0, 0, 0));
+        _mockUtils.Setup(h => h.UtcNow).Returns(new DateTime(2026, 1, 1, 0, 0, 0));
 
         var network = CreateNetwork();
         network.Update();
@@ -80,7 +80,7 @@ public class NetworkTests
     {
         _mockFileSystem.AddFile("/proc/net/dev", new MockFileData(TestData.NetDev1()));
         _mockFileSystem.AddFile("/sys/class/net/eth0/operstate", new MockFileData("down"));
-        _mockHelper.Setup(h => h.UtcNow).Returns(new DateTime(2026, 1, 1, 0, 0, 0));
+        _mockUtils.Setup(h => h.UtcNow).Returns(new DateTime(2026, 1, 1, 0, 0, 0));
 
         var network = CreateNetwork();
         network.Update();
@@ -97,7 +97,7 @@ public class NetworkTests
         _mockFileSystem.AddFile("/proc/net/dev", new MockFileData(TestData.NetDev1()));
         // No /sys/class/net/eth0/operstate file added
 
-        _mockHelper.Setup(h => h.UtcNow).Returns(new DateTime(2026, 1, 1, 0, 0, 0));
+        _mockUtils.Setup(h => h.UtcNow).Returns(new DateTime(2026, 1, 1, 0, 0, 0));
 
         var network = CreateNetwork();
         network.Update();
@@ -127,7 +127,7 @@ public class NetworkTests
             "   eth0: invalid bytes                                           more stuff\n" +
             "   eth1: 1000 10 0 0 0 0 0 0 2000 20 0 0 0 0 0 0\n"
         ));
-        _mockHelper.Setup(h => h.UtcNow).Returns(new DateTime(2026, 1, 1, 0, 0, 0));
+        _mockUtils.Setup(h => h.UtcNow).Returns(new DateTime(2026, 1, 1, 0, 0, 0));
 
         var network = CreateNetwork();
         network.Update();
@@ -147,7 +147,7 @@ public class NetworkTests
             " face |bytes    packets errs drop fifo frame compressed multicast|bytes    packets errs drop fifo colls carrier compressed\n" +
             "   eth0 1000 10 0 0 0 0 0 0 2000 20 0 0 0 0 0 0\n" // no colon
         ));
-        _mockHelper.Setup(h => h.UtcNow).Returns(new DateTime(2026, 1, 1, 0, 0, 0));
+        _mockUtils.Setup(h => h.UtcNow).Returns(new DateTime(2026, 1, 1, 0, 0, 0));
 
         var network = CreateNetwork();
         network.Update();

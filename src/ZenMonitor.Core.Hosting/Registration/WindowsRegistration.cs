@@ -3,20 +3,17 @@
 
 #if PLATFORM_WINDOWS
 
-using System;
-using System.Runtime.Versioning;
-
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
 using Microsoft.Win32;
 
-using ZenMonitor.Core.Abstractions;
-using ZenMonitor.Core.Interfaces;
-using ZenMonitor.Core.Models;
+using ZenMonitor.Core.Abstractions.Telemetry;
+using ZenMonitor.Core.Models.Telemetry;
 using ZenMonitor.Core.Services;
-using ZenMonitor.Core.Windows.ServiceAbstraction;
-using ZenMonitor.Core.Windows.Services;
+using ZenMonitor.Core.Utils;
+using ZenMonitor.Core.Windows.Services.Telemetry;
+using ZenMonitor.Core.Windows.Utils;
 
 namespace ZenMonitor.Core.Hosting.Registration;
 
@@ -39,19 +36,19 @@ internal static class WindowsRegistration
             services.AddSingleton<ILogger<Memory>>(NullLogger<Memory>.Instance);
             services.AddSingleton<ILogger<Network>>(NullLogger<Network>.Instance);
             services.AddSingleton<ILogger<Process>>(NullLogger<Process>.Instance);
-            services.AddSingleton<ILogger<Windows.Services.System>>(NullLogger<Windows.Services.System>.Instance);
+            services.AddSingleton<ILogger<Windows.Services.Telemetry.System>>(NullLogger<Windows.Services.Telemetry.System>.Instance);
 
             services.AddSingleton<ILogger<GpuNvidia>>(NullLogger<GpuNvidia>.Instance);
             services.AddSingleton<ILogger<GpuAmd>>(NullLogger<GpuAmd>.Instance);
         }
 
-        services.AddSingleton<IAbstractionsWindows, AbstractionsWindows>();
+        services.AddSingleton<IUtilsWindows, UtilsWindows>();
         services.AddSingleton<ICpu, Cpu>();
         services.AddSingleton<IDrive, Drive>();
         services.AddSingleton<IMemory, Memory>();
         services.AddSingleton<INetwork, Network>();
         services.AddSingleton<IProcess, Process>();
-        services.AddSingleton<ISystem, Windows.Services.System>();
+        services.AddSingleton<ISystem, Windows.Services.Telemetry.System>();
 
         var vendor = DetectGpuVendor();
 
@@ -81,7 +78,7 @@ internal static class WindowsRegistration
                 if (subKey == null)
                     continue;
 
-                string? provider = subKey.GetValue("ProviderName") as string;
+                var provider = subKey.GetValue("ProviderName") as string;
                 if (string.IsNullOrEmpty(provider))
                     continue;
 
