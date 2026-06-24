@@ -7,9 +7,9 @@ using System.IO.Abstractions;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
 
-using ZenMonitor.Core.Abstractions;
-using ZenMonitor.Core.Interfaces;
-using ZenMonitor.Core.Models;
+using ZenMonitor.Core.Abstractions.Telemetry;
+using ZenMonitor.Core.Models.Telemetry;
+using ZenMonitor.Core.Utils;
 
 namespace ZenMonitor.Core.Linux.Services;
 
@@ -18,7 +18,7 @@ namespace ZenMonitor.Core.Linux.Services;
 /// from the <c>/proc</c> filesystem.
 /// </summary>
 [SupportedOSPlatform("linux")]
-public class Process(ILogger<Process>? logger, IFileSystem fileSystem, IAbstractionsLinux helper) : IProcess
+public class Process(ILogger<Process>? logger, IFileSystem fileSystem, IUtilsLinux helper) : IProcess
 {
     private readonly ILogger<Process> _logger = logger ?? NullLogger<Process>.Instance;
 
@@ -178,7 +178,7 @@ public class Process(ILogger<Process>? logger, IFileSystem fileSystem, IAbstract
 
             // In the truncated numeric part:
             // Field 3 (State) is at index 0.
-            // Field 14 (utime) is at index 11.
+            // Field 14 (utime) is at index 11.w
             // Field 15 (stime) is at index 12.
             if (fields.Length <= 12 ||
                 !double.TryParse(fields[11], out var utime) ||

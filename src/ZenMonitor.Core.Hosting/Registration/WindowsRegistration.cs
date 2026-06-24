@@ -11,12 +11,12 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
 using Microsoft.Win32;
 
-using ZenMonitor.Core.Abstractions;
-using ZenMonitor.Core.Interfaces;
-using ZenMonitor.Core.Models;
+using ZenMonitor.Core.Abstractions.Telemetry;
+using ZenMonitor.Core.Models.Telemetry;
 using ZenMonitor.Core.Services;
-using ZenMonitor.Core.Windows.ServiceAbstraction;
+using ZenMonitor.Core.Utils;
 using ZenMonitor.Core.Windows.Services;
+using ZenMonitor.Core.Windows.Utils;
 
 namespace ZenMonitor.Core.Hosting.Registration;
 
@@ -45,7 +45,7 @@ internal static class WindowsRegistration
             services.AddSingleton<ILogger<GpuAmd>>(NullLogger<GpuAmd>.Instance);
         }
 
-        services.AddSingleton<IAbstractionsWindows, AbstractionsWindows>();
+        services.AddSingleton<IUtilsWindows, UtilsWindows>();
         services.AddSingleton<ICpu, Cpu>();
         services.AddSingleton<IDrive, Drive>();
         services.AddSingleton<IMemory, Memory>();
@@ -81,7 +81,7 @@ internal static class WindowsRegistration
                 if (subKey == null)
                     continue;
 
-                string? provider = subKey.GetValue("ProviderName") as string;
+                var provider = subKey.GetValue("ProviderName") as string;
                 if (string.IsNullOrEmpty(provider))
                     continue;
 

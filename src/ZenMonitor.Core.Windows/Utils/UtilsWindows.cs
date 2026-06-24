@@ -5,18 +5,18 @@ using System.Management;
 
 using Microsoft.Win32;
 
-using ZenMonitor.Core.Interfaces;
 using ZenMonitor.Core.Models;
+using ZenMonitor.Core.Utils;
 
-namespace ZenMonitor.Core.Windows.ServiceAbstraction;
+namespace ZenMonitor.Core.Windows.Utils;
 
 /// <summary>
-/// Windows implementation of <see cref="IAbstractionsWindows"/> using native Win32 API calls
+/// Windows implementation of <see cref="IUtilsWindows"/> using native Win32 API calls
 /// (P/Invoke) and WMI for hardware metrics.
 /// </summary>
 [ExcludeFromCodeCoverage]
 [SupportedOSPlatform("windows")]
-public partial class AbstractionsWindows : IAbstractionsWindows
+public partial class UtilsWindows : IUtilsWindows
 {
     #region Cpu
     /// <inheritdoc />

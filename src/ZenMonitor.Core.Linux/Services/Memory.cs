@@ -6,8 +6,8 @@ using System.IO.Abstractions;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
 
-using ZenMonitor.Core.Abstractions;
-using ZenMonitor.Core.Models;
+using ZenMonitor.Core.Abstractions.Telemetry;
+using ZenMonitor.Core.Models.Telemetry;
 
 namespace ZenMonitor.Core.Linux.Services;
 

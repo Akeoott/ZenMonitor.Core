@@ -3,14 +3,14 @@
 
 using ZenMonitor.Core.Models;
 
-namespace ZenMonitor.Core.Interfaces;
+namespace ZenMonitor.Core.Utils;
 
 /// <summary>
 /// Abstractions for Windows-native system operations via Win32 API that need
 /// to be mockable in tests.
 /// </summary>
 [SupportedOSPlatform("windows")]
-public interface IAbstractionsWindows
+public interface IUtilsWindows
 {
     /// <summary>Returns the CPU processor model name.</summary>
     string GetProcessorName();

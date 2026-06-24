@@ -4,9 +4,9 @@
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
 
-using ZenMonitor.Core.Abstractions;
-using ZenMonitor.Core.Interfaces;
-using ZenMonitor.Core.Models;
+using ZenMonitor.Core.Abstractions.Telemetry;
+using ZenMonitor.Core.Models.Telemetry;
+using ZenMonitor.Core.Utils;
 
 namespace ZenMonitor.Core.Linux.Services;
 
@@ -15,7 +15,7 @@ namespace ZenMonitor.Core.Linux.Services;
 /// Reads metrics via the <c>nvidia-smi</c> CLI tool.
 /// </summary>
 [SupportedOSPlatform("linux")]
-public class GpuNvidia(ILogger<GpuNvidia>? logger, IAbstractionsLinux helper) : IGpu
+public class GpuNvidia(ILogger<GpuNvidia>? logger, IUtilsLinux helper) : IGpu
 {
     private readonly ILogger<GpuNvidia> _logger = logger ?? NullLogger<GpuNvidia>.Instance;
     private GpuInfoSnapshot _snapshot = new("", 0, 0, 0.0, 0.0, 0, "", 0.0);

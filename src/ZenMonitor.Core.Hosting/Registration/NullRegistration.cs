@@ -3,7 +3,7 @@
 
 using Microsoft.Extensions.DependencyInjection;
 
-using ZenMonitor.Core.Abstractions;
+using ZenMonitor.Core.Abstractions.Telemetry;
 using ZenMonitor.Core.Services;
 
 namespace ZenMonitor.Core.Hosting.Registration;

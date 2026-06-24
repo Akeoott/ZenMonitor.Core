@@ -7,9 +7,9 @@ using System.IO.Abstractions;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
 
-using ZenMonitor.Core.Abstractions;
-using ZenMonitor.Core.Interfaces;
-using ZenMonitor.Core.Models;
+using ZenMonitor.Core.Abstractions.Telemetry;
+using ZenMonitor.Core.Models.Telemetry;
+using ZenMonitor.Core.Utils;
 
 namespace ZenMonitor.Core.Linux.Services;
 
@@ -18,7 +18,7 @@ namespace ZenMonitor.Core.Linux.Services;
 /// information from <c>df</c> and disk I/O stats from <c>/proc/diskstats</c>.
 /// </summary>
 [SupportedOSPlatform("linux")]
-public class Drive(ILogger<Drive>? logger, IFileSystem fileSystem, IAbstractionsLinux helper) : IDrive
+public class Drive(ILogger<Drive>? logger, IFileSystem fileSystem, IUtilsLinux helper) : IDrive
 {
     private readonly ILogger<Drive> _logger = logger ?? NullLogger<Drive>.Instance;
     private DriveInfoSnapshot _snapshot = new([]);

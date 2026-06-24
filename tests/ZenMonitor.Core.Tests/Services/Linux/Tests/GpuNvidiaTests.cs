@@ -7,9 +7,9 @@ using Moq;
 
 using Xunit;
 
-using ZenMonitor.Core.Interfaces;
 using ZenMonitor.Core.Linux.Services;
 using ZenMonitor.Core.Models;
+using ZenMonitor.Core.Utils;
 
 namespace ZenMonitor.Core.Tests.Services.Linux.Tests;
 
@@ -18,7 +18,7 @@ namespace ZenMonitor.Core.Tests.Services.Linux.Tests;
 public class GpuNvidiaTests
 {
     private readonly Mock<ILogger<GpuNvidia>> _mockLogger = new();
-    private readonly Mock<IAbstractionsLinux> _mockHelper = new();
+    private readonly Mock<IUtilsLinux> _mockHelper = new();
 
     [Fact]
     public void Expected_ReturnsParsedValues()

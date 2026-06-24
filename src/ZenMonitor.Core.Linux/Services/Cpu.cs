@@ -7,9 +7,9 @@ using System.IO.Abstractions;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
 
-using ZenMonitor.Core.Abstractions;
-using ZenMonitor.Core.Interfaces;
-using ZenMonitor.Core.Models;
+using ZenMonitor.Core.Abstractions.Telemetry;
+using ZenMonitor.Core.Models.Telemetry;
+using ZenMonitor.Core.Utils;
 
 namespace ZenMonitor.Core.Linux.Services;
 
@@ -18,7 +18,7 @@ namespace ZenMonitor.Core.Linux.Services;
 /// <c>/proc</c> and <c>/sys</c> filesystems.
 /// </summary>
 [SupportedOSPlatform("linux")]
-public class Cpu(ILogger<Cpu>? logger, IFileSystem fileSystem, IAbstractionsLinux helper) : ICpu
+public class Cpu(ILogger<Cpu>? logger, IFileSystem fileSystem, IUtilsLinux helper) : ICpu
 {
     private readonly ILogger<Cpu> _logger = logger ?? NullLogger<Cpu>.Instance;
     private CpuInfoSnapshot _snapshot = new("", 0, 0, 0, 0, [], [], []);

@@ -3,13 +3,13 @@
 
 using ZenMonitor.Core.Models;
 
-namespace ZenMonitor.Core.Interfaces;
+namespace ZenMonitor.Core.Utils;
 
 /// <summary>
 /// Abstraction for system-level operations that need to be mockable in tests.
 /// </summary>
 [SupportedOSPlatform("linux")]
-public interface IAbstractionsLinux
+public interface IUtilsLinux
 {
     /// <summary>Gets the current UTC date and time.</summary>
     DateTime UtcNow { get; }

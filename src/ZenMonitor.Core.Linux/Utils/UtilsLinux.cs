@@ -3,17 +3,17 @@
 
 using System.Diagnostics;
 
-using ZenMonitor.Core.Interfaces;
 using ZenMonitor.Core.Models;
+using ZenMonitor.Core.Utils;
 
-namespace ZenMonitor.Core.Linux.ServiceAbstraction;
+namespace ZenMonitor.Core.Linux.Utils;
 
 /// <summary>
 /// Provides system-level helper operations that are abstracted for testability.
 /// </summary>
 [ExcludeFromCodeCoverage]
 [SupportedOSPlatform("linux")]
-public class AbstractionsLinux : IAbstractionsLinux
+public class UtilsLinux : IUtilsLinux
 {
     /// <inheritdoc />
     public DateTime UtcNow => DateTime.UtcNow;

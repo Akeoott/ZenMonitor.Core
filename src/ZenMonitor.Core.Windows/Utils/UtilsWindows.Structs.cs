@@ -1,10 +1,10 @@
 // Copyright (c) Ame (Akeoot/Akeoott) <akeoot@pm.me>. Licensed under the LGPL-3.0 Licence.
 // See the LICENSE file in the repository root for full license text.
 
-namespace ZenMonitor.Core.Windows.ServiceAbstraction;
+namespace ZenMonitor.Core.Windows.Utils;
 
 [SupportedOSPlatform("windows")]
-public partial class AbstractionsWindows
+public partial class UtilsWindows
 {
     #region Cpu
     [StructLayout(LayoutKind.Sequential)]

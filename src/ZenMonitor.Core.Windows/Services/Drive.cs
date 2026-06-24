@@ -4,15 +4,15 @@
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
 
-using ZenMonitor.Core.Abstractions;
-using ZenMonitor.Core.Interfaces;
-using ZenMonitor.Core.Models;
+using ZenMonitor.Core.Abstractions.Telemetry;
+using ZenMonitor.Core.Models.Telemetry;
+using ZenMonitor.Core.Utils;
 
 namespace ZenMonitor.Core.Windows.Services;
 
 /// <summary>
 /// Windows implementation of <see cref="IDrive"/> that reads Drive metrics
-/// via native Win32 API calls through <see cref="IAbstractionsWindows"/>.
+/// via native Win32 API calls through <see cref="IUtilsWindows"/>.
 /// </summary>
 [SupportedOSPlatform("windows")]
 public class Drive(ILogger<Drive>? logger) : IDrive

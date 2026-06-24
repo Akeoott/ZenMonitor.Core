@@ -9,12 +9,12 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
 
-using ZenMonitor.Core.Abstractions;
-using ZenMonitor.Core.Interfaces;
-using ZenMonitor.Core.Linux.ServiceAbstraction;
+using ZenMonitor.Core.Abstractions.Telemetry;
 using ZenMonitor.Core.Linux.Services;
-using ZenMonitor.Core.Models;
+using ZenMonitor.Core.Linux.Utils;
+using ZenMonitor.Core.Models.Telemetry;
 using ZenMonitor.Core.Services;
+using ZenMonitor.Core.Utils;
 
 namespace ZenMonitor.Core.Hosting.Registration;
 
@@ -43,7 +43,7 @@ internal static class LinuxRegistration
             services.AddSingleton<ILogger<GpuNvidia>>(NullLogger<GpuNvidia>.Instance);
         }
 
-        services.AddSingleton<IAbstractionsLinux, AbstractionsLinux>();
+        services.AddSingleton<IUtilsLinux, UtilsLinux>();
         services.AddSingleton<ICpu, Cpu>();
         services.AddSingleton<IDrive, Drive>();
         services.AddSingleton<IMemory, Memory>();

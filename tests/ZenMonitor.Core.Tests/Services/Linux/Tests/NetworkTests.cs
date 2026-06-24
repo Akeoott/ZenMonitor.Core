@@ -9,8 +9,8 @@ using Moq;
 
 using Xunit;
 
-using ZenMonitor.Core.Interfaces;
 using ZenMonitor.Core.Linux.Services;
+using ZenMonitor.Core.Utils;
 
 namespace ZenMonitor.Core.Tests.Services.Linux.Tests;
 
@@ -20,7 +20,7 @@ public class NetworkTests
 {
     private readonly Mock<ILogger<Network>> _mockLogger = new();
     private readonly MockFileSystem _mockFileSystem = new();
-    private readonly Mock<IAbstractionsLinux> _mockHelper = new();
+    private readonly Mock<IUtilsLinux> _mockHelper = new();
 
     private Network CreateNetwork() => new(_mockLogger.Object, _mockFileSystem, _mockHelper.Object);
 

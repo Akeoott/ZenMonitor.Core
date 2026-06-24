@@ -10,9 +10,9 @@ using Moq;
 
 using Xunit;
 
-using ZenMonitor.Core.Interfaces;
 using ZenMonitor.Core.Linux.Services;
-using ZenMonitor.Core.Models;
+using ZenMonitor.Core.Models.Telemetry;
+using ZenMonitor.Core.Utils;
 
 namespace ZenMonitor.Core.Tests.Services.Linux.Tests;
 
@@ -22,7 +22,7 @@ public class ProcessTests
 {
     private readonly Mock<ILogger<Process>> _mockLogger = new();
     private readonly MockFileSystem _mockFileSystem = new();
-    private readonly Mock<IAbstractionsLinux> _mockHelper = new();
+    private readonly Mock<IUtilsLinux> _mockHelper = new();
 
     private const int MockProcessorCount = 4;
 

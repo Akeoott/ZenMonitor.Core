@@ -7,8 +7,9 @@ using Moq;
 
 using Xunit;
 
-using ZenMonitor.Core.Interfaces;
 using ZenMonitor.Core.Models;
+using ZenMonitor.Core.Models.Telemetry;
+using ZenMonitor.Core.Utils;
 using ZenMonitor.Core.Windows.Services;
 
 namespace ZenMonitor.Core.Tests.Services.Windows.Tests;
@@ -18,7 +19,7 @@ namespace ZenMonitor.Core.Tests.Services.Windows.Tests;
 public class CpuTests
 {
     private readonly Mock<ILogger<Cpu>> _mockLogger = new();
-    private readonly Mock<IAbstractionsWindows> _mockHelper = new();
+    private readonly Mock<IUtilsWindows> _mockHelper = new();
 
     private Cpu CreateCpu() => new(_mockLogger.Object, _mockHelper.Object);
 

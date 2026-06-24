@@ -4,18 +4,19 @@
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
 
-using ZenMonitor.Core.Abstractions;
-using ZenMonitor.Core.Interfaces;
+using ZenMonitor.Core.Abstractions.Telemetry;
 using ZenMonitor.Core.Models;
+using ZenMonitor.Core.Models.Telemetry;
+using ZenMonitor.Core.Utils;
 
 namespace ZenMonitor.Core.Windows.Services;
 
 /// <summary>
 /// Windows implementation of <see cref="ICpu"/> that reads CPU metrics
-/// via native Win32 API calls through <see cref="IAbstractionsWindows"/>.
+/// via native Win32 API calls through <see cref="IUtilsWindows"/>.
 /// </summary>
 [SupportedOSPlatform("windows")]
-public class Cpu(ILogger<Cpu>? logger, IAbstractionsWindows helper) : ICpu
+public class Cpu(ILogger<Cpu>? logger, IUtilsWindows helper) : ICpu
 {
     private readonly ILogger<Cpu> _logger = logger ?? NullLogger<Cpu>.Instance;
     private CpuInfoSnapshot _snapshot = new("", 0, 0, 0, 0, [], [], []);

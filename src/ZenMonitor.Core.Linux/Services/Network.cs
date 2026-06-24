@@ -6,9 +6,9 @@ using System.IO.Abstractions;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
 
-using ZenMonitor.Core.Abstractions;
-using ZenMonitor.Core.Interfaces;
-using ZenMonitor.Core.Models;
+using ZenMonitor.Core.Abstractions.Telemetry;
+using ZenMonitor.Core.Models.Telemetry;
+using ZenMonitor.Core.Utils;
 
 namespace ZenMonitor.Core.Linux.Services;
 
@@ -17,7 +17,7 @@ namespace ZenMonitor.Core.Linux.Services;
 /// from <c>/proc/net/dev</c> and <c>/sys/class/net/*/operstate</c>.
 /// </summary>
 [SupportedOSPlatform("linux")]
-public class Network(ILogger<Network>? logger, IFileSystem fileSystem, IAbstractionsLinux helper) : INetwork
+public class Network(ILogger<Network>? logger, IFileSystem fileSystem, IUtilsLinux helper) : INetwork
 {
     private readonly ILogger<Network> _logger = logger ?? NullLogger<Network>.Instance;
     private NetworkInfoSnapshot _snapshot = new(0, 0, []);

@@ -4,15 +4,16 @@
 using Xunit;
 
 using ZenMonitor.Core.Abstractions;
+using ZenMonitor.Core.Abstractions.Telemetry;
 
 namespace ZenMonitor.Core.Tests.Abstractions;
 
-public class HardwareMonitorTests
+public class SystemTelemetryTests
 {
     [Fact]
     public void IHardwareMonitor_Interface_Is_Valid_Aggregator()
     {
-        var type = typeof(IHardwareMonitor);
+        var type = typeof(ISystemTelemetry);
         Assert.True(type.IsInterface);
         Assert.NotNull(type.GetProperty("Cpu"));
         Assert.NotNull(type.GetProperty("Drive"));

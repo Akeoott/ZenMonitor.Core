@@ -41,7 +41,7 @@ public static class DependencyInjection
 #else
             NullRegistration.Register(services);
 #endif
-            services.AddSingleton<IHardwareMonitor, HardwareMonitor>();
+            services.AddSingleton<ISystemTelemetry, SystemTelemetry>();
             return services;
         }
     }
