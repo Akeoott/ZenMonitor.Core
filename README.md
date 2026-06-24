@@ -55,32 +55,39 @@ services.AddZenMonitor();
 
 ### Interfaces
 
-Each service is defined as an interface in the `Abstractions` namespace,
-with a corresponding Null-object service in `Services` (used as fallback when no platform implementation is available).
+Each service is defined as an interface in `Abstractions.*` and it's sub namespaces.
 The Linux project provides real implementations, while Windows support is under development.
 
-- ### `IHardwareMonitor`:
-  aggregates all interfaces as properties,
+- ### `ISystemTelemetry`:
+  aggregates all telemetry interfaces as properties,
   providing a single entry point for consumers to simplify usage.
 
-  | Interface   | Provides                               |
-  |-------------|----------------------------------------|
-  | `UpdateAll` | Updates all records in all interfaces. |
-  | `ICpu`      | CPU usage, temperature, frequency etc. |
-  | `IDrive`    | Disk I/O, partition usage etc.         |
-  | `IGpu`      | GPU utilization, VRAM etc.             |
-  | `IMemory`   | RAM usage, swap etc.                   |
-  | `INetwork`  | Network throughput, interfaces etc.    |
-  | `IProcess`  | Details of processes etc.              |
-  | `ISystem`   | OS info, uptime, hostname etc.         |
+  | ISystemTelemetry | Provides                               |
+  |------------------|----------------------------------------|
+  | `UpdateAll`      | Updates all records in all interfaces. |
+  | `ICpu`           | CPU usage, temperature, frequency etc. |
+  | `IDrive`         | Disk I/O, partition usage etc.         |
+  | `IGpu`           | GPU utilization, VRAM etc.             |
+  | `IMemory`        | RAM usage, swap etc.                   |
+  | `INetwork`       | Network throughput, interfaces etc.    |
+  | `IProcess`       | Details of processes etc.              |
+  | `ISystem`        | OS info, uptime, hostname etc.         |
+
+- ### `ISystemController` (WIP):
+  aggregates all controller interfaces as properties,
+  providing a single entry point for consumers to simplify usage.
+
+  | ISystemController | Provides |
+  |-------------------|----------|
+  | N/A               | N/A      |
 
 ### Project Structure
 
-The repo is split across five projects:
+The repo is split across six projects:
 
 | Project                   | Descriptions                                                                                                                                         |
 |---------------------------|------------------------------------------------------------------------------------------------------------------------------------------------------|
-| `ZenMonitor.Core`         | Hardware abstraction interfaces, data models, and Null-object fallback services.                                                                     |
+| `ZenMonitor.Core`         | Interfaces for consumers, data models and utils for services.                                                                                        |
 | `ZenMonitor.Core.Hosting` | DI registration extensions (`AddZenMonitor()`) that auto-detect the OS and register the correct platform services. This is optional but recommended. |
 | `ZenMonitor.Core.Linux`   | Linux-specific platform implementations for all interfaces.                                                                                          |
 | `ZenMonitor.Core.Windows` | Windows-specific platform implementations for all interfaces.                                                                                        |
@@ -90,7 +97,7 @@ The repo is split across five projects:
 ### NuGet Packages
 
 Four NuGet packages are built and published:
-- `ZenMonitor.Core` — interfaces, models, Null services.
+- `ZenMonitor.Core` — interfaces, models, utils for services.
 - `ZenMonitor.Core.Hosting` — DI registration helpers.
 - `ZenMonitor.Core.Linux` — Linux platform services.
 - `ZenMonitor.Core.Windows` — Windows platform services.
