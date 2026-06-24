@@ -9,7 +9,7 @@ using ZenMonitor.Core.Models;
 using ZenMonitor.Core.Models.Telemetry;
 using ZenMonitor.Core.Utils;
 
-namespace ZenMonitor.Core.Windows.Services;
+namespace ZenMonitor.Core.Windows.Services.Telemetry;
 
 /// <summary>
 /// Windows implementation of <see cref="ICpu"/> that reads CPU metrics

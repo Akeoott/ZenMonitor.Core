@@ -11,7 +11,7 @@ using ZenMonitor.Core.Abstractions.Telemetry;
 using ZenMonitor.Core.Models.Telemetry;
 using ZenMonitor.Core.Utils;
 
-namespace ZenMonitor.Core.Linux.Services;
+namespace ZenMonitor.Core.Linux.Services.Telemetry;
 
 /// <summary>
 /// Linux implementation of <see cref="ICpu"/> that reads CPU metrics from
@@ -395,6 +395,11 @@ public class Cpu(ILogger<Cpu>? logger, IFileSystem fileSystem, IUtilsLinux helpe
             _prevEnergyTime = currentTime;
 
             return Math.Round(power, 2);
+        }
+        catch (UnauthorizedAccessException)
+        {
+            _logger.LogWarning("Failed to read CPU power draw. Requires root access.");
+            return 0.0;
         }
         catch (Exception ex)
         {

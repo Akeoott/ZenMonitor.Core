@@ -15,10 +15,10 @@ namespace ZenMonitor.Core.Tests.Services.Linux.Tests;
 [SupportedOSPlatform("linux")]
 public class SystemTests
 {
-    private readonly Mock<ILogger<Core.Linux.Services.System>> _mockLogger = new();
+    private readonly Mock<ILogger<Core.Linux.Services.Telemetry.System>> _mockLogger = new();
     private readonly MockFileSystem _mockFileSystem = new();
 
-    private Core.Linux.Services.System CreateSystem() => new(_mockLogger.Object, _mockFileSystem);
+    private Core.Linux.Services.Telemetry.System CreateSystem() => new(_mockLogger.Object, _mockFileSystem);
 
     [Fact]
     public void Expected_AllSystemInfo()

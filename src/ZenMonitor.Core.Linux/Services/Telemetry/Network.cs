@@ -10,7 +10,7 @@ using ZenMonitor.Core.Abstractions.Telemetry;
 using ZenMonitor.Core.Models.Telemetry;
 using ZenMonitor.Core.Utils;
 
-namespace ZenMonitor.Core.Linux.Services;
+namespace ZenMonitor.Core.Linux.Services.Telemetry;
 
 /// <summary>
 /// Linux implementation of <see cref="INetwork"/> that reads network interface metrics

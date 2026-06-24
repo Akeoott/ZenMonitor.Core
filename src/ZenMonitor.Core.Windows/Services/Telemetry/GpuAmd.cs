@@ -7,7 +7,7 @@ using Microsoft.Extensions.Logging.Abstractions;
 using ZenMonitor.Core.Abstractions.Telemetry;
 using ZenMonitor.Core.Models.Telemetry;
 
-namespace ZenMonitor.Core.Windows.Services;
+namespace ZenMonitor.Core.Windows.Services.Telemetry;
 
 /// <summary>
 /// Windows implementation of <see cref="IGpu"/> for AMD GPUs.

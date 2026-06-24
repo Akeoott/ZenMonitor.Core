@@ -15,7 +15,7 @@ using ZenMonitor.Core.Abstractions.Telemetry;
 using ZenMonitor.Core.Models.Telemetry;
 using ZenMonitor.Core.Services;
 using ZenMonitor.Core.Utils;
-using ZenMonitor.Core.Windows.Services;
+using ZenMonitor.Core.Windows.Services.Telemetry;
 using ZenMonitor.Core.Windows.Utils;
 
 namespace ZenMonitor.Core.Hosting.Registration;

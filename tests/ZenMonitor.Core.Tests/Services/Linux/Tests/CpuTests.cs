@@ -9,7 +9,7 @@ using Moq;
 
 using Xunit;
 
-using ZenMonitor.Core.Linux.Services;
+using ZenMonitor.Core.Linux.Services.Telemetry;
 using ZenMonitor.Core.Models.Telemetry;
 using ZenMonitor.Core.Utils;
 

@@ -9,7 +9,7 @@ using Microsoft.Extensions.Logging.Abstractions;
 using ZenMonitor.Core.Abstractions.Telemetry;
 using ZenMonitor.Core.Models.Telemetry;
 
-namespace ZenMonitor.Core.Linux.Services;
+namespace ZenMonitor.Core.Linux.Services.Telemetry;
 
 /// <summary>
 /// Linux implementation of <see cref="ISystem"/> that reads system information

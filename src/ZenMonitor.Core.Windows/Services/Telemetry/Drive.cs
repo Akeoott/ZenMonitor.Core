@@ -8,7 +8,7 @@ using ZenMonitor.Core.Abstractions.Telemetry;
 using ZenMonitor.Core.Models.Telemetry;
 using ZenMonitor.Core.Utils;
 
-namespace ZenMonitor.Core.Windows.Services;
+namespace ZenMonitor.Core.Windows.Services.Telemetry;
 
 /// <summary>
 /// Windows implementation of <see cref="IDrive"/> that reads Drive metrics

@@ -10,7 +10,7 @@ using Xunit;
 using ZenMonitor.Core.Models;
 using ZenMonitor.Core.Models.Telemetry;
 using ZenMonitor.Core.Utils;
-using ZenMonitor.Core.Windows.Services;
+using ZenMonitor.Core.Windows.Services.Telemetry;
 
 namespace ZenMonitor.Core.Tests.Services.Windows.Tests;
 
