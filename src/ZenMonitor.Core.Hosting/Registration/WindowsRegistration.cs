@@ -3,9 +3,6 @@
 
 #if PLATFORM_WINDOWS
 
-using System;
-using System.Runtime.Versioning;
-
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
@@ -39,7 +36,7 @@ internal static class WindowsRegistration
             services.AddSingleton<ILogger<Memory>>(NullLogger<Memory>.Instance);
             services.AddSingleton<ILogger<Network>>(NullLogger<Network>.Instance);
             services.AddSingleton<ILogger<Process>>(NullLogger<Process>.Instance);
-            services.AddSingleton<ILogger<Windows.Services.System>>(NullLogger<Windows.Services.System>.Instance);
+            services.AddSingleton<ILogger<Windows.Services.Telemetry.System>>(NullLogger<Windows.Services.Telemetry.System>.Instance);
 
             services.AddSingleton<ILogger<GpuNvidia>>(NullLogger<GpuNvidia>.Instance);
             services.AddSingleton<ILogger<GpuAmd>>(NullLogger<GpuAmd>.Instance);
@@ -51,7 +48,7 @@ internal static class WindowsRegistration
         services.AddSingleton<IMemory, Memory>();
         services.AddSingleton<INetwork, Network>();
         services.AddSingleton<IProcess, Process>();
-        services.AddSingleton<ISystem, Windows.Services.System>();
+        services.AddSingleton<ISystem, Windows.Services.Telemetry.System>();
 
         var vendor = DetectGpuVendor();
 
