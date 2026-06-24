@@ -10,5 +10,4 @@ namespace ZenMonitor.Core.Abstractions;
 /// </summary>
 public interface ISystemController
 {
-
 }
