@@ -18,17 +18,17 @@ namespace ZenMonitor.Core.Tests.Services.Linux.Tests;
 public class GpuNvidiaTests
 {
     private readonly Mock<ILogger<GpuNvidia>> _mockLogger = new();
-    private readonly Mock<IUtilsLinux> _mockHelper = new();
+    private readonly Mock<IUtilsLinux> _mockUtils = new();
 
     [Fact]
     public void Expected_ReturnsParsedValues()
     {
         const string output = "GeForce RTX 4090, 12, 6, 1024, 24576, 72, P0, 450.00";
-        _mockHelper
+        _mockUtils
             .Setup(r => r.RunProcess("nvidia-smi", It.IsAny<string>()))
             .Returns(new ProcessResult(0, output, string.Empty));
 
-        var gpu = new GpuNvidia(_mockLogger.Object, _mockHelper.Object);
+        var gpu = new GpuNvidia(_mockLogger.Object, _mockUtils.Object);
         gpu.Update();
 
         Assert.Equal("GeForce RTX 4090", gpu.GetGpuName());
@@ -44,11 +44,11 @@ public class GpuNvidiaTests
     [Fact]
     public void Error_NvidiaSmiFails_ReturnsEmptySnapshot()
     {
-        _mockHelper
+        _mockUtils
             .Setup(r => r.RunProcess("nvidia-smi", It.IsAny<string>()))
             .Returns(new ProcessResult(1, string.Empty, "Failed to query GPU"));
 
-        var gpu = new GpuNvidia(_mockLogger.Object, _mockHelper.Object);
+        var gpu = new GpuNvidia(_mockLogger.Object, _mockUtils.Object);
         gpu.Update();
 
         Assert.Equal("", gpu.GetGpuName());
@@ -65,11 +65,11 @@ public class GpuNvidiaTests
     public void Error_MalformedCsvOutput_ReturnsEmptySnapshot()
     {
         // nvidia-smi returns output with only 2 fields — part[7] access would throw IndexOutOfRangeException
-        _mockHelper
+        _mockUtils
             .Setup(r => r.RunProcess("nvidia-smi", It.IsAny<string>()))
             .Returns(new ProcessResult(0, "NVIDIA GPU, 50", string.Empty));
 
-        var gpu = new GpuNvidia(_mockLogger.Object, _mockHelper.Object);
+        var gpu = new GpuNvidia(_mockLogger.Object, _mockUtils.Object);
         gpu.Update();
 
         Assert.Equal("", gpu.GetGpuName());
@@ -86,11 +86,11 @@ public class GpuNvidiaTests
     public void Error_NoCsvOutput_ReturnsEmptySnapshot()
     {
         // nvidia-smi returns an empty string — hits the < 8 guard
-        _mockHelper
+        _mockUtils
             .Setup(r => r.RunProcess("nvidia-smi", It.IsAny<string>()))
             .Returns(new ProcessResult(0, "", string.Empty));
 
-        var gpu = new GpuNvidia(_mockLogger.Object, _mockHelper.Object);
+        var gpu = new GpuNvidia(_mockLogger.Object, _mockUtils.Object);
         gpu.Update();
 
         Assert.Equal("", gpu.GetGpuName());
@@ -107,11 +107,11 @@ public class GpuNvidiaTests
     public void Edge_UnparseableNumericFields_FallsBackToZero()
     {
         // 8 CSV fields but numeric fields are garbage — exercises TryParse fallback to 0
-        _mockHelper
+        _mockUtils
             .Setup(r => r.RunProcess("nvidia-smi", It.IsAny<string>()))
             .Returns(new ProcessResult(0, "My GPU, abc, def, ghi, jkl, mno, P8, xyz", string.Empty));
 
-        var gpu = new GpuNvidia(_mockLogger.Object, _mockHelper.Object);
+        var gpu = new GpuNvidia(_mockLogger.Object, _mockUtils.Object);
         gpu.Update();
 
         Assert.Equal("My GPU", gpu.GetGpuName());

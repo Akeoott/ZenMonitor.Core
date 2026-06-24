@@ -18,7 +18,7 @@ namespace ZenMonitor.Core.Linux.Services.Telemetry;
 /// information from <c>df</c> and disk I/O stats from <c>/proc/diskstats</c>.
 /// </summary>
 [SupportedOSPlatform("linux")]
-public class Drive(ILogger<Drive>? logger, IFileSystem fileSystem, IUtilsLinux helper) : IDrive
+public class Drive(ILogger<Drive>? logger, IFileSystem fileSystem, IUtilsLinux utils) : IDrive
 {
     private readonly ILogger<Drive> _logger = logger ?? NullLogger<Drive>.Instance;
     private DriveInfoSnapshot _snapshot = new([]);
@@ -118,7 +118,7 @@ public class Drive(ILogger<Drive>? logger, IFileSystem fileSystem, IUtilsLinux h
 
                 if (_previousDiskStats.TryGetValue(name, out var prev))
                 {
-                    var deltaTime = (helper.UtcNow - prev.time).TotalMilliseconds;
+                    var deltaTime = (utils.UtcNow - prev.time).TotalMilliseconds;
                     double deltaIo = ioTime - prev.ioTime;
                     var usage = deltaTime > 0 ? deltaIo / deltaTime * 100 : 0;
                     ioUsages[name] = usage;
@@ -128,7 +128,7 @@ public class Drive(ILogger<Drive>? logger, IFileSystem fileSystem, IUtilsLinux h
                     ioUsages[name] = 0;
                 }
 
-                _previousDiskStats[name] = (ioTime, helper.UtcNow);
+                _previousDiskStats[name] = (ioTime, utils.UtcNow);
             }
         }
         catch (FileNotFoundException ex)
@@ -142,7 +142,7 @@ public class Drive(ILogger<Drive>? logger, IFileSystem fileSystem, IUtilsLinux h
 
     private string RunDf(string arguments)
     {
-        var result = helper.RunProcess("df", arguments);
+        var result = utils.RunProcess("df", arguments);
         try
         {
             return result.ExitCode != 0

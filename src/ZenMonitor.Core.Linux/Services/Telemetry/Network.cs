@@ -17,7 +17,7 @@ namespace ZenMonitor.Core.Linux.Services.Telemetry;
 /// from <c>/proc/net/dev</c> and <c>/sys/class/net/*/operstate</c>.
 /// </summary>
 [SupportedOSPlatform("linux")]
-public class Network(ILogger<Network>? logger, IFileSystem fileSystem, IUtilsLinux helper) : INetwork
+public class Network(ILogger<Network>? logger, IFileSystem fileSystem, IUtilsLinux utils) : INetwork
 {
     private readonly ILogger<Network> _logger = logger ?? NullLogger<Network>.Instance;
     private NetworkInfoSnapshot _snapshot = new(0, 0, []);
@@ -109,7 +109,7 @@ public class Network(ILogger<Network>? logger, IFileSystem fileSystem, IUtilsLin
 
             if (_previousNetStats.TryGetValue(interfaceName, out var prev))
             {
-                var deltaSec = (helper.UtcNow - prev.time).TotalSeconds;
+                var deltaSec = (utils.UtcNow - prev.time).TotalSeconds;
                 if (deltaSec > 0)
                 {
                     var deltaRx = rxBytes - prev.rx;
@@ -123,7 +123,7 @@ public class Network(ILogger<Network>? logger, IFileSystem fileSystem, IUtilsLin
                 }
             }
 
-            _previousNetStats[interfaceName] = (rxBytes, txBytes, helper.UtcNow);
+            _previousNetStats[interfaceName] = (rxBytes, txBytes, utils.UtcNow);
 
             networks.Add(new ConnectedNetworks(
                 interfaceName,

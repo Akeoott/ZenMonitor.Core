@@ -18,7 +18,7 @@ namespace ZenMonitor.Core.Linux.Services.Telemetry;
 /// from the <c>/proc</c> filesystem.
 /// </summary>
 [SupportedOSPlatform("linux")]
-public class Process(ILogger<Process>? logger, IFileSystem fileSystem, IUtilsLinux helper) : IProcess
+public class Process(ILogger<Process>? logger, IFileSystem fileSystem, IUtilsLinux utils) : IProcess
 {
     private readonly ILogger<Process> _logger = logger ?? NullLogger<Process>.Instance;
 
@@ -38,7 +38,7 @@ public class Process(ILogger<Process>? logger, IFileSystem fileSystem, IUtilsLin
 
     private void FetchProcessInfo()
     {
-        var utcNow = helper.UtcNow;
+        var utcNow = utils.UtcNow;
         var newProcessList = new List<ProcessDetail>();
         var activePids = new HashSet<int>();
 
@@ -200,7 +200,7 @@ public class Process(ILogger<Process>? logger, IFileSystem fileSystem, IUtilsLin
             _cpuCache[pid] = prev;
 
             return deltaTime > 0 && deltaCpu >= 0
-                ? Math.Round((deltaCpu / deltaTime) / helper.ProcessorCount * 100.0, 2) : 0;
+                ? Math.Round(deltaCpu / deltaTime / utils.ProcessorCount * 100.0, 2) : 0;
         }
         catch (Exception ex)
         {

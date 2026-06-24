@@ -21,17 +21,17 @@ public class DriveTests
 {
     private readonly Mock<ILogger<Drive>> _mockLogger = new();
     private readonly MockFileSystem _mockFileSystem = new();
-    private readonly Mock<IUtilsLinux> _mockHelper = new();
+    private readonly Mock<IUtilsLinux> _mockUtils = new();
 
-    private Drive CreateDrive() => new(_mockLogger.Object, _mockFileSystem, _mockHelper.Object);
+    private Drive CreateDrive() => new(_mockLogger.Object, _mockFileSystem, _mockUtils.Object);
 
     [Fact]
     public void Expected_MountInfoWithIOUsage()
     {
         _mockFileSystem.AddFile("/proc/diskstats", new MockFileData(TestData.DiskStats1()));
-        _mockHelper.Setup(h => h.RunProcess("df", "-T -B1"))
+        _mockUtils.Setup(h => h.RunProcess("df", "-T -B1"))
                    .Returns(new ProcessResult(0, TestData.DfOutput(), ""));
-        _mockHelper.Setup(c => c.UtcNow).Returns(new DateTime(2026, 1, 1, 0, 0, 1));
+        _mockUtils.Setup(c => c.UtcNow).Returns(new DateTime(2026, 1, 1, 0, 0, 1));
 
         var drive = CreateDrive();
         drive.Update();
@@ -49,7 +49,7 @@ public class DriveTests
 
         // Second call with updated diskstats produces IO delta
         _mockFileSystem.AddFile("/proc/diskstats", new MockFileData(TestData.DiskStats2()));
-        _mockHelper.Setup(c => c.UtcNow).Returns(new DateTime(2026, 1, 1, 0, 0, 5));
+        _mockUtils.Setup(c => c.UtcNow).Returns(new DateTime(2026, 1, 1, 0, 0, 5));
 
         drive.Update();
         mountInfos = drive.GetMountInfos();
@@ -61,9 +61,9 @@ public class DriveTests
     public void Edge_FiltersPseudoFilesystems()
     {
         _mockFileSystem.AddFile("/proc/diskstats", new MockFileData(TestData.DiskStats1()));
-        _mockHelper.Setup(h => h.RunProcess("df", "-T -B1"))
+        _mockUtils.Setup(h => h.RunProcess("df", "-T -B1"))
                    .Returns(new ProcessResult(0, TestData.DfOutput(), "")); // df has tmpfs and ext4
-        _mockHelper.Setup(c => c.UtcNow).Returns(new DateTime(2026, 1, 1, 0, 0, 1));
+        _mockUtils.Setup(c => c.UtcNow).Returns(new DateTime(2026, 1, 1, 0, 0, 1));
 
         var drive = CreateDrive();
         drive.Update();
@@ -76,7 +76,7 @@ public class DriveTests
     public void Error_DfNonZeroExit_ReturnsEmptyMountInfos()
     {
         _mockFileSystem.AddFile("/proc/diskstats", new MockFileData(TestData.DiskStats1()));
-        _mockHelper.Setup(h => h.RunProcess("df", "-T -B1"))
+        _mockUtils.Setup(h => h.RunProcess("df", "-T -B1"))
                    .Returns(new ProcessResult(1, string.Empty, "df: cannot read table"));
 
         var drive = CreateDrive();
@@ -88,9 +88,9 @@ public class DriveTests
     [Fact]
     public void Error_MissingProcDiskstats_ReturnsMountInfosWithZeroIO()
     {
-        _mockHelper.Setup(h => h.RunProcess("df", "-T -B1"))
+        _mockUtils.Setup(h => h.RunProcess("df", "-T -B1"))
                    .Returns(new ProcessResult(0, TestData.DfOutput(), ""));
-        _mockHelper.Setup(c => c.UtcNow).Returns(new DateTime(2026, 1, 1, 0, 0, 1));
+        _mockUtils.Setup(c => c.UtcNow).Returns(new DateTime(2026, 1, 1, 0, 0, 1));
 
         var drive = CreateDrive();
         drive.Update();
@@ -104,9 +104,9 @@ public class DriveTests
     [Fact]
     public void Error_DfMalformedOutput()
     {
-        _mockHelper.Setup(h => h.RunProcess("df", "-T -B1"))
+        _mockUtils.Setup(h => h.RunProcess("df", "-T -B1"))
                    .Returns(new ProcessResult(0, "Not enough columns", ""));
-        _mockHelper.Setup(c => c.UtcNow).Returns(new DateTime(2026, 1, 1, 0, 0, 1));
+        _mockUtils.Setup(c => c.UtcNow).Returns(new DateTime(2026, 1, 1, 0, 0, 1));
         _mockFileSystem.AddFile("/proc/diskstats", new MockFileData(TestData.DiskStats1()));
 
         var drive = CreateDrive();
@@ -121,9 +121,9 @@ public class DriveTests
         _mockFileSystem.AddFile("/proc/diskstats", new MockFileData(
             "8       0 sda 79252 10076 6669686 71586 1056792 25175 31019894\n" // fewer than 14 fields
         ));
-        _mockHelper.Setup(h => h.RunProcess("df", "-T -B1"))
+        _mockUtils.Setup(h => h.RunProcess("df", "-T -B1"))
                    .Returns(new ProcessResult(0, TestData.DfOutput(), ""));
-        _mockHelper.Setup(c => c.UtcNow).Returns(new DateTime(2026, 1, 1, 0, 0, 1));
+        _mockUtils.Setup(c => c.UtcNow).Returns(new DateTime(2026, 1, 1, 0, 0, 1));
 
         var drive = CreateDrive();
         drive.Update();

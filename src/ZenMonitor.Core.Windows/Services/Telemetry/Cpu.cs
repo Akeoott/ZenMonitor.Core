@@ -16,7 +16,7 @@ namespace ZenMonitor.Core.Windows.Services.Telemetry;
 /// via native Win32 API calls through <see cref="IUtilsWindows"/>.
 /// </summary>
 [SupportedOSPlatform("windows")]
-public class Cpu(ILogger<Cpu>? logger, IUtilsWindows helper) : ICpu
+public class Cpu(ILogger<Cpu>? logger, IUtilsWindows utils) : ICpu
 {
     private readonly ILogger<Cpu> _logger = logger ?? NullLogger<Cpu>.Instance;
     private CpuInfoSnapshot _snapshot = new("", 0, 0, 0, 0, [], [], []);
@@ -89,9 +89,9 @@ public class Cpu(ILogger<Cpu>? logger, IUtilsWindows helper) : ICpu
     #region CpuInfo
     private (string cpuName, CpuCoreSpeed[] coreSpeeds) ReadCpuInfo()
     {
-        var cpuName = helper.GetProcessorName();
-        var coreCount = helper.GetProcessorCount();
-        var baseMhz = helper.GetProcessorBaseFrequencyMHz();
+        var cpuName = utils.GetProcessorName();
+        var coreCount = utils.GetProcessorCount();
+        var baseMhz = utils.GetProcessorBaseFrequencyMHz();
 
         var speeds = new CpuCoreSpeed[coreCount];
         for (var i = 0; i < coreCount; i++)
@@ -104,8 +104,8 @@ public class Cpu(ILogger<Cpu>? logger, IUtilsWindows helper) : ICpu
     #region CpuUsages
     private (int totalUsage, CpuCoreUsage[] coreUsages) ReadCpuUsages()
     {
-        var currentTotal = helper.GetSystemTimes();
-        var currentCore = helper.GetPerCoreTimes();
+        var currentTotal = utils.GetSystemTimes();
+        var currentCore = utils.GetPerCoreTimes();
 
         var totalUsage = 0;
         CpuCoreUsage[] coreUsages;
@@ -161,7 +161,7 @@ public class Cpu(ILogger<Cpu>? logger, IUtilsWindows helper) : ICpu
     #region CpuTemps
     private (int overallTemp, CpuCoreTemp[] coreTemps) ReadCpuTemps(int coreCount)
     {
-        var overall = helper.GetCpuTemperature(); // Windows only provides overall temp.
+        var overall = utils.GetCpuTemperature(); // Windows only provides overall temp.
 
         var coreTemps = new CpuCoreTemp[coreCount];
         for (var i = 0; i < coreCount; i++)
@@ -176,7 +176,7 @@ public class Cpu(ILogger<Cpu>? logger, IUtilsWindows helper) : ICpu
     {
         try
         {
-            return helper.GetCpuPowerDraw();
+            return utils.GetCpuPowerDraw();
         }
         catch (Exception ex)
         {

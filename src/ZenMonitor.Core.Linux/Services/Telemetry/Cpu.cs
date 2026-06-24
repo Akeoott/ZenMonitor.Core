@@ -18,7 +18,7 @@ namespace ZenMonitor.Core.Linux.Services.Telemetry;
 /// <c>/proc</c> and <c>/sys</c> filesystems.
 /// </summary>
 [SupportedOSPlatform("linux")]
-public class Cpu(ILogger<Cpu>? logger, IFileSystem fileSystem, IUtilsLinux helper) : ICpu
+public class Cpu(ILogger<Cpu>? logger, IFileSystem fileSystem, IUtilsLinux utils) : ICpu
 {
     private readonly ILogger<Cpu> _logger = logger ?? NullLogger<Cpu>.Instance;
     private CpuInfoSnapshot _snapshot = new("", 0, 0, 0, 0, [], [], []);
@@ -379,7 +379,7 @@ public class Cpu(ILogger<Cpu>? logger, IFileSystem fileSystem, IUtilsLinux helpe
         try
         {
             var energyUj = double.Parse(fileSystem.File.ReadAllText(EnergyUjPath).Trim());
-            var currentTime = helper.UtcNow;
+            var currentTime = utils.UtcNow;
 
             double power = 0;
             if (_prevEnergyUj > 0)

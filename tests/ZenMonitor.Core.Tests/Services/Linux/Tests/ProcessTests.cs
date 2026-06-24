@@ -22,11 +22,11 @@ public class ProcessTests
 {
     private readonly Mock<ILogger<Process>> _mockLogger = new();
     private readonly MockFileSystem _mockFileSystem = new();
-    private readonly Mock<IUtilsLinux> _mockHelper = new();
+    private readonly Mock<IUtilsLinux> _mockUtils = new();
 
     private const int MockProcessorCount = 4;
 
-    private Process CreateProcess() => new(_mockLogger.Object, _mockFileSystem, _mockHelper.Object);
+    private Process CreateProcess() => new(_mockLogger.Object, _mockFileSystem, _mockUtils.Object);
 
     [Fact]
     public void Expected_ParsesProcessMetadata()
@@ -38,8 +38,8 @@ public class ProcessTests
         _mockFileSystem.AddFile(Path.Combine(procDir, "stat"), new MockFileData(TestData.ProcStatSample1()));
         _mockFileSystem.AddFile(Path.Combine(procDir, "cmdline"), new MockFileData("test-program\0--flag\0value"));
         _mockFileSystem.AddFile("/etc/passwd", new MockFileData(TestData.EtcPasswd()));
-        _mockHelper.Setup(h => h.UtcNow).Returns(new DateTime(2026, 1, 1, 0, 0, 1));
-        _mockHelper.Setup(h => h.ProcessorCount).Returns(MockProcessorCount);
+        _mockUtils.Setup(h => h.UtcNow).Returns(new DateTime(2026, 1, 1, 0, 0, 1));
+        _mockUtils.Setup(h => h.ProcessorCount).Returns(MockProcessorCount);
 
         var process = CreateProcess();
         process.Update();
@@ -69,8 +69,8 @@ public class ProcessTests
         _mockFileSystem.AddFile(Path.Combine(procDir, "stat"), new MockFileData(TestData.ProcStatSample1()));
         _mockFileSystem.AddFile(Path.Combine(procDir, "cmdline"), new MockFileData("test-program\0--flag\0value"));
         _mockFileSystem.AddFile("/etc/passwd", new MockFileData(TestData.EtcPasswd()));
-        _mockHelper.Setup(h => h.UtcNow).Returns(new DateTime(2026, 1, 1, 0, 0, 1));
-        _mockHelper.Setup(h => h.ProcessorCount).Returns(MockProcessorCount);
+        _mockUtils.Setup(h => h.UtcNow).Returns(new DateTime(2026, 1, 1, 0, 0, 1));
+        _mockUtils.Setup(h => h.ProcessorCount).Returns(MockProcessorCount);
 
         var process = CreateProcess();
         process.Update();
@@ -81,7 +81,7 @@ public class ProcessTests
         // deltaCpu = 1, deltaTime = 1, ProcessorCount = 4
         // result = (1/1) / 4 * 100 = 25
         _mockFileSystem.AddFile(Path.Combine(procDir, "stat"), new MockFileData(TestData.ProcStatSample2()));
-        _mockHelper.Setup(h => h.UtcNow).Returns(new DateTime(2026, 1, 1, 0, 0, 2));
+        _mockUtils.Setup(h => h.UtcNow).Returns(new DateTime(2026, 1, 1, 0, 0, 2));
 
         process.Update();
 
@@ -116,8 +116,8 @@ public class ProcessTests
         _mockFileSystem.AddFile(Path.Combine(proc5678, "cmdline"), new MockFileData("/usr/bin/proc-two"));
 
         _mockFileSystem.AddFile("/etc/passwd", new MockFileData(TestData.EtcPasswd()));
-        _mockHelper.Setup(h => h.UtcNow).Returns(new DateTime(2026, 1, 1, 0, 0, 1));
-        _mockHelper.Setup(h => h.ProcessorCount).Returns(MockProcessorCount);
+        _mockUtils.Setup(h => h.UtcNow).Returns(new DateTime(2026, 1, 1, 0, 0, 1));
+        _mockUtils.Setup(h => h.ProcessorCount).Returns(MockProcessorCount);
 
         var process = CreateProcess();
         process.Update();
@@ -155,8 +155,8 @@ public class ProcessTests
         _mockFileSystem.AddFile(Path.Combine(procDir, "stat"), new MockFileData(TestData.ProcStatSample1()));
         _mockFileSystem.AddFile(Path.Combine(procDir, "cmdline"), new MockFileData("test-program\0"));
         _mockFileSystem.AddFile("/etc/passwd", new MockFileData(TestData.EtcPasswd()));
-        _mockHelper.Setup(h => h.UtcNow).Returns(new DateTime(2026, 1, 1, 0, 0, 1));
-        _mockHelper.Setup(h => h.ProcessorCount).Returns(MockProcessorCount);
+        _mockUtils.Setup(h => h.UtcNow).Returns(new DateTime(2026, 1, 1, 0, 0, 1));
+        _mockUtils.Setup(h => h.ProcessorCount).Returns(MockProcessorCount);
 
         var process = CreateProcess();
         process.Update();
@@ -165,7 +165,7 @@ public class ProcessTests
         // Second update — /proc/1234 is removed (no status file = skipped)
         // We simulate removal by removing the status file
         _mockFileSystem.RemoveFile(Path.Combine(procDir, "status"));
-        _mockHelper.Setup(h => h.UtcNow).Returns(new DateTime(2026, 1, 1, 0, 0, 2));
+        _mockUtils.Setup(h => h.UtcNow).Returns(new DateTime(2026, 1, 1, 0, 0, 2));
 
         process.Update();
 
@@ -191,8 +191,8 @@ public class ProcessTests
             "9999 (my-process) R 1 1 1 0 -1 4194304 0 0 0 0 0 0 0 0 20 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0"
         ));
         _mockFileSystem.AddFile("/etc/passwd", new MockFileData(TestData.EtcPasswd()));
-        _mockHelper.Setup(h => h.UtcNow).Returns(new DateTime(2026, 1, 1, 0, 0, 1));
-        _mockHelper.Setup(h => h.ProcessorCount).Returns(MockProcessorCount);
+        _mockUtils.Setup(h => h.UtcNow).Returns(new DateTime(2026, 1, 1, 0, 0, 1));
+        _mockUtils.Setup(h => h.ProcessorCount).Returns(MockProcessorCount);
 
         var process = CreateProcess();
         process.Update();
@@ -213,8 +213,8 @@ public class ProcessTests
         // cmdline without null separators — just a plain string
         _mockFileSystem.AddFile(Path.Combine(procDir, "cmdline"), new MockFileData("firefox"));
         _mockFileSystem.AddFile("/etc/passwd", new MockFileData(TestData.EtcPasswd()));
-        _mockHelper.Setup(h => h.UtcNow).Returns(new DateTime(2026, 1, 1, 0, 0, 1));
-        _mockHelper.Setup(h => h.ProcessorCount).Returns(MockProcessorCount);
+        _mockUtils.Setup(h => h.UtcNow).Returns(new DateTime(2026, 1, 1, 0, 0, 1));
+        _mockUtils.Setup(h => h.ProcessorCount).Returns(MockProcessorCount);
 
         var process = CreateProcess();
         process.Update();
@@ -240,8 +240,8 @@ public class ProcessTests
             "1111 (weird) Q 1 1 1 0 -1 4194304 0 0 0 0 0 0 0 0 20 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0"
         ));
         _mockFileSystem.AddFile("/etc/passwd", new MockFileData(TestData.EtcPasswd()));
-        _mockHelper.Setup(h => h.UtcNow).Returns(new DateTime(2026, 1, 1, 0, 0, 1));
-        _mockHelper.Setup(h => h.ProcessorCount).Returns(MockProcessorCount);
+        _mockUtils.Setup(h => h.UtcNow).Returns(new DateTime(2026, 1, 1, 0, 0, 1));
+        _mockUtils.Setup(h => h.ProcessorCount).Returns(MockProcessorCount);
 
         var process = CreateProcess();
         process.Update();
@@ -253,7 +253,7 @@ public class ProcessTests
     public void Edge_NoProcDirectory_ReturnsEmpty()
     {
         // /proc does not exist in the mock filesystem
-        _mockHelper.Setup(h => h.ProcessorCount).Returns(MockProcessorCount);
+        _mockUtils.Setup(h => h.ProcessorCount).Returns(MockProcessorCount);
 
         var process = CreateProcess();
         process.Update();
@@ -272,8 +272,8 @@ public class ProcessTests
         _mockFileSystem.AddFile(Path.Combine("/proc/1234", "stat"), new MockFileData(TestData.ProcStatSample1()));
         _mockFileSystem.AddFile(Path.Combine("/proc/1234", "cmdline"), new MockFileData("test-program\0"));
         _mockFileSystem.AddFile("/etc/passwd", new MockFileData(TestData.EtcPasswd()));
-        _mockHelper.Setup(h => h.UtcNow).Returns(new DateTime(2026, 1, 1, 0, 0, 1));
-        _mockHelper.Setup(h => h.ProcessorCount).Returns(MockProcessorCount);
+        _mockUtils.Setup(h => h.UtcNow).Returns(new DateTime(2026, 1, 1, 0, 0, 1));
+        _mockUtils.Setup(h => h.ProcessorCount).Returns(MockProcessorCount);
 
         var process = CreateProcess();
         process.Update();
@@ -290,8 +290,8 @@ public class ProcessTests
         _mockFileSystem.AddFile(Path.Combine(procDir, "stat"), new MockFileData(TestData.ProcStatSample1()));
         _mockFileSystem.AddFile(Path.Combine(procDir, "cmdline"), new MockFileData("test-program\0"));
         _mockFileSystem.AddFile("/etc/passwd", new MockFileData(TestData.EtcPasswd()));
-        _mockHelper.Setup(h => h.UtcNow).Returns(new DateTime(2026, 1, 1, 0, 0, 1));
-        _mockHelper.Setup(h => h.ProcessorCount).Returns(MockProcessorCount);
+        _mockUtils.Setup(h => h.UtcNow).Returns(new DateTime(2026, 1, 1, 0, 0, 1));
+        _mockUtils.Setup(h => h.ProcessorCount).Returns(MockProcessorCount);
 
         var process = CreateProcess();
         process.Update();
@@ -301,7 +301,7 @@ public class ProcessTests
         _mockFileSystem.AddFile("/etc/passwd", new MockFileData(
             "newuser:x:1000:1000:New User:/home/newuser:/bin/bash\n"
         ));
-        _mockHelper.Setup(h => h.UtcNow).Returns(new DateTime(2026, 1, 1, 0, 11, 0));
+        _mockUtils.Setup(h => h.UtcNow).Returns(new DateTime(2026, 1, 1, 0, 11, 0));
 
         process.Update();
         Assert.Equal("newuser", process.GetProcesses().ToArray()[0].User);
@@ -312,7 +312,7 @@ public class ProcessTests
     {
         _mockFileSystem.AddDirectory("/proc/1234");
         // No status file added
-        _mockHelper.Setup(h => h.ProcessorCount).Returns(MockProcessorCount);
+        _mockUtils.Setup(h => h.ProcessorCount).Returns(MockProcessorCount);
 
         var process = CreateProcess();
         process.Update();
@@ -329,8 +329,8 @@ public class ProcessTests
         _mockFileSystem.AddFile(Path.Combine(procDir, "stat"), new MockFileData(TestData.ProcStatSample1()));
         _mockFileSystem.AddFile(Path.Combine(procDir, "cmdline"), new MockFileData("test-program\0"));
         // No /etc/passwd file
-        _mockHelper.Setup(h => h.UtcNow).Returns(new DateTime(2026, 1, 1, 0, 0, 1));
-        _mockHelper.Setup(h => h.ProcessorCount).Returns(MockProcessorCount);
+        _mockUtils.Setup(h => h.UtcNow).Returns(new DateTime(2026, 1, 1, 0, 0, 1));
+        _mockUtils.Setup(h => h.ProcessorCount).Returns(MockProcessorCount);
 
         var process = CreateProcess();
         process.Update();
@@ -350,8 +350,8 @@ public class ProcessTests
         ));
         _mockFileSystem.AddFile(Path.Combine(procDir, "cmdline"), new MockFileData("test-program\0"));
         _mockFileSystem.AddFile("/etc/passwd", new MockFileData(TestData.EtcPasswd()));
-        _mockHelper.Setup(h => h.UtcNow).Returns(new DateTime(2026, 1, 1, 0, 0, 1));
-        _mockHelper.Setup(h => h.ProcessorCount).Returns(MockProcessorCount);
+        _mockUtils.Setup(h => h.UtcNow).Returns(new DateTime(2026, 1, 1, 0, 0, 1));
+        _mockUtils.Setup(h => h.ProcessorCount).Returns(MockProcessorCount);
 
         var process = CreateProcess();
         process.Update();
@@ -370,8 +370,8 @@ public class ProcessTests
         _mockFileSystem.AddFile(Path.Combine(procDir, "cmdline"), new MockFileData("test-program\0"));
         _mockFileSystem.AddFile("/etc/passwd", new MockFileData(TestData.EtcPasswd()));
         // No stat file
-        _mockHelper.Setup(h => h.UtcNow).Returns(new DateTime(2026, 1, 1, 0, 0, 1));
-        _mockHelper.Setup(h => h.ProcessorCount).Returns(MockProcessorCount);
+        _mockUtils.Setup(h => h.UtcNow).Returns(new DateTime(2026, 1, 1, 0, 0, 1));
+        _mockUtils.Setup(h => h.ProcessorCount).Returns(MockProcessorCount);
 
         var process = CreateProcess();
         process.Update();
@@ -389,8 +389,8 @@ public class ProcessTests
         _mockFileSystem.AddFile(Path.Combine(procDir, "stat"), new MockFileData(TestData.ProcStatSample1()));
         _mockFileSystem.AddFile(Path.Combine(procDir, "cmdline"), new MockFileData(""));
         _mockFileSystem.AddFile("/etc/passwd", new MockFileData(TestData.EtcPasswd()));
-        _mockHelper.Setup(h => h.UtcNow).Returns(new DateTime(2026, 1, 1, 0, 0, 1));
-        _mockHelper.Setup(h => h.ProcessorCount).Returns(MockProcessorCount);
+        _mockUtils.Setup(h => h.UtcNow).Returns(new DateTime(2026, 1, 1, 0, 0, 1));
+        _mockUtils.Setup(h => h.ProcessorCount).Returns(MockProcessorCount);
 
         var process = CreateProcess();
         process.Update();
