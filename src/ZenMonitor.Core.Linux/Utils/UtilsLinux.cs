@@ -22,24 +22,44 @@ public class UtilsLinux : IUtilsLinux
     public int ProcessorCount => Environment.ProcessorCount;
 
     /// <inheritdoc />
-    public ProcessResult RunProcess(string fileName, string arguments)
+    public ProcessResult RunProcess(string programName, params string[] arguments) => ProcessHelper(programName, arguments);
+
+    /// <inheritdoc />
+    public ProcessResult TerminateProcess(string processName) => ProcessHelper("pkill", processName);
+
+    /// <inheritdoc />
+    public ProcessResult TerminateProcess(int processId) => ProcessHelper("kill", processId.ToString());
+
+    /// <inheritdoc />
+    public ProcessResult KillProcess(string processName) => ProcessHelper("pkill", "-9", processName);
+
+    /// <inheritdoc />
+    public ProcessResult KillProcess(int processId) => ProcessHelper("kill", "-9", processId.ToString());
+
+
+    private static ProcessResult ProcessHelper(string fileName, params string[] arguments)
     {
         var startInfo = new ProcessStartInfo
         {
             FileName = fileName,
-            Arguments = arguments,
             RedirectStandardOutput = true,
             RedirectStandardError = true,
             UseShellExecute = false,
             CreateNoWindow = true
         };
 
+        foreach (var arg in arguments)
+        {
+            startInfo.ArgumentList.Add(arg);
+        }
+
         using var process = new Process();
         process.StartInfo = startInfo;
         process.Start();
 
+        var errorTask = process.StandardError.ReadToEndAsync();
         var output = process.StandardOutput.ReadToEnd();
-        var error = process.StandardError.ReadToEnd();
+        var error = errorTask.GetAwaiter().GetResult();
 
         process.WaitForExit();
 
