@@ -247,7 +247,7 @@ public class Process(ILogger<Process>? logger, IFileSystem fileSystem, IUtilsLin
         }
         catch (Exception ex)
         {
-            _logger.LogWarning(ex, "Failed to read {Path}", passwdPath);
+            _logger.LogWarning(ex, "Failed to read /etc/passwd");
         }
     }
 
