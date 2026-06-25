@@ -36,7 +36,6 @@ public class UtilsLinux : IUtilsLinux
     /// <inheritdoc />
     public ProcessResult KillProcess(int processId) => ProcessHelper("kill", "-9", processId.ToString());
 
-
     private static ProcessResult ProcessHelper(string fileName, params string[] arguments)
     {
         var startInfo = new ProcessStartInfo
