@@ -13,9 +13,4 @@
     <PackageTags>system-monitoring;telemetry;hardware;abstraction</PackageTags>
   </PropertyGroup>
 
-  <ItemGroup>
-    <Folder Include="Abstractions\Controller\" />
-    <Folder Include="Models\Controller\" />
-  </ItemGroup>
-
 </Project>
