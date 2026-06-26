@@ -15,17 +15,17 @@ namespace ZenMonitor.Core.Linux.Services.Controller;
 public class ProcessController(IUtilsLinux utils) : IProcessController
 {
     /// <inheritdoc />
-    public ProcessResult Run(string programName, params string[] arguments) => utils.RunProcess(programName,arguments);
+    public ProcessResult Run(string programName, params string[] arguments) => utils.RunProcess(programName, arguments);
 
     /// <inheritdoc />
-    public ProcessResult Terminate(string processName) => utils.TerminateProcess(processName);
+    public ProcessResult Terminate(string processName) => utils.RunProcess("pkill", processName);
 
     /// <inheritdoc />
-    public ProcessResult Terminate(int processId) => utils.TerminateProcess(processId);
+    public ProcessResult Terminate(int processId) => utils.RunProcess("kill", processId.ToString());
 
     /// <inheritdoc />
-    public ProcessResult Kill(string processName) => utils.KillProcess(processName);
+    public ProcessResult Kill(string processName) => utils.RunProcess("pkill", "-9", processName);
 
     /// <inheritdoc />
-    public ProcessResult Kill(int processId) => utils.KillProcess(processId);
+    public ProcessResult Kill(int processId) => utils.RunProcess("kill", "-9", processId.ToString());
 }

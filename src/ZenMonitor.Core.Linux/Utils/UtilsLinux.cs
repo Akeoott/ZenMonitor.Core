@@ -3,21 +3,17 @@
 
 using System.Diagnostics;
 
-using Microsoft.Extensions.Logging;
-
-using ZenMonitor.Core.Linux.Services.Controller;
 using ZenMonitor.Core.Models;
 using ZenMonitor.Core.Utils;
 
 namespace ZenMonitor.Core.Linux.Utils;
-#pragma warning disable CA1873
 
 /// <summary>
 /// Provides system-level helper operations that are abstracted for testability.
 /// </summary>
 [ExcludeFromCodeCoverage]
 [SupportedOSPlatform("linux")]
-public class UtilsLinux(ILogger<ProcessController> logger) : IUtilsLinux
+public class UtilsLinux : IUtilsLinux
 {
     /// <inheritdoc />
     public DateTime UtcNow => DateTime.UtcNow;
@@ -26,24 +22,8 @@ public class UtilsLinux(ILogger<ProcessController> logger) : IUtilsLinux
     public int ProcessorCount => Environment.ProcessorCount;
 
     /// <inheritdoc />
-    public ProcessResult RunProcess(string programName, params string[] arguments) => ProcessHelper(programName, arguments);
-
-    /// <inheritdoc />
-    public ProcessResult TerminateProcess(string processName) => ProcessHelper("pkill", processName);
-
-    /// <inheritdoc />
-    public ProcessResult TerminateProcess(int processId) => ProcessHelper("kill", processId.ToString());
-
-    /// <inheritdoc />
-    public ProcessResult KillProcess(string processName) => ProcessHelper("pkill", "-9", processName);
-
-    /// <inheritdoc />
-    public ProcessResult KillProcess(int processId) => ProcessHelper("kill", "-9", processId.ToString());
-
-    private ProcessResult ProcessHelper(string fileName, params string[] arguments)
+    public ProcessResult RunProcess(string fileName, params string[] arguments)
     {
-        logger.LogInformation("Starting process: `{fileName} {arguments}`", fileName, arguments);
-
         var startInfo = new ProcessStartInfo
         {
             FileName = fileName,

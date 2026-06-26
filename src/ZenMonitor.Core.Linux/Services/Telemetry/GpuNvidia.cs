@@ -51,10 +51,18 @@ public class GpuNvidia(ILogger<GpuNvidia> logger, IUtilsLinux utils) : IGpu
 
         try
         {
-            var csv = RunNvidiaSmi(
-                "--query-gpu=name,utilization.gpu,utilization.memory,memory.used,memory.total,temperature.gpu,pstate,power.draw --format=csv,noheader,nounits");
+            const string nvidia = "nvidia-smi";
+            const string nvidiaArgs =
+                "--query-gpu=name,utilization.gpu,utilization.memory,memory.used,memory.total,temperature.gpu,pstate,power.draw " +
+                "--format=csv,noheader,nounits";
 
-            string[] part = [.. csv.Split(',').Select(p => p.Trim())];
+            var result = utils.RunProcess(nvidia, nvidiaArgs);
+
+            var cvs = result.ExitCode != 0
+                ? throw new InvalidOperationException($"nvidia-smi error code {result.ExitCode}: {result.StandardError}")
+                : result.StandardOutput.Trim();
+
+            string[] part = [.. cvs.Split(',').Select(p => p.Trim())];
 
             return new GpuInfoSnapshot(
                 part[0],
@@ -68,7 +76,7 @@ public class GpuNvidia(ILogger<GpuNvidia> logger, IUtilsLinux utils) : IGpu
         }
         catch (InvalidOperationException ex)
         {
-            logger.LogError(ex, "{exceptionMessage}", ex.Message);
+            logger.LogError(ex, "{exMessage}", ex.Message);
             return new GpuInfoSnapshot("", 0, 0, 0.0, 0.0, 0, "", 0.0);
         }
         catch (Exception ex)
@@ -76,14 +84,5 @@ public class GpuNvidia(ILogger<GpuNvidia> logger, IUtilsLinux utils) : IGpu
             logger.LogError(ex, "FetchGpuInfo failed unexpectedly.");
             return new GpuInfoSnapshot("", 0, 0, 0.0, 0.0, 0, "", 0.0);
         }
-    }
-
-    private string RunNvidiaSmi(string arguments)
-    {
-        var result = utils.RunProcess("nvidia-smi", arguments);
-
-        return result.ExitCode != 0
-            ? throw new InvalidOperationException($"nvidia-smi error code {result.ExitCode}: {result.StandardError}")
-            : result.StandardOutput.Trim();
     }
 }
