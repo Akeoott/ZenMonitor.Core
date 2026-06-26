@@ -23,5 +23,5 @@ public interface IUtilsLinux
     /// <param name="fileName">The executable file name or path.</param>
     /// <param name="arguments">Command-line arguments to pass.</param>
     /// <returns>A <see cref="ProcessResult"/> containing the captured results.</returns>
-    ProcessResult RunProcess(string fileName, string arguments);
+    ProcessResult RunProcess(string fileName, params string[] arguments);
 }

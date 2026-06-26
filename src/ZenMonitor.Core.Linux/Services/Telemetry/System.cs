@@ -4,7 +4,6 @@
 using System.IO.Abstractions;
 
 using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Logging.Abstractions;
 
 using ZenMonitor.Core.Abstractions.Telemetry;
 using ZenMonitor.Core.Models.Telemetry;
@@ -16,9 +15,8 @@ namespace ZenMonitor.Core.Linux.Services.Telemetry;
 /// from <c>/proc/sys</c>, <c>/proc/uptime</c>, and <c>/proc/loadavg</c>.
 /// </summary>
 [SupportedOSPlatform("linux")]
-public class System(ILogger<System>? logger, IFileSystem fileSystem) : ISystem
+public class System(ILogger<System> logger, IFileSystem fileSystem) : ISystem
 {
-    private readonly ILogger<System> _logger = logger ?? NullLogger<System>.Instance;
     private SystemInfoSnapshot _snapshot = new("", "", 0, 0, 0);
 
     /// <inheritdoc />
@@ -43,7 +41,7 @@ public class System(ILogger<System>? logger, IFileSystem fileSystem) : ISystem
     {
         try
         {
-            _logger.LogTrace("Fetching all System info...");
+            logger.LogTrace("Fetching all System info...");
 
             var kernel = fileSystem.File.ReadAllText("/proc/sys/kernel/osrelease").Trim();
             var hostname = fileSystem.File.ReadAllText("/proc/sys/kernel/hostname").Trim();
@@ -63,7 +61,7 @@ public class System(ILogger<System>? logger, IFileSystem fileSystem) : ISystem
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "Failed to fetch System info");
+            logger.LogError(ex, "Failed to fetch System info");
             return new SystemInfoSnapshot("Error", "Error", 0, 0, 0);
         }
     }

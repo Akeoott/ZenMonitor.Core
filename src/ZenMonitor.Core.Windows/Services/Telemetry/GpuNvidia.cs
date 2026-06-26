@@ -2,7 +2,6 @@
 // See the LICENSE file in the repository root for full license text.
 
 using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Logging.Abstractions;
 
 using ZenMonitor.Core.Abstractions.Telemetry;
 using ZenMonitor.Core.Models.Telemetry;
@@ -13,9 +12,8 @@ namespace ZenMonitor.Core.Windows.Services.Telemetry;
 /// Windows implementation of <see cref="IGpu"/> for NVIDIA GPUs.
 /// </summary>
 [SupportedOSPlatform("windows")]
-public class GpuNvidia(ILogger<GpuNvidia>? logger) : IGpu
+public class GpuNvidia(ILogger<GpuNvidia> logger) : IGpu
 {
-    private readonly ILogger<GpuNvidia> _logger = logger ?? NullLogger<GpuNvidia>.Instance;
     private GpuInfoSnapshot _snapshot = new("", 0, 0, 0.0, 0.0, 0, "", 0.0);
 
     /// <inheritdoc />
@@ -49,12 +47,12 @@ public class GpuNvidia(ILogger<GpuNvidia>? logger) : IGpu
     {
         try
         {
-            _logger.LogTrace("Fetching all Gpu info...");
+            logger.LogTrace("Fetching all Gpu info...");
             throw new NotImplementedException();
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "Failed to fetch Gpu info");
+            logger.LogError(ex, "Failed to fetch Gpu info");
             return new GpuInfoSnapshot("", 0, 0, 0, 0, 0, "", 0);
         }
     }

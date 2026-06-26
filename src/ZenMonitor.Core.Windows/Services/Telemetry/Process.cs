@@ -2,7 +2,6 @@
 // See the LICENSE file in the repository root for full license text.
 
 using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Logging.Abstractions;
 
 using ZenMonitor.Core.Abstractions.Telemetry;
 using ZenMonitor.Core.Models.Telemetry;
@@ -15,9 +14,8 @@ namespace ZenMonitor.Core.Windows.Services.Telemetry;
 /// implementation is pending.
 /// </summary>
 [SupportedOSPlatform("windows")]
-public class Process(ILogger<Process>? logger) : IProcess
+public class Process(ILogger<Process> logger) : IProcess
 {
-    private readonly ILogger<Process> _logger = logger ?? NullLogger<Process>.Instance;
     private ProcessInfoSnapshot _snapshot = new(0, []);
 
     /// <inheritdoc />
@@ -31,7 +29,7 @@ public class Process(ILogger<Process>? logger) : IProcess
 
     private ProcessInfoSnapshot FetchProcessInfo()
     {
-        _logger.LogWarning("IProcess not implemented yet. Returning empty snapshot.");
+        logger.LogWarning("IProcess not implemented yet. Returning empty snapshot.");
         return new ProcessInfoSnapshot(0,[]);
     }
 }

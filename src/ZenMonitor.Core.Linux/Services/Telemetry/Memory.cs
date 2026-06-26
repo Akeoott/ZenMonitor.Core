@@ -4,7 +4,6 @@
 using System.IO.Abstractions;
 
 using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Logging.Abstractions;
 
 using ZenMonitor.Core.Abstractions.Telemetry;
 using ZenMonitor.Core.Models.Telemetry;
@@ -16,9 +15,8 @@ namespace ZenMonitor.Core.Linux.Services.Telemetry;
 /// from <c>/proc/meminfo</c>.
 /// </summary>
 [SupportedOSPlatform("linux")]
-public class Memory(ILogger<Memory>? logger, IFileSystem fileSystem) : IMemory
+public class Memory(ILogger<Memory> logger, IFileSystem fileSystem) : IMemory
 {
-    private readonly ILogger<Memory> _logger = logger ?? NullLogger<Memory>.Instance;
     private MemoryInfoSnapshot _snapshot = new(0, 0, 0, 0, 0, 0, 0);
 
     /// <inheritdoc />
@@ -49,7 +47,7 @@ public class Memory(ILogger<Memory>? logger, IFileSystem fileSystem) : IMemory
     {
         try
         {
-            _logger.LogTrace("Fetching all Memory info...");
+            logger.LogTrace("Fetching all Memory info...");
 
             var values = new Dictionary<string, double>(StringComparer.Ordinal);
             const double kbToGib = 1.0 / 1_048_576;
@@ -95,7 +93,7 @@ public class Memory(ILogger<Memory>? logger, IFileSystem fileSystem) : IMemory
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "Failed to fetch memory info");
+            logger.LogError(ex, "Failed to fetch memory info");
             return new MemoryInfoSnapshot(0, 0, 0, 0, 0, 0, 0);
         }
     }

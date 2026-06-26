@@ -9,7 +9,9 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
 
+using ZenMonitor.Core.Abstractions.Controller;
 using ZenMonitor.Core.Abstractions.Telemetry;
+using ZenMonitor.Core.Linux.Services.Controller;
 using ZenMonitor.Core.Linux.Services.Telemetry;
 using ZenMonitor.Core.Linux.Utils;
 using ZenMonitor.Core.Models.Telemetry;
@@ -32,6 +34,7 @@ internal static class LinuxRegistration
         // skip this block so their open-generic ILogger<T> resolver takes full effect.
         if (!DependencyInjection.HasLogging(services))
         {
+            services.AddSingleton<ILogger<UtilsLinux>>(NullLogger<UtilsLinux>.Instance);
             services.AddSingleton<ILogger<Cpu>>(NullLogger<Cpu>.Instance);
             services.AddSingleton<ILogger<Drive>>(NullLogger<Drive>.Instance);
             services.AddSingleton<ILogger<Memory>>(NullLogger<Memory>.Instance);
@@ -44,6 +47,9 @@ internal static class LinuxRegistration
         }
 
         services.AddSingleton<IUtilsLinux, UtilsLinux>();
+
+        services.AddSingleton<IProcessController, ProcessController>();
+
         services.AddSingleton<ICpu, Cpu>();
         services.AddSingleton<IDrive, Drive>();
         services.AddSingleton<IMemory, Memory>();

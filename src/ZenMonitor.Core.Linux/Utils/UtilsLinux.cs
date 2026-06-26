@@ -11,35 +11,41 @@ namespace ZenMonitor.Core.Linux.Utils;
 /// <summary>
 /// Provides system-level helper operations that are abstracted for testability.
 /// </summary>
-[ExcludeFromCodeCoverage]
 [SupportedOSPlatform("linux")]
 public class UtilsLinux : IUtilsLinux
 {
     /// <inheritdoc />
+    [ExcludeFromCodeCoverage]
     public DateTime UtcNow => DateTime.UtcNow;
 
     /// <inheritdoc />
+    [ExcludeFromCodeCoverage]
     public int ProcessorCount => Environment.ProcessorCount;
 
     /// <inheritdoc />
-    public ProcessResult RunProcess(string fileName, string arguments)
+    public ProcessResult RunProcess(string fileName, params string[] arguments)
     {
         var startInfo = new ProcessStartInfo
         {
             FileName = fileName,
-            Arguments = arguments,
             RedirectStandardOutput = true,
             RedirectStandardError = true,
             UseShellExecute = false,
             CreateNoWindow = true
         };
 
+        foreach (var arg in arguments)
+        {
+            startInfo.ArgumentList.Add(arg);
+        }
+
         using var process = new Process();
         process.StartInfo = startInfo;
         process.Start();
 
+        var errorTask = process.StandardError.ReadToEndAsync();
         var output = process.StandardOutput.ReadToEnd();
-        var error = process.StandardError.ReadToEnd();
+        var error = errorTask.GetAwaiter().GetResult();
 
         process.WaitForExit();
 

@@ -77,9 +77,11 @@ The Linux project provides real implementations, while Windows support is under 
   aggregates all controller interfaces as properties,
   providing a single entry point for consumers to simplify usage.
 
-  | ISystemController | Provides |
-  |-------------------|----------|
-  | N/A               | N/A      |
+  | ISystemController  | Provides                                    |
+  |--------------------|---------------------------------------------|
+  | IProcessController | Running, terminating and killing processes. |
+
+  More will be added in the future!
 
 ### Project Structure
 

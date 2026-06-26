@@ -10,6 +10,7 @@ namespace ZenMonitor.Core.Services;
 /// No-op <see cref="ISystemTelemetry"/> that exposes all Null sub-services.
 /// Used as a fallback when the platform is unsupported or detection fails.
 /// </summary>
+[ExcludeFromCodeCoverage]
 public sealed class SystemTelemetry(
     ICpu cpu,
     IDrive drive,
