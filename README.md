@@ -1,4 +1,5 @@
-![ZenMonitor.Core](https://raw.githubusercontent.com/Akeoott/ZenMonitor.Core/586f76f5ddc4576873e0763e24b4d46cca458af3/assets/images/ZenMonitor.Core.svg)
+![ZenMonitor.Core](https://raw.githubusercontent.com/Akeoott/ZenMonitor.Core/586f76f5ddc4576873e0763e24b4d46cca458af3/assets/images/ZenMonitor.
+Core.svg)
 
 ### Core library for ZenMonitor system telemetry
 
@@ -77,9 +78,11 @@ The Linux project provides real implementations, while Windows support is under 
   aggregates all controller interfaces as properties,
   providing a single entry point for consumers to simplify usage.
 
-  | ISystemController | Provides |
-  |-------------------|----------|
-  | N/A               | N/A      |
+  | ISystemController  | Provides                                    |
+  |--------------------|---------------------------------------------|
+  | IProcessController | Running, terminating and killing processes. |
+
+  More will be added in the future!
 
 ### Project Structure
 
