@@ -2,7 +2,6 @@
 // See the LICENSE file in the repository root for full license text.
 
 using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Logging.Abstractions;
 
 using ZenMonitor.Core.Abstractions.Telemetry;
 using ZenMonitor.Core.Models.Telemetry;
@@ -14,9 +13,8 @@ namespace ZenMonitor.Core.Linux.Services.Telemetry;
 /// Currently not implemented — returns default zeros.
 /// </summary>
 [SupportedOSPlatform("linux")]
-public class GpuAmd(ILogger<GpuAmd>? logger) : IGpu
+public class GpuAmd(ILogger<GpuAmd> logger) : IGpu
 {
-    private readonly ILogger<GpuAmd> _logger = logger ?? NullLogger<GpuAmd>.Instance;
     private GpuInfoSnapshot _snapshot = new("", 0, 0, 0.0, 0.0, 0, "", 0.0);
 
     /// <inheritdoc />
@@ -52,8 +50,8 @@ public class GpuAmd(ILogger<GpuAmd>? logger) : IGpu
     /// </summary>
     private GpuInfoSnapshot FetchGpuInfo()
     {
-        _logger.LogTrace("Fetching all GpuAmd info...");
-        _logger.LogWarning("AMD GPUs are currently not supported!");
+        logger.LogTrace("Fetching all GpuAmd info...");
+        logger.LogWarning("AMD GPUs are currently not supported!");
 
         return new GpuInfoSnapshot(
             "", 0, 0, 0.0, 0.0, 0, "", 0.0);

@@ -5,7 +5,6 @@ using System.IO;
 using System.IO.Abstractions;
 
 using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Logging.Abstractions;
 
 using ZenMonitor.Core.Abstractions.Telemetry;
 using ZenMonitor.Core.Models.Telemetry;
@@ -18,9 +17,8 @@ namespace ZenMonitor.Core.Linux.Services.Telemetry;
 /// information from <c>df</c> and disk I/O stats from <c>/proc/diskstats</c>.
 /// </summary>
 [SupportedOSPlatform("linux")]
-public class Drive(ILogger<Drive>? logger, IFileSystem fileSystem, IUtilsLinux utils) : IDrive
+public class Drive(ILogger<Drive> logger, IFileSystem fileSystem, IUtilsLinux utils) : IDrive
 {
-    private readonly ILogger<Drive> _logger = logger ?? NullLogger<Drive>.Instance;
     private DriveInfoSnapshot _snapshot = new([]);
 
     private readonly Dictionary<string, (long ioTime, DateTime time)> _previousDiskStats = [];
@@ -33,7 +31,7 @@ public class Drive(ILogger<Drive>? logger, IFileSystem fileSystem, IUtilsLinux u
 
     private DriveInfoSnapshot FetchDriveInfo()
     {
-        _logger.LogTrace("Fetching all Drive info...");
+        logger.LogTrace("Fetching all Drive info...");
 
         var mountInfos = ReadMountInfos();
 
@@ -96,7 +94,7 @@ public class Drive(ILogger<Drive>? logger, IFileSystem fileSystem, IUtilsLinux u
         }
         catch (Exception ex) when (ex is InvalidOperationException or FormatException)
         {
-            _logger.LogError(ex, "Failed to get values for DriveMountInfo[]. Returning empty array...");
+            logger.LogError(ex, "Failed to get values for DriveMountInfo[]. Returning empty array...");
             return [];
         }
     }
@@ -133,7 +131,7 @@ public class Drive(ILogger<Drive>? logger, IFileSystem fileSystem, IUtilsLinux u
         }
         catch (FileNotFoundException ex)
         {
-            _logger.LogError(ex, "Could not find /proc/diskstats");
+            logger.LogError(ex, "Could not find /proc/diskstats");
             return [];
         }
 
@@ -151,7 +149,7 @@ public class Drive(ILogger<Drive>? logger, IFileSystem fileSystem, IUtilsLinux u
         }
         catch (InvalidOperationException ex)
         {
-            _logger.LogError(ex, "df failed: {Error}", result.StandardError);
+            logger.LogError(ex, "df failed: {Error}", result.StandardError);
             return "";
         }
     }

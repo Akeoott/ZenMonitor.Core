@@ -5,7 +5,6 @@ using System.IO;
 using System.IO.Abstractions;
 
 using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Logging.Abstractions;
 
 using ZenMonitor.Core.Abstractions.Telemetry;
 using ZenMonitor.Core.Models.Telemetry;
@@ -18,10 +17,8 @@ namespace ZenMonitor.Core.Linux.Services.Telemetry;
 /// from the <c>/proc</c> filesystem.
 /// </summary>
 [SupportedOSPlatform("linux")]
-public class Process(ILogger<Process>? logger, IFileSystem fileSystem, IUtilsLinux utils) : IProcess
+public class Process(ILogger<Process> logger, IFileSystem fileSystem, IUtilsLinux utils) : IProcess
 {
-    private readonly ILogger<Process> _logger = logger ?? NullLogger<Process>.Instance;
-
     private List<ProcessDetail> _processes = [];
     private readonly Dictionary<int, CpuCacheEntry> _cpuCache = new();
     private Dictionary<int, string> _userMap = new();
@@ -96,7 +93,7 @@ public class Process(ILogger<Process>? logger, IFileSystem fileSystem, IUtilsLin
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "Error enumerating processes");
+            logger.LogError(ex, "Error enumerating processes");
             _processes.Clear();
             return;
         }
@@ -155,7 +152,7 @@ public class Process(ILogger<Process>? logger, IFileSystem fileSystem, IUtilsLin
         }
         catch (Exception ex)
         {
-            _logger.LogWarning(ex, "Something unexpected happened.");
+            logger.LogWarning(ex, "Something unexpected happened.");
             // Fail "silently" and return defaults if a single file read locks up
         }
     }
@@ -204,7 +201,7 @@ public class Process(ILogger<Process>? logger, IFileSystem fileSystem, IUtilsLin
         }
         catch (Exception ex)
         {
-            _logger.LogWarning(ex, "Something unexpected happened.");
+            logger.LogWarning(ex, "Something unexpected happened.");
             return 0;
         }
     }
@@ -219,7 +216,7 @@ public class Process(ILogger<Process>? logger, IFileSystem fileSystem, IUtilsLin
         }
         catch (Exception ex)
         {
-            _logger.LogWarning(ex, "Something unexpected happened.");
+            logger.LogWarning(ex, "Something unexpected happened.");
             return string.Empty;
         }
     }
@@ -247,7 +244,7 @@ public class Process(ILogger<Process>? logger, IFileSystem fileSystem, IUtilsLin
         }
         catch (Exception ex)
         {
-            _logger.LogWarning(ex, "Failed to read /etc/passwd");
+            logger.LogWarning(ex, "Failed to read /etc/passwd");
         }
     }
 

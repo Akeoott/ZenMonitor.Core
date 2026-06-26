@@ -2,7 +2,6 @@
 // See the LICENSE file in the repository root for full license text.
 
 using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Logging.Abstractions;
 
 using ZenMonitor.Core.Abstractions.Telemetry;
 using ZenMonitor.Core.Models.Telemetry;
@@ -15,9 +14,8 @@ namespace ZenMonitor.Core.Linux.Services.Telemetry;
 /// Reads metrics via the <c>nvidia-smi</c> CLI tool.
 /// </summary>
 [SupportedOSPlatform("linux")]
-public class GpuNvidia(ILogger<GpuNvidia>? logger, IUtilsLinux utils) : IGpu
+public class GpuNvidia(ILogger<GpuNvidia> logger, IUtilsLinux utils) : IGpu
 {
-    private readonly ILogger<GpuNvidia> _logger = logger ?? NullLogger<GpuNvidia>.Instance;
     private GpuInfoSnapshot _snapshot = new("", 0, 0, 0.0, 0.0, 0, "", 0.0);
 
     /// <inheritdoc />
@@ -49,7 +47,7 @@ public class GpuNvidia(ILogger<GpuNvidia>? logger, IUtilsLinux utils) : IGpu
 
     private GpuInfoSnapshot FetchGpuInfo()
     {
-        _logger.LogTrace("Fetching all GpuNvidia info...");
+        logger.LogTrace("Fetching all GpuNvidia info...");
 
         try
         {
@@ -70,12 +68,12 @@ public class GpuNvidia(ILogger<GpuNvidia>? logger, IUtilsLinux utils) : IGpu
         }
         catch (InvalidOperationException ex)
         {
-            _logger.LogError(ex, "{exceptionMessage}", ex.Message);
+            logger.LogError(ex, "{exceptionMessage}", ex.Message);
             return new GpuInfoSnapshot("", 0, 0, 0.0, 0.0, 0, "", 0.0);
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "FetchGpuInfo failed unexpectedly.");
+            logger.LogError(ex, "FetchGpuInfo failed unexpectedly.");
             return new GpuInfoSnapshot("", 0, 0, 0.0, 0.0, 0, "", 0.0);
         }
     }

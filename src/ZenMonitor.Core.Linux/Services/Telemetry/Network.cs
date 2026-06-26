@@ -4,7 +4,6 @@
 using System.IO.Abstractions;
 
 using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Logging.Abstractions;
 
 using ZenMonitor.Core.Abstractions.Telemetry;
 using ZenMonitor.Core.Models.Telemetry;
@@ -17,9 +16,8 @@ namespace ZenMonitor.Core.Linux.Services.Telemetry;
 /// from <c>/proc/net/dev</c> and <c>/sys/class/net/*/operstate</c>.
 /// </summary>
 [SupportedOSPlatform("linux")]
-public class Network(ILogger<Network>? logger, IFileSystem fileSystem, IUtilsLinux utils) : INetwork
+public class Network(ILogger<Network> logger, IFileSystem fileSystem, IUtilsLinux utils) : INetwork
 {
-    private readonly ILogger<Network> _logger = logger ?? NullLogger<Network>.Instance;
     private NetworkInfoSnapshot _snapshot = new(0, 0, []);
 
     private readonly Dictionary<string, (long rx, long tx, DateTime time)> _previousNetStats = [];
@@ -40,7 +38,7 @@ public class Network(ILogger<Network>? logger, IFileSystem fileSystem, IUtilsLin
     {
         try
         {
-            _logger.LogTrace("Fetching all Network info...");
+            logger.LogTrace("Fetching all Network info...");
 
             var networks = ReadNetworkInterfaces();
             long totalDownloadSpeed = 0;
@@ -56,7 +54,7 @@ public class Network(ILogger<Network>? logger, IFileSystem fileSystem, IUtilsLin
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "Failed to fetch network info");
+            logger.LogError(ex, "Failed to fetch network info");
             return new NetworkInfoSnapshot(0, 0, []);
         }
     }
@@ -72,7 +70,7 @@ public class Network(ILogger<Network>? logger, IFileSystem fileSystem, IUtilsLin
         }
         catch (Exception ex)
         {
-            _logger.LogWarning(ex, "Failed to read /proc/net/dev");
+            logger.LogWarning(ex, "Failed to read /proc/net/dev");
             return [];
         }
 
@@ -151,7 +149,7 @@ public class Network(ILogger<Network>? logger, IFileSystem fileSystem, IUtilsLin
         }
         catch (Exception ex)
         {
-            _logger.LogWarning(ex, "Failed to read operstate for {Interface}", interfaceName);
+            logger.LogWarning(ex, "Failed to read operstate for {Interface}", interfaceName);
             return false;
         }
     }
