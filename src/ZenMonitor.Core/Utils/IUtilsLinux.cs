@@ -18,10 +18,10 @@ public interface IUtilsLinux
     int ProcessorCount { get; }
 
     /// <summary>
-    /// Runs a process and returns results.
+    /// Runs an external process and captures its output, error, and exit code.
     /// </summary>
-    /// <param name="fileName">process to run (has to exist in PATH)</param>
-    /// <param name="arguments">args the process receives</param>
-    /// <returns><see cref="ProcessResult"/> containing exit code, stdout and stderr from said process</returns>
+    /// <param name="fileName">The executable file name or path.</param>
+    /// <param name="arguments">Command-line arguments to pass.</param>
+    /// <returns>A <see cref="ProcessResult"/> containing the captured results.</returns>
     ProcessResult RunProcess(string fileName, params string[] arguments);
 }
