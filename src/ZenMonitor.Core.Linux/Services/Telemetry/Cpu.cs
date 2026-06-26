@@ -5,7 +5,6 @@ using System.IO;
 using System.IO.Abstractions;
 
 using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Logging.Abstractions;
 
 using ZenMonitor.Core.Abstractions.Telemetry;
 using ZenMonitor.Core.Models.Telemetry;
@@ -18,9 +17,8 @@ namespace ZenMonitor.Core.Linux.Services.Telemetry;
 /// <c>/proc</c> and <c>/sys</c> filesystems.
 /// </summary>
 [SupportedOSPlatform("linux")]
-public class Cpu(ILogger<Cpu>? logger, IFileSystem fileSystem, IUtilsLinux utils) : ICpu
+public class Cpu(ILogger<Cpu> logger, IFileSystem fileSystem, IUtilsLinux utils) : ICpu
 {
-    private readonly ILogger<Cpu> _logger = logger ?? NullLogger<Cpu>.Instance;
     private CpuInfoSnapshot _snapshot = new("", 0, 0, 0, 0, [], [], []);
 
     private long[] _currentTotalTicks = [];
@@ -63,7 +61,7 @@ public class Cpu(ILogger<Cpu>? logger, IFileSystem fileSystem, IUtilsLinux utils
     {
         try
         {
-            _logger.LogTrace("Fetching all CPU info...");
+            logger.LogTrace("Fetching all CPU info...");
 
             var (cpuName, coreSpeeds) = ReadCpuInfo();
             var (totalUsage, coreUsages) = ReadCpuUsages();
@@ -88,7 +86,7 @@ public class Cpu(ILogger<Cpu>? logger, IFileSystem fileSystem, IUtilsLinux utils
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "Failed to fetch CPU info");
+            logger.LogError(ex, "Failed to fetch CPU info");
             return new CpuInfoSnapshot("Error", 0, 0, 0, 0, [], [], []);
         }
     }
@@ -262,7 +260,7 @@ public class Cpu(ILogger<Cpu>? logger, IFileSystem fileSystem, IUtilsLinux utils
         }
         catch (Exception ex)
         {
-            _logger.LogWarning(ex, "Failed to read CPU temperatures from hwmon");
+            logger.LogWarning(ex, "Failed to read CPU temperatures from hwmon");
         }
 
         CpuCoreTemp[] uniformTemps;
@@ -318,7 +316,7 @@ public class Cpu(ILogger<Cpu>? logger, IFileSystem fileSystem, IUtilsLinux utils
         }
         catch (Exception ex)
         {
-            _logger.LogWarning(ex, "Error reading Intel CPU temperatures from {Dir}", hwmonDir);
+            logger.LogWarning(ex, "Error reading Intel CPU temperatures from {Dir}", hwmonDir);
         }
 
         return (overall, temps.ToArray());
@@ -364,7 +362,7 @@ public class Cpu(ILogger<Cpu>? logger, IFileSystem fileSystem, IUtilsLinux utils
         }
         catch (Exception ex)
         {
-            _logger.LogWarning(ex, "Error reading AMD CPU temperatures from {Dir}", hwmonDir);
+            logger.LogWarning(ex, "Error reading AMD CPU temperatures from {Dir}", hwmonDir);
         }
 
         return (overall, temps.ToArray());
@@ -398,12 +396,12 @@ public class Cpu(ILogger<Cpu>? logger, IFileSystem fileSystem, IUtilsLinux utils
         }
         catch (UnauthorizedAccessException)
         {
-            _logger.LogWarning("Failed to read CPU power draw. Requires root access.");
+            logger.LogWarning("Failed to read CPU power draw. Requires root access.");
             return 0.0;
         }
         catch (Exception ex)
         {
-            _logger.LogWarning(ex, "Failed to read CPU power draw");
+            logger.LogWarning(ex, "Failed to read CPU power draw");
             return 0.0;
         }
     }

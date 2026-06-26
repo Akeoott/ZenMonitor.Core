@@ -2,7 +2,6 @@
 // See the LICENSE file in the repository root for full license text.
 
 using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Logging.Abstractions;
 
 using ZenMonitor.Core.Abstractions.Telemetry;
 using ZenMonitor.Core.Models.Telemetry;
@@ -13,9 +12,8 @@ namespace ZenMonitor.Core.Windows.Services.Telemetry;
 /// Windows implementation of <see cref="IMemory"/>
 /// </summary>
 [SupportedOSPlatform("windows")]
-public class Memory(ILogger<Memory>? logger) : IMemory
+public class Memory(ILogger<Memory> logger) : IMemory
 {
-    private readonly ILogger<Memory> _logger = logger ?? NullLogger<Memory>.Instance;
     private MemoryInfoSnapshot _snapshot = new(0, 0, 0, 0, 0, 0, 0);
 
     /// <inheritdoc />
@@ -46,12 +44,12 @@ public class Memory(ILogger<Memory>? logger) : IMemory
     {
         try
         {
-            _logger.LogTrace("Fetching all Memory info...");
+            logger.LogTrace("Fetching all Memory info...");
             throw new NotImplementedException();
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "Failed to fetch Memory info");
+            logger.LogError(ex, "Failed to fetch Memory info");
             return new MemoryInfoSnapshot(0, 0, 0, 0, 0, 0, 0);
         }
     }

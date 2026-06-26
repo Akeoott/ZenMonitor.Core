@@ -2,7 +2,6 @@
 // See the LICENSE file in the repository root for full license text.
 
 using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Logging.Abstractions;
 
 using ZenMonitor.Core.Abstractions.Telemetry;
 using ZenMonitor.Core.Models.Telemetry;
@@ -13,9 +12,8 @@ namespace ZenMonitor.Core.Windows.Services.Telemetry;
 /// Windows implementation of <see cref="INetwork"/> that gets all network related telemetry.
 /// </summary>
 [SupportedOSPlatform("windows")]
-public class Network(ILogger<Network>? logger) : INetwork
+public class Network(ILogger<Network> logger) : INetwork
 {
-    private readonly ILogger<Network> _logger = logger ?? NullLogger<Network>.Instance;
     private NetworkInfoSnapshot _snapshot = new(0, 0, []);
 
     /// <inheritdoc />
@@ -32,8 +30,8 @@ public class Network(ILogger<Network>? logger) : INetwork
 
     private NetworkInfoSnapshot FetchNetworkInfo()
     {
-        _logger.LogTrace("Fetching all Network info...");
-        _logger.LogInformation("Network has not been implemented yet for windows.");
+        logger.LogTrace("Fetching all Network info...");
+        logger.LogInformation("Network has not been implemented yet for windows.");
 
         return new NetworkInfoSnapshot(0, 0, []);
     }
