@@ -57,8 +57,8 @@ public class Drive(ILogger<Drive> logger, IFileSystem fileSystem, IUtilsLinux ut
 
             HashSet<string> pseudoFileSystems = [
                 "tmpfs", "proc", "sysfs", "devtmpfs", "devpts",
-            "fusectl", "securityfs", "cgroup", "cgroup2", "pstore",
-            "debugfs", "hugetlbfs", "mqueue", "configfs", "bpf", "tracefs"
+                "fusectl", "securityfs", "cgroup", "cgroup2", "pstore",
+                "debugfs", "hugetlbfs", "mqueue", "configfs", "bpf", "tracefs"
             ];
 
             foreach (var line in lines)

@@ -3,17 +3,21 @@
 
 using System.Diagnostics;
 
+using Microsoft.Extensions.Logging;
+
+using ZenMonitor.Core.Linux.Services.Controller;
 using ZenMonitor.Core.Models;
 using ZenMonitor.Core.Utils;
 
 namespace ZenMonitor.Core.Linux.Utils;
+#pragma warning disable CA1873
 
 /// <summary>
 /// Provides system-level helper operations that are abstracted for testability.
 /// </summary>
 [ExcludeFromCodeCoverage]
 [SupportedOSPlatform("linux")]
-public class UtilsLinux : IUtilsLinux
+public class UtilsLinux(ILogger<ProcessController> logger) : IUtilsLinux
 {
     /// <inheritdoc />
     public DateTime UtcNow => DateTime.UtcNow;
@@ -36,8 +40,10 @@ public class UtilsLinux : IUtilsLinux
     /// <inheritdoc />
     public ProcessResult KillProcess(int processId) => ProcessHelper("kill", "-9", processId.ToString());
 
-    private static ProcessResult ProcessHelper(string fileName, params string[] arguments)
+    private ProcessResult ProcessHelper(string fileName, params string[] arguments)
     {
+        logger.LogInformation("Starting process: `{fileName} {arguments}`", fileName, arguments);
+
         var startInfo = new ProcessStartInfo
         {
             FileName = fileName,

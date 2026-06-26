@@ -6,7 +6,7 @@ using ZenMonitor.Core.Models;
 namespace ZenMonitor.Core.Abstractions.Controller;
 
 // TODO: add xml docs
-public interface IProcess
+public interface IProcessController
 {
     ProcessResult Run(string programName, params string[] arguments);
 
