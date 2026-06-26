@@ -9,6 +9,7 @@ namespace ZenMonitor.Core.Services;
 /// No-op <see cref="IGpu"/> implementation that returns all-zero / empty defaults.
 /// Used as a fallback when the GPU vendor is unknown or detection fails.
 /// </summary>
+[ExcludeFromCodeCoverage]
 public sealed class NullGpu : IGpu
 {
     /// <summary>No-op update — does nothing.</summary>
