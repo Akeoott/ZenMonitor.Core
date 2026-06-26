@@ -9,7 +9,7 @@ using Moq;
 
 using Xunit;
 
-namespace ZenMonitor.Core.Tests.Services.Linux.Tests;
+namespace ZenMonitor.Core.Tests.Services.Linux.Telemetry;
 
 [Trait("Platform", "Linux")]
 [SupportedOSPlatform("linux")]

@@ -12,7 +12,7 @@ using Xunit;
 using ZenMonitor.Core.Linux.Services.Telemetry;
 using ZenMonitor.Core.Utils;
 
-namespace ZenMonitor.Core.Tests.Services.Linux.Tests;
+namespace ZenMonitor.Core.Tests.Services.Linux.Telemetry;
 
 [Trait("Platform", "Linux")]
 [SupportedOSPlatform("linux")]
