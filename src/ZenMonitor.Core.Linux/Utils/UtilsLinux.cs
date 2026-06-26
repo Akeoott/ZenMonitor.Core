@@ -11,14 +11,15 @@ namespace ZenMonitor.Core.Linux.Utils;
 /// <summary>
 /// Provides system-level helper operations that are abstracted for testability.
 /// </summary>
-[ExcludeFromCodeCoverage]
 [SupportedOSPlatform("linux")]
 public class UtilsLinux : IUtilsLinux
 {
     /// <inheritdoc />
+    [ExcludeFromCodeCoverage]
     public DateTime UtcNow => DateTime.UtcNow;
 
     /// <inheritdoc />
+    [ExcludeFromCodeCoverage]
     public int ProcessorCount => Environment.ProcessorCount;
 
     /// <inheritdoc />
