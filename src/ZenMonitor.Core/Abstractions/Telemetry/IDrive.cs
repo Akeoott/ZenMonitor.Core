@@ -14,6 +14,12 @@ public interface IDrive
     /// <summary>Updates all cached drive metrics by reading from system files.</summary>
     void Update();
 
+    /// <summary>
+    /// Get the entire snapshot record of <see cref="IDrive"/>
+    /// </summary>
+    /// <returns><see cref="DriveInfoSnapshot"/> and all its underlying data</returns>
+    DriveInfoSnapshot GetSnapshot();
+
     /// <summary>Returns information about all mounted filesystems.</summary>
     DriveMountInfo[] GetMountInfos();
 }

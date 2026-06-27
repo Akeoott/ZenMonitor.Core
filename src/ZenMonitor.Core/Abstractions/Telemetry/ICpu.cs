@@ -14,6 +14,12 @@ public interface ICpu
     /// <summary>Updates all cached CPU metrics by reading from system files.</summary>
     void Update();
 
+    /// <summary>
+    /// Get the entire snapshot record of <see cref="ICpu"/>
+    /// </summary>
+    /// <returns><see cref="CpuInfoSnapshot"/> and all its underlying data</returns>
+    CpuInfoSnapshot GetSnapshot();
+
     /// <summary>Returns the CPU model name (e.g. "Intel Core i7-13700K").</summary>
     string GetCpuName();
 

@@ -33,7 +33,7 @@ public enum ProcessState : byte
 /// <param name="Threads">The number of threads in the process.</param>
 /// <param name="MemoryUsage">The memory usage of the process in megabytes (MB).</param>
 /// <param name="CpuUsage">The current CPU usage percentage of the process.</param>
-public readonly record struct ProcessDetail(
+public record ProcessDetail(
     int Pid,
     string Program,
     string Command,
