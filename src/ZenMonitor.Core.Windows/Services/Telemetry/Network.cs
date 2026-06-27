@@ -20,6 +20,9 @@ public class Network(ILogger<Network> logger) : INetwork
     public void Update() => _snapshot = FetchNetworkInfo();
 
     /// <inheritdoc />
+    public NetworkInfoSnapshot GetSnapshot() => _snapshot;
+
+    /// <inheritdoc />
     public long GetDownloadSpeed() => _snapshot.DownloadSpeed;
 
     /// <inheritdoc />

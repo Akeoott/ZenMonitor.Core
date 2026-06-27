@@ -22,6 +22,9 @@ public class Drive(ILogger<Drive> logger) : IDrive
     public void Update() => _snapshot = FetchDriveInfo();
 
     /// <inheritdoc />
+    public DriveInfoSnapshot GetSnapshot() => _snapshot;
+
+    /// <inheritdoc />
     public DriveMountInfo[] GetMountInfos() => _snapshot.MountInfos;
 
     private DriveInfoSnapshot FetchDriveInfo()

@@ -22,6 +22,9 @@ public class Process(ILogger<Process> logger) : IProcess
     public void Update() => _snapshot = FetchProcessInfo();
 
     /// <inheritdoc />
+    public ProcessInfoSnapshot GetSnapshot() => _snapshot;
+
+    /// <inheritdoc />
     public int GetTotalProcesses() => _snapshot.TotalProcesses;
 
     /// <inheritdoc />

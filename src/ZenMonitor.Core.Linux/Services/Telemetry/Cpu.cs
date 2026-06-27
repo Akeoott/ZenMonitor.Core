@@ -34,6 +34,9 @@ public class Cpu(ILogger<Cpu> logger, IFileSystem fileSystem, IUtilsLinux utils)
     public void Update() => _snapshot = FetchCpuInfo();
 
     /// <inheritdoc />
+    public CpuInfoSnapshot GetSnapshot() => _snapshot;
+
+    /// <inheritdoc />
     public string GetCpuName() => _snapshot.CpuName;
 
     /// <inheritdoc />
