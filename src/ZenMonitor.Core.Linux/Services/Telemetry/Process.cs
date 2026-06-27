@@ -19,21 +19,24 @@ namespace ZenMonitor.Core.Linux.Services.Telemetry;
 [SupportedOSPlatform("linux")]
 public class Process(ILogger<Process> logger, IFileSystem fileSystem, IUtilsLinux utils) : IProcess
 {
-    private List<ProcessDetail> _processes = [];
+    private ProcessInfoSnapshot _snapshot = new(0, []);
     private readonly Dictionary<int, CpuCacheEntry> _cpuCache = new();
     private Dictionary<int, string> _userMap = new();
     private DateTime _lastUserMapUpdate = DateTime.MinValue;
 
     /// <inheritdoc />
-    public void Update() => FetchProcessInfo();
+    public void Update() => _snapshot = FetchProcessInfo();
 
     /// <inheritdoc />
-    public int GetTotalProcesses() => _processes.Count;
+    public ProcessInfoSnapshot GetSnapshot() => _snapshot;
 
     /// <inheritdoc />
-    public ReadOnlySpan<ProcessDetail> GetProcesses() => CollectionsMarshal.AsSpan(_processes);
+    public int GetTotalProcesses() => _snapshot.TotalProcesses;
 
-    private void FetchProcessInfo()
+    /// <inheritdoc />
+    public ReadOnlySpan<ProcessDetail> GetProcesses() => _snapshot.ProcessDetails;
+
+    private ProcessInfoSnapshot FetchProcessInfo()
     {
         var utcNow = utils.UtcNow;
         var newProcessList = new List<ProcessDetail>();
@@ -48,7 +51,7 @@ public class Process(ILogger<Process> logger, IFileSystem fileSystem, IUtilsLinu
 
         try
         {
-            if (!fileSystem.Directory.Exists("/proc")) return;
+            if (!fileSystem.Directory.Exists("/proc")) return new ProcessInfoSnapshot(0, []);
 
             foreach (var dir in fileSystem.Directory.EnumerateDirectories("/proc"))
             {
@@ -89,20 +92,21 @@ public class Process(ILogger<Process> logger, IFileSystem fileSystem, IUtilsLinu
                 ));
             }
 
-            _processes = newProcessList;
+            return new ProcessInfoSnapshot(newProcessList.Count, newProcessList.ToArray());
         }
         catch (Exception ex)
         {
             logger.LogError(ex, "Error enumerating processes");
-            _processes.Clear();
-            return;
+            return new ProcessInfoSnapshot(0, []);
         }
-
-        // Clean up dead processes from the CPU cache
-        var deadPids = _cpuCache.Keys.Where(p => !activePids.Contains(p)).ToList();
-        foreach (var deadPid in deadPids)
+        finally
         {
-            _ = _cpuCache.Remove(deadPid);
+            // Clean up dead processes from the CPU cache
+            var deadPids = _cpuCache.Keys.Where(p => !activePids.Contains(p)).ToList();
+            foreach (var deadPid in deadPids)
+            {
+                _ = _cpuCache.Remove(deadPid);
+            }
         }
     }
 

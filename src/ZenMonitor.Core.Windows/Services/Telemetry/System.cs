@@ -21,6 +21,9 @@ public class System(ILogger<System> logger) : ISystem
     public void Update() => _snapshot = FetchSystemInfo();
 
     /// <inheritdoc />
+    public SystemInfoSnapshot GetSnapshot() => _snapshot;
+
+    /// <inheritdoc />
     public string GetKernelVersion() => _snapshot.KernelVersion;
 
     /// <inheritdoc />

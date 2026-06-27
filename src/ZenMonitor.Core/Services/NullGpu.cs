@@ -2,6 +2,7 @@
 // See the LICENSE file in the repository root for full license text.
 
 using ZenMonitor.Core.Abstractions.Telemetry;
+using ZenMonitor.Core.Models.Telemetry;
 
 namespace ZenMonitor.Core.Services;
 
@@ -12,8 +13,13 @@ namespace ZenMonitor.Core.Services;
 [ExcludeFromCodeCoverage]
 public sealed class NullGpu : IGpu
 {
+    private readonly GpuInfoSnapshot _emptySnapshot = new("", 0, 0, 0.0, 0.0, 0, "", 0.0);
+
     /// <summary>No-op update — does nothing.</summary>
     public void Update() { }
+
+    /// <inheritdoc />
+    public GpuInfoSnapshot GetSnapshot() => _emptySnapshot;
 
     /// <summary>Returns an empty string.</summary>
     public string GetGpuName() => "";

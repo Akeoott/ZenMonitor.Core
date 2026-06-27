@@ -1,6 +1,8 @@
 // Copyright (c) Ame (Akeoot/Akeoott) <akeoot@pm.me>. Licensed under the LGPL-3.0 Licence.
 // See the LICENSE file in the repository root for full license text.
 
+using ZenMonitor.Core.Models.Telemetry;
+
 namespace ZenMonitor.Core.Abstractions.Telemetry;
 
 /// <summary>
@@ -11,6 +13,12 @@ public interface ISystem
 {
     /// <summary>Updates all cached system info by reading from system files.</summary>
     void Update();
+
+    /// <summary>
+    /// Get the entire snapshot record of <see cref="ISystem"/>
+    /// </summary>
+    /// <returns><see cref="SystemInfoSnapshot"/> and all its underlying data</returns>
+    SystemInfoSnapshot GetSnapshot();
 
     /// <summary>Returns the operating system kernel version string.</summary>
     string GetKernelVersion();

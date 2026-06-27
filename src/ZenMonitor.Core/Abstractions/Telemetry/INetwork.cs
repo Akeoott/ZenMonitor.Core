@@ -14,6 +14,12 @@ public interface INetwork
     /// <summary>Updates all cached network metrics.</summary>
     void Update();
 
+    /// <summary>
+    /// Get the entire snapshot record of <see cref="INetwork"/>
+    /// </summary>
+    /// <returns><see cref="NetworkInfoSnapshot"/> and all its underlying data</returns>
+    NetworkInfoSnapshot GetSnapshot();
+
     /// <summary>Returns the current total download speed in bytes per second.</summary>
     long GetDownloadSpeed();
 

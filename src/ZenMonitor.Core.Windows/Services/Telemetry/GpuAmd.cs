@@ -21,6 +21,9 @@ public class GpuAmd(ILogger<GpuAmd> logger) : IGpu
     public void Update() => _snapshot = FetchGpuInfo();
 
     /// <inheritdoc />
+    public GpuInfoSnapshot GetSnapshot() => _snapshot;
+
+    /// <inheritdoc />
     public string GetGpuName() => _snapshot.GpuName;
 
     /// <inheritdoc />

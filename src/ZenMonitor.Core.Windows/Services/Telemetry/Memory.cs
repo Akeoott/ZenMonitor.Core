@@ -20,6 +20,9 @@ public class Memory(ILogger<Memory> logger) : IMemory
     public void Update() => _snapshot = FetchMemoryInfo();
 
     /// <inheritdoc />
+    public MemoryInfoSnapshot GetSnapshot() => _snapshot;
+
+    /// <inheritdoc />
     public double GetMemTotal() => _snapshot.MemTotal;
 
     /// <inheritdoc />

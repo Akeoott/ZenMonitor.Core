@@ -1,6 +1,8 @@
 // Copyright (c) Ame (Akeoot/Akeoott) <akeoot@pm.me>. Licensed under the LGPL-3.0 Licence.
 // See the LICENSE file in the repository root for full license text.
 
+using ZenMonitor.Core.Models.Telemetry;
+
 namespace ZenMonitor.Core.Abstractions.Telemetry;
 
 /// <summary>
@@ -11,6 +13,12 @@ public interface IMemory
 {
     /// <summary>Updates all cached memory metrics by reading from system files.</summary>
     void Update();
+
+    /// <summary>
+    /// Get the entire snapshot record of <see cref="IMemory"/>
+    /// </summary>
+    /// <returns><see cref="MemoryInfoSnapshot"/> and all its underlying data</returns>
+    MemoryInfoSnapshot GetSnapshot();
 
     /// <summary>Returns total physical memory in GiB.</summary>
     double GetMemTotal();

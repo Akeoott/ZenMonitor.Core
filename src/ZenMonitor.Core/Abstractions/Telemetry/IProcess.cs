@@ -14,6 +14,12 @@ public interface IProcess
     /// <summary>Updates the internal process snapshot with the latest data from the system.</summary>
     void Update();
 
+    /// <summary>
+    /// Get the entire snapshot record of <see cref="IProcess"/>
+    /// </summary>
+    /// <returns><see cref="ProcessInfoSnapshot"/> and all its underlying data</returns>
+    ProcessInfoSnapshot GetSnapshot();
+
     /// <summary>Returns the total number of processes detected during the last update.</summary>
     int GetTotalProcesses();
 
