@@ -1,0 +1,18 @@
+XS:
+  name: "Size: XS"
+  lines: 0
+S:
+  name: "Size: S"
+  lines: 10
+M:
+  name: "Size: M"
+  lines: 30
+L:
+  name: "Size: L"
+  lines: 100
+XL:
+  name: "Size: XL"
+  lines: 500
+XXL:
+  name: "Size: XXL"
+  lines: 1000
