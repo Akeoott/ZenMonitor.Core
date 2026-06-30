@@ -3,12 +3,13 @@
 
 namespace ZenMonitor.Core.Windows.Utils;
 
+// ReSharper disable InconsistentNaming
 [SupportedOSPlatform("windows")]
 public partial class UtilsWindows
 {
-    #region Cpu
+    #region RawCpuTelemetry
     [StructLayout(LayoutKind.Sequential)]
-    internal struct SYSTEM_INFO
+    private struct SYSTEM_INFO
     {
         public ushort wProcessorArchitecture;
         public ushort wReserved;
@@ -24,7 +25,7 @@ public partial class UtilsWindows
     }
 
     [StructLayout(LayoutKind.Sequential)]
-    internal struct SYSTEM_PROCESSOR_PERFORMANCE_INFORMATION
+    private struct SYSTEM_PROCESSOR_PERFORMANCE_INFORMATION
     {
         public long IdleTime;
         public long KernelTime;
@@ -34,7 +35,7 @@ public partial class UtilsWindows
     }
 
     [StructLayout(LayoutKind.Sequential)]
-    internal struct SYSTEM_POWER_INFORMATION
+    private struct SYSTEM_POWER_INFORMATION
     {
         public ulong MaxIdlenessAllowed;
         public ulong Idleness;
@@ -42,54 +43,7 @@ public partial class UtilsWindows
         public byte CoolingMode;
     }
 
-    internal const int SystemProcessorPerformanceInformation = 8;
-    internal const int SystemPowerInformation = 5;
-    #endregion
-
-    #region Memory
-    internal const double BytesToGiB = 1024.0 * 1024.0 * 1024.0;
-
-    [StructLayout(LayoutKind.Sequential)]
-    internal struct MEMORYSTATUSEX
-    {
-        public uint dwLength;
-        public uint dwMemoryLoad;
-        public ulong ullTotalPhys;
-        public ulong ullAvailPhys;
-        public ulong ullTotalPageFile;
-        public ulong ullAvailPageFile;
-        public ulong ullTotalVirtual;
-        public ulong ullAvailVirtual;
-        public ulong ullAvailExtendedVirtual;
-
-        public MEMORYSTATUSEX()
-        {
-            dwLength = (uint)Marshal.SizeOf<MEMORYSTATUSEX>();
-        }
-    }
-
-    [StructLayout(LayoutKind.Sequential)]
-    internal struct PERFORMANCE_INFORMATION
-    {
-        public uint cb;
-        public UIntPtr CommitTotal;
-        public UIntPtr CommitLimit;
-        public UIntPtr CommitPeak;
-        public UIntPtr PhysicalTotal;
-        public UIntPtr PhysicalAvailable;
-        public UIntPtr SystemCache;
-        public UIntPtr KernelTotal;
-        public UIntPtr KernelPaged;
-        public UIntPtr KernelNonpaged;
-        public UIntPtr PageSize;
-        public uint HandleCount;
-        public uint ProcessCount;
-        public uint ThreadCount;
-
-        public PERFORMANCE_INFORMATION()
-        {
-            cb = (uint)Marshal.SizeOf<PERFORMANCE_INFORMATION>();
-        }
-    }
+    private const int SystemProcessorPerformanceInformation = 8;
+    private const int SystemPowerInformation = 5;
     #endregion
 }

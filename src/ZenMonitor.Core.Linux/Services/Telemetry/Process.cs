@@ -179,7 +179,7 @@ public class Process(ILogger<Process> logger, IFileSystem fileSystem, IUtilsLinu
 
             // In the truncated numeric part:
             // Field 3 (State) is at index 0.
-            // Field 14 (utime) is at index 11.w
+            // Field 14 (utime) is at index 11.
             // Field 15 (stime) is at index 12.
             if (fields.Length <= 12 ||
                 !double.TryParse(fields[11], out var utime) ||

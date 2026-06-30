@@ -43,6 +43,7 @@ internal static class WindowsRegistration
         }
 
         services.AddSingleton<IUtilsWindows, UtilsWindows>();
+        services.AddSingleton<IRawCpuTelemetry, UtilsWindows.RawCpuTelemetry>();
 
         services.AddSingleton<ICpu, Cpu>();
         services.AddSingleton<IDrive, Drive>();

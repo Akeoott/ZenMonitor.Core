@@ -90,9 +90,9 @@ public class Cpu(ILogger<Cpu> logger, IUtilsWindows utils) : ICpu
     #region CpuInfo
     private (string cpuName, CpuCoreSpeed[] coreSpeeds) ReadCpuInfo()
     {
-        var cpuName = utils.GetProcessorName();
-        var coreCount = utils.GetProcessorCount();
-        var baseMhz = utils.GetProcessorBaseFrequencyMHz();
+        var cpuName = utils.RawCpu.GetProcessorName();
+        var coreCount = utils.RawCpu.GetProcessorCount();
+        var baseMhz = utils.RawCpu.GetBaseFrequencyMHz();
 
         var speeds = new CpuCoreSpeed[coreCount];
         for (var i = 0; i < coreCount; i++)
@@ -105,8 +105,8 @@ public class Cpu(ILogger<Cpu> logger, IUtilsWindows utils) : ICpu
     #region CpuUsages
     private (int totalUsage, CpuCoreUsage[] coreUsages) ReadCpuUsages()
     {
-        var currentTotal = utils.GetSystemTimes();
-        var currentCore = utils.GetPerCoreTimes();
+        var currentTotal = utils.RawCpu.GetSystemTimes();
+        var currentCore = utils.RawCpu.GetPerCoreTimes();
 
         var totalUsage = 0;
         CpuCoreUsage[] coreUsages;
@@ -162,7 +162,7 @@ public class Cpu(ILogger<Cpu> logger, IUtilsWindows utils) : ICpu
     #region CpuTemps
     private (int overallTemp, CpuCoreTemp[] coreTemps) ReadCpuTemps(int coreCount)
     {
-        var overall = utils.GetCpuTemperature(); // Windows only provides overall temp.
+        var overall = utils.RawCpu.GetTemperature(); // Windows only provides overall temp.
 
         var coreTemps = new CpuCoreTemp[coreCount];
         for (var i = 0; i < coreCount; i++)
@@ -177,7 +177,7 @@ public class Cpu(ILogger<Cpu> logger, IUtilsWindows utils) : ICpu
     {
         try
         {
-            return utils.GetCpuPowerDraw();
+            return utils.RawCpu.GetPowerDraw();
         }
         catch (Exception ex)
         {
