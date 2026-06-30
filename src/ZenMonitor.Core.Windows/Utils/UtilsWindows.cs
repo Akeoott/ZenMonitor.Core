@@ -16,126 +16,129 @@ namespace ZenMonitor.Core.Windows.Utils;
 /// </summary>
 [ExcludeFromCodeCoverage]
 [SupportedOSPlatform("windows")]
-public partial class UtilsWindows : IUtilsWindows
+public partial class UtilsWindows(UtilsWindows.RawCpuTelemetry rawCpu) : IUtilsWindows
 {
-    #region Cpu
     /// <inheritdoc />
-    public string GetProcessorName()
-    {
-        try
-        {
-            using var key = Registry.LocalMachine.OpenSubKey(
-                @"HARDWARE\DESCRIPTION\System\CentralProcessor\0");
-            return (string?)key?.GetValue("ProcessorNameString") ?? "Unknown CPU";
-        }
-        catch
-        {
-            return "Unknown CPU";
-        }
-    }
+    public IRawCpuTelemetry RawCpu { get; } = rawCpu;
 
-    /// <inheritdoc />
-    public int GetProcessorCount()
+    #region RawCpuTelemetry
+    /// <summary>
+    /// Implementation of <see cref="IRawCpuTelemetry"/> that gets CPU metrics
+    /// </summary>
+    public class RawCpuTelemetry : IRawCpuTelemetry
     {
-        GetSystemInfo(out var info);
-        return (int)info.dwNumberOfProcessors;
-    }
-
-    /// <inheritdoc />
-    public int GetProcessorBaseFrequencyMHz()
-    {
-        try
+        /// <inheritdoc />
+        public string GetProcessorName()
         {
-            using var key = Registry.LocalMachine.OpenSubKey(
-                @"HARDWARE\DESCRIPTION\System\CentralProcessor\0");
-            var value = key?.GetValue("~MHz");
-            return value is int mhz ? mhz : 0;
+            try
+            {
+                using var key = Registry.LocalMachine.OpenSubKey(
+                    @"HARDWARE\DESCRIPTION\System\CentralProcessor\0");
+                return (string?)key?.GetValue("ProcessorNameString") ?? "Unknown CPU";
+            }
+            catch
+            {
+                return "Unknown CPU";
+            }
         }
-        catch
+
+        /// <inheritdoc />
+        public int GetProcessorCount()
         {
+            GetSystemInfo(out var info);
+            return (int)info.dwNumberOfProcessors;
+        }
+
+        /// <inheritdoc />
+        public int GetBaseFrequencyMHz()
+        {
+            try
+            {
+                using var key = Registry.LocalMachine.OpenSubKey(
+                    @"HARDWARE\DESCRIPTION\System\CentralProcessor\0");
+                var value = key?.GetValue("~MHz");
+                return value is int mhz ? mhz : 0;
+            }
+            catch
+            {
+                return 0;
+            }
+        }
+
+        /// <inheritdoc />
+        public CpuTickInfo GetSystemTimes()
+        {
+            var result = UtilsWindows.GetSystemTimes(out var idle, out var kernel, out var user);
+            return result == 0
+                ? new CpuTickInfo(0, 0, 0)
+                : new CpuTickInfo(idle, kernel, user);
+        }
+
+        /// <inheritdoc />
+        public CpuTickInfo[] GetPerCoreTimes()
+        {
+            var coreCount = GetProcessorCount();
+            var structSize = Marshal.SizeOf<SYSTEM_PROCESSOR_PERFORMANCE_INFORMATION>();
+            var bufferSize = structSize * coreCount;
+
+            var buffer = Marshal.AllocHGlobal(bufferSize);
+            try
+            {
+                var ret = NtQuerySystemInformation(
+                    SystemProcessorPerformanceInformation,
+                    buffer,
+                    bufferSize,
+                    out _);
+
+                if (ret != 0)
+                    return [.. Enumerable.Repeat(new CpuTickInfo(0, 0, 0), coreCount)];
+
+                var results = new CpuTickInfo[coreCount];
+                for (var i = 0; i < coreCount; i++)
+                {
+                    var ptr = buffer + (i * structSize);
+                    var perf = Marshal.PtrToStructure<SYSTEM_PROCESSOR_PERFORMANCE_INFORMATION>(ptr);
+                    results[i] = new CpuTickInfo(perf.IdleTime, perf.KernelTime, perf.UserTime);
+                }
+
+                return results;
+            }
+            finally
+            {
+                Marshal.FreeHGlobal(buffer);
+            }
+        }
+
+        /// <inheritdoc />
+        public int GetTemperature()
+        {
+            try
+            {
+                using var searcher = new ManagementObjectSearcher(
+                    @"root\WMI",
+                    "SELECT * FROM MSAcpi_ThermalZoneTemperature");
+
+                foreach (var obj in searcher.Get().Cast<ManagementObject>())
+                {
+                    var tempKelvin = (uint)(obj["CurrentTemperature"] ?? 0);
+                    if (tempKelvin > 0)
+                        return (int)((tempKelvin - 2732) / 10.0);
+                }
+            }
+            catch
+            {
+                // WMI may not be available or thermal zone may not exist
+            }
+
             return 0;
         }
-    }
 
-    /// <inheritdoc />
-    public CpuTickInfo GetSystemTimes()
-    {
-        var result = GetSystemTimes(out var idle, out var kernel, out var user);
-        return result == 0
-            ? new CpuTickInfo(0, 0, 0)
-            : new CpuTickInfo(idle, kernel, user);
-    }
-
-    /// <inheritdoc />
-    public CpuTickInfo[] GetPerCoreTimes()
-    {
-        var coreCount = GetProcessorCount();
-        var structSize = Marshal.SizeOf<SYSTEM_PROCESSOR_PERFORMANCE_INFORMATION>();
-        var bufferSize = structSize * coreCount;
-
-        var buffer = Marshal.AllocHGlobal(bufferSize);
-        try
+        /// <inheritdoc />
+        public double GetPowerDraw()
         {
-            var ret = NtQuerySystemInformation(
-                SystemProcessorPerformanceInformation,
-                buffer,
-                bufferSize,
-                out _);
-
-            if (ret != 0)
-                return [.. Enumerable.Repeat(new CpuTickInfo(0, 0, 0), coreCount)];
-
-            var results = new CpuTickInfo[coreCount];
-            for (var i = 0; i < coreCount; i++)
-            {
-                var ptr = buffer + (i * structSize);
-                var perf = Marshal.PtrToStructure<SYSTEM_PROCESSOR_PERFORMANCE_INFORMATION>(ptr);
-                results[i] = new CpuTickInfo(perf.IdleTime, perf.KernelTime, perf.UserTime);
-            }
-
-            return results;
-        }
-        finally
-        {
-            Marshal.FreeHGlobal(buffer);
+            // TODO: Add Power draw fetching
+            return 0.0;
         }
     }
-
-    /// <inheritdoc />
-    public int GetCpuTemperature()
-    {
-        try
-        {
-            using var searcher = new ManagementObjectSearcher(
-                @"root\WMI",
-                "SELECT * FROM MSAcpi_ThermalZoneTemperature");
-
-            foreach (var obj in searcher.Get().Cast<ManagementObject>())
-            {
-                var tempKelvin = (uint)(obj["CurrentTemperature"] ?? 0);
-                if (tempKelvin > 0)
-                    return (int)((tempKelvin - 2732) / 10.0);
-            }
-        }
-        catch
-        {
-            // WMI may not be available or thermal zone may not exist
-        }
-
-        return 0;
-    }
-
-    /// <inheritdoc />
-    public double GetCpuPowerDraw()
-    {
-        // TODO: Add Power draw fetching
-        return 0.0;
-    }
-    #endregion
-
-    #region Memory
-    // TODO: Implement Memory and update IWindows to accept the new values.
-    //       ApiDeclarations and structs are already available.
-
     #endregion
 }

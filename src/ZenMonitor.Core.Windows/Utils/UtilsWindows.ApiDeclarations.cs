@@ -3,10 +3,11 @@
 
 namespace ZenMonitor.Core.Windows.Utils;
 
+// ReSharper disable InconsistentNaming
 [SupportedOSPlatform("windows")]
 public partial class UtilsWindows
 {
-    #region Cpu
+    #region RawCpuTelemetry
     [LibraryImport("kernel32.dll", EntryPoint = "GetSystemInfo")]
     private static partial void GetSystemInfo(out SYSTEM_INFO lpSystemInfo);
 
@@ -22,15 +23,5 @@ public partial class UtilsWindows
         IntPtr SystemInformation,
         int SystemInformationLength,
         out int ReturnLength);
-    #endregion
-
-    #region Memory
-    [LibraryImport("kernel32.dll", EntryPoint = "GlobalMemoryStatusEx")]
-    [return: MarshalAs(UnmanagedType.Bool)]
-    internal static partial bool GlobalMemoryStatusEx(ref MEMORYSTATUSEX lpBuffer);
-
-    [LibraryImport("psapi.dll", EntryPoint = "GetPerformanceInfo")]
-    [return: MarshalAs(UnmanagedType.Bool)]
-    internal static partial bool GetPerformanceInfo(ref PERFORMANCE_INFORMATION pPerformanceInformation, uint cb);
     #endregion
 }
