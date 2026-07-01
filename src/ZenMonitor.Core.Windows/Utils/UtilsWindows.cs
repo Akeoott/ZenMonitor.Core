@@ -96,7 +96,7 @@ public partial class UtilsWindows(UtilsWindows.RawCpuTelemetry rawCpu) : IUtilsW
                 var results = new CpuTickInfo[coreCount];
                 for (var i = 0; i < coreCount; i++)
                 {
-                    var ptr = buffer + i * structSize;
+                    var ptr = buffer + (i * structSize);
                     var perf = Marshal.PtrToStructure<SYSTEM_PROCESSOR_PERFORMANCE_INFORMATION>(ptr);
                     results[i] = new CpuTickInfo(perf.IdleTime, perf.KernelTime, perf.UserTime);
                 }
