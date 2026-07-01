@@ -83,16 +83,24 @@ public class Memory(ILogger<Memory> logger, IFileSystem fileSystem) : IMemory
 
             string[] required = ["MemTotal", "MemFree", "MemAvailable", "Cached", "SwapTotal", "SwapFree"];
 
-            foreach (var key in required)
-            {
-                if (!values.ContainsKey(key))
-                    throw new KeyNotFoundException($"Could not find '{key}' in /proc/meminfo");
-            }
+            var missing = required.Where(k => !values.ContainsKey(k)).ToList();
+            if (missing.Count > 0)
+                throw new KeyNotFoundException(
+                    $"Could not find the following keys in /proc/meminfo: {string.Join(", ", missing)}");
 
             return new MemoryInfoSnapshot(
-                values["MemTotal"], values["MemFree"], values["MemAvailable"],
-                Math.Round(values["MemTotal"] - values["MemAvailable"], 2),
-                values["Cached"], values["SwapTotal"], values["SwapFree"]);
+                MemTotal:      values["MemTotal"],
+                MemFree:       values["MemFree"],
+                MemAvailable:  values["MemAvailable"],
+                MemUsed:       Math.Round(values["MemTotal"] - values["MemAvailable"], 2),
+                Cached:        values["Cached"],
+                SwapTotal:     values["SwapTotal"],
+                SwapFree:      values["SwapFree"]);
+        }
+        catch (KeyNotFoundException ex)
+        {
+            logger.LogError(ex, "Fetched memory info is missing keys");
+            return new MemoryInfoSnapshot(0, 0, 0, 0, 0, 0, 0);
         }
         catch (Exception ex)
         {

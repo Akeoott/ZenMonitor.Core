@@ -127,8 +127,12 @@ public class CpuTests
     [Fact]
     public void Expected_PowerDraw()
     {
-        const string energyUjPath = "/sys/class/powercap/intel-rapl:0/energy_uj";
+        const string raplDir = "/sys/class/powercap/intel-rapl:0";
+        const string energyUjPath = raplDir + "/energy_uj";
+        const string nameFilePath = raplDir + "/name";
 
+        _mockFileSystem.AddDirectory(raplDir);
+        _mockFileSystem.AddFile(nameFilePath, new MockFileData("intel-rapl:0"));
         _mockFileSystem.AddFile("/proc/cpuinfo", new MockFileData(TestData.CpuInfo()));
         _mockFileSystem.AddFile("/proc/stat", new MockFileData(TestData.Stat1()));
 
@@ -250,8 +254,12 @@ public class CpuTests
     [Fact]
     public void Error_EnergyFileInvalidContent()
     {
-        const string energyUjPath = "/sys/class/powercap/intel-rapl:0/energy_uj";
+        const string raplDir = "/sys/class/powercap/intel-rapl:0";
+        const string energyUjPath = raplDir + "/energy_uj";
+        const string nameFilePath = raplDir + "/name";
 
+        _mockFileSystem.AddDirectory(raplDir);
+        _mockFileSystem.AddFile(nameFilePath, new MockFileData("intel-rapl:0"));
         _mockFileSystem.AddFile("/proc/cpuinfo", new MockFileData(TestData.CpuInfo()));
         _mockFileSystem.AddFile("/proc/stat", new MockFileData(TestData.Stat1()));
         _mockFileSystem.AddFile(energyUjPath, new MockFileData("not_a_number"));

@@ -23,6 +23,6 @@ public interface IProcess
     /// <summary>Returns the total number of processes detected during the last update.</summary>
     int GetTotalProcesses();
 
-    /// <summary>Returns a read-only span of <see cref="ProcessDetail"/> records representing the current process snapshot.</summary>
-    ReadOnlySpan<ProcessDetail> GetProcesses();
+    /// <summary>Returns an array of <see cref="ProcessDetail"/> records representing the current process snapshot.</summary>
+    ProcessDetail[] GetProcesses();
 }

@@ -43,10 +43,8 @@ public class UtilsLinux : IUtilsLinux
         process.StartInfo = startInfo;
         process.Start();
 
-        var errorTask = process.StandardError.ReadToEndAsync();
         var output = process.StandardOutput.ReadToEnd();
-        var error = errorTask.GetAwaiter().GetResult();
-
+        var error = process.StandardError.ReadToEnd();
         process.WaitForExit();
 
         return new ProcessResult(process.ExitCode, output.Trim(), error.Trim());

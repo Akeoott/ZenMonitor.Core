@@ -29,8 +29,8 @@ public interface IRawCpuTelemetry
     /// <summary>Returns the number of logical processors.</summary>
     int GetProcessorCount();
 
-    /// <summary>Returns the base processor frequency in MHz.</summary>
-    int GetBaseFrequencyMHz();
+    /// <summary>Returns the cpu processor frequency in MHz.</summary>
+    int GetCpuFrequencyMHz();
 
     /// <summary>
     /// Returns the current total system idle/kernel/user tick counts.

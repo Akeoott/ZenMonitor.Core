@@ -65,7 +65,7 @@ internal static class LinuxRegistration
             {
                 GpuVendor.Nvidia => ActivatorUtilities.CreateInstance<GpuNvidia>(serviceProvider),
                 GpuVendor.Amd => ActivatorUtilities.CreateInstance<GpuAmd>(serviceProvider),
-                _ => new NullGpu(),
+                _ => new NullGpu()
             };
         });
     }
@@ -99,7 +99,7 @@ internal static class LinuxRegistration
                     {
                         "0x1002" => GpuVendor.Amd,
                         "0x10de" => GpuVendor.Nvidia,
-                        _ => GpuVendor.Unknown,
+                        _ => GpuVendor.Unknown
                     };
                 }
             }

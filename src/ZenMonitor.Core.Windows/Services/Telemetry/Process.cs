@@ -28,7 +28,7 @@ public class Process(ILogger<Process> logger) : IProcess
     public int GetTotalProcesses() => _snapshot.TotalProcesses;
 
     /// <inheritdoc />
-    public ReadOnlySpan<ProcessDetail> GetProcesses() => _snapshot.ProcessDetails;
+    public ProcessDetail[] GetProcesses() => _snapshot.ProcessDetails;
 
     private ProcessInfoSnapshot FetchProcessInfo()
     {
