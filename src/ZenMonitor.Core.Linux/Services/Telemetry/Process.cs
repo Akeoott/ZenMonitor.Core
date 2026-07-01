@@ -34,7 +34,7 @@ public class Process(ILogger<Process> logger, IFileSystem fileSystem, IUtilsLinu
     public int GetTotalProcesses() => _snapshot.TotalProcesses;
 
     /// <inheritdoc />
-    public ReadOnlySpan<ProcessDetail> GetProcesses() => _snapshot.ProcessDetails;
+    public ProcessDetail[] GetProcesses() => _snapshot.ProcessDetails;
 
     private ProcessInfoSnapshot FetchProcessInfo()
     {

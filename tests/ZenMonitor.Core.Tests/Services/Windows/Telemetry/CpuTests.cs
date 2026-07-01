@@ -27,7 +27,7 @@ public class CpuTests
     {
         _mockUtils.Setup(w => w.RawCpu.GetProcessorName()).Returns(name);
         _mockUtils.Setup(w => w.RawCpu.GetProcessorCount()).Returns(coreCount);
-        _mockUtils.Setup(w => w.RawCpu.GetBaseFrequencyMHz()).Returns(baseMhz);
+        _mockUtils.Setup(w => w.RawCpu.GetCpuFrequencyMHz()).Returns(baseMhz);
     }
 
     private void SetupStdTicks(long idle = 1000, long kernel = 2000, long user = 3000, int cores = 2)

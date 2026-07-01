@@ -170,7 +170,7 @@ public class ProcessTests
         process.Update();
 
         Assert.Equal(0, process.GetTotalProcesses());
-        Assert.True(process.GetProcesses().IsEmpty);
+        Assert.Empty(process.GetProcesses());
     }
 
     [Fact]
@@ -259,7 +259,7 @@ public class ProcessTests
         process.Update();
 
         Assert.Equal(0, process.GetTotalProcesses());
-        Assert.True(process.GetProcesses().IsEmpty);
+        Assert.Empty(process.GetProcesses());
     }
 
     [Fact]

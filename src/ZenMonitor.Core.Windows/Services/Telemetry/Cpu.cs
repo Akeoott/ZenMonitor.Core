@@ -92,7 +92,7 @@ public class Cpu(ILogger<Cpu> logger, IUtilsWindows utils) : ICpu
     {
         var cpuName = utils.RawCpu.GetProcessorName();
         var coreCount = utils.RawCpu.GetProcessorCount();
-        var baseMhz = utils.RawCpu.GetBaseFrequencyMHz();
+        var baseMhz = utils.RawCpu.GetCpuFrequencyMHz();
 
         var speeds = new CpuCoreSpeed[coreCount];
         for (var i = 0; i < coreCount; i++)

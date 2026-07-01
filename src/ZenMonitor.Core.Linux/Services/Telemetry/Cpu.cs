@@ -26,9 +26,11 @@ public class Cpu(ILogger<Cpu> logger, IFileSystem fileSystem, IUtilsLinux utils)
     private long[][] _currentCoreTicks = [];
     private long[][] _previousCoreTicks = [];
 
-    private const string EnergyUjPath = "/sys/class/powercap/intel-rapl:0/energy_uj";
+    private static readonly string[] RaplNamePatterns = ["intel-rapl", "amd-rapl"];
+    private string? _energyUjPath;
     private double _prevEnergyUj;
     private DateTime _prevEnergyTime;
+    private bool _raplDiscovered;
 
     /// <inheritdoc />
     public void Update() => _snapshot = FetchCpuInfo();
@@ -375,11 +377,19 @@ public class Cpu(ILogger<Cpu> logger, IFileSystem fileSystem, IUtilsLinux utils)
     #region PowerDraw
     private double ReadPowerDraw()
     {
-        if (!fileSystem.File.Exists(EnergyUjPath)) return 0.0;
+        if (_energyUjPath == null)
+        {
+            if (_raplDiscovered) return 0.0;
+            _energyUjPath = DiscoverRaplPath();
+            _raplDiscovered = _energyUjPath == null;
+            if (_energyUjPath == null) return 0.0;
+        }
+
+        if (!fileSystem.File.Exists(_energyUjPath)) return 0.0;
 
         try
         {
-            var energyUj = double.Parse(fileSystem.File.ReadAllText(EnergyUjPath).Trim());
+            var energyUj = double.Parse(fileSystem.File.ReadAllText(_energyUjPath).Trim());
             var currentTime = utils.UtcNow;
 
             double power = 0;
@@ -407,6 +417,36 @@ public class Cpu(ILogger<Cpu> logger, IFileSystem fileSystem, IUtilsLinux utils)
             logger.LogWarning(ex, "Failed to read CPU power draw");
             return 0.0;
         }
+    }
+
+    private string? DiscoverRaplPath()
+    {
+        const string powercapDir = "/sys/class/powercap";
+        if (!fileSystem.Directory.Exists(powercapDir)) return null;
+
+        try
+        {
+            foreach (var dir in fileSystem.Directory.EnumerateDirectories(powercapDir))
+            {
+                var nameFile = fileSystem.Path.Combine(dir, "name");
+                if (!fileSystem.File.Exists(nameFile)) continue;
+
+                var name = fileSystem.File.ReadAllText(nameFile).Trim();
+                if (!RaplNamePatterns.Any(p => name.StartsWith(p, StringComparison.Ordinal))) continue;
+
+                var energyPath = fileSystem.Path.Combine(dir, "energy_uj");
+                if (!fileSystem.File.Exists(energyPath)) continue;
+
+                logger.LogTrace("Discovered RAPL power domain: {Path}", energyPath);
+                return energyPath;
+            }
+        }
+        catch (Exception ex)
+        {
+            logger.LogWarning(ex, "Failed to discover RAPL power domain");
+        }
+
+        return null;
     }
     #endregion
 }

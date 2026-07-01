@@ -50,7 +50,7 @@ public partial class UtilsWindows(UtilsWindows.RawCpuTelemetry rawCpu) : IUtilsW
         }
 
         /// <inheritdoc />
-        public int GetBaseFrequencyMHz()
+        public int GetCpuFrequencyMHz()
         {
             try
             {

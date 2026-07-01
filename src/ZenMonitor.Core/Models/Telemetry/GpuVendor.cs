@@ -17,6 +17,9 @@ public enum GpuVendor
     /// <summary>NVIDIA graphics hardware.</summary>
     Nvidia,
 
-    /// <summary>Intel graphics hardware.</summary>
+    /// <summary>
+    /// Intel graphics hardware.
+    /// <para>Note: Intel GPU detection is not yet implemented. This member is reserved for future use.</para>
+    /// </summary>
     Intel,
 }
