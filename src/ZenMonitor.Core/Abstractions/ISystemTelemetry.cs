@@ -18,23 +18,23 @@ public interface ISystemTelemetry
     void UpdateAll();
 
     /// <summary>Gets the CPU telemetry service.</summary>
-    ICpu Cpu { get; }
+    ICpuTel CpuTel { get; }
 
     /// <summary>Gets the Drive telemetry service.</summary>
-    IDrive Drive { get; }
+    IDriveTel DriveTel { get; }
 
     /// <summary>Gets the GPU telemetry service.</summary>
-    IGpu Gpu { get; }
+    IGpuTel GpuTel { get; }
 
     /// <summary>Gets the Memory telemetry service.</summary>
-    IMemory Memory { get; }
+    IMemoryTel MemoryTel { get; }
 
     /// <summary>Gets the Network telemetry service.</summary>
-    INetwork Network { get; }
+    INetworkTel NetworkTel { get; }
 
     /// <summary>Gets the Process telemetry service.</summary>
-    IProcess Process { get; }
+    IProcessTel ProcessTel { get; }
 
     /// <summary>Gets the System telemetry service.</summary>
-    ISystem System { get; }
+    ISystemTel SystemTel { get; }
 }

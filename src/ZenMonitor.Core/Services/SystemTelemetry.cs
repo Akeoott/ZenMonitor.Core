@@ -12,44 +12,44 @@ namespace ZenMonitor.Core.Services;
 /// </summary>
 [ExcludeFromCodeCoverage]
 public sealed class SystemTelemetry(
-    ICpu cpu,
-    IDrive drive,
-    IGpu gpu,
-    IMemory memory,
-    INetwork network,
-    IProcess process,
-    ISystem system) : ISystemTelemetry
+    ICpuTel cpuTel,
+    IDriveTel driveTel,
+    IGpuTel gpuTel,
+    IMemoryTel memoryTel,
+    INetworkTel networkTel,
+    IProcessTel processTel,
+    ISystemTel systemTel) : ISystemTelemetry
 {
     /// <inheritdoc />
     public void UpdateAll()
     {
-        Cpu.Update();
-        Drive.Update();
-        Gpu.Update();
-        Memory.Update();
-        Network.Update();
-        Process.Update();
-        System.Update();
+        CpuTel.Update();
+        DriveTel.Update();
+        GpuTel.Update();
+        MemoryTel.Update();
+        NetworkTel.Update();
+        ProcessTel.Update();
+        SystemTel.Update();
     }
 
     /// <inheritdoc />
-    public ICpu Cpu { get; } = cpu;
+    public ICpuTel CpuTel { get; } = cpuTel;
 
     /// <inheritdoc />
-    public IDrive Drive { get; } = drive;
+    public IDriveTel DriveTel { get; } = driveTel;
 
     /// <inheritdoc />
-    public IGpu Gpu { get; } = gpu;
+    public IGpuTel GpuTel { get; } = gpuTel;
 
     /// <inheritdoc />
-    public IMemory Memory { get; } = memory;
+    public IMemoryTel MemoryTel { get; } = memoryTel;
 
     /// <inheritdoc />
-    public INetwork Network { get; } = network;
+    public INetworkTel NetworkTel { get; } = networkTel;
 
     /// <inheritdoc />
-    public IProcess Process { get; } = process;
+    public IProcessTel ProcessTel { get; } = processTel;
 
     /// <inheritdoc />
-    public ISystem System { get; } = system;
+    public ISystemTel SystemTel { get; } = systemTel;
 }

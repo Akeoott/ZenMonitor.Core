@@ -35,37 +35,37 @@ internal static class LinuxRegistration
         if (!DependencyInjection.HasLogging(services))
         {
             services.AddSingleton<ILogger<UtilsLinux>>(NullLogger<UtilsLinux>.Instance);
-            services.AddSingleton<ILogger<Cpu>>(NullLogger<Cpu>.Instance);
-            services.AddSingleton<ILogger<Drive>>(NullLogger<Drive>.Instance);
-            services.AddSingleton<ILogger<Memory>>(NullLogger<Memory>.Instance);
-            services.AddSingleton<ILogger<Network>>(NullLogger<Network>.Instance);
-            services.AddSingleton<ILogger<Process>>(NullLogger<Process>.Instance);
-            services.AddSingleton<ILogger<Linux.Services.Telemetry.System>>(NullLogger<Linux.Services.Telemetry.System>.Instance);
+            services.AddSingleton<ILogger<CpuTel>>(NullLogger<CpuTel>.Instance);
+            services.AddSingleton<ILogger<DriveTel>>(NullLogger<DriveTel>.Instance);
+            services.AddSingleton<ILogger<MemoryTel>>(NullLogger<MemoryTel>.Instance);
+            services.AddSingleton<ILogger<NetworkTel>>(NullLogger<NetworkTel>.Instance);
+            services.AddSingleton<ILogger<ProcessTel>>(NullLogger<ProcessTel>.Instance);
+            services.AddSingleton<ILogger<SystemTel>>(NullLogger<SystemTel>.Instance);
 
-            services.AddSingleton<ILogger<GpuAmd>>(NullLogger<GpuAmd>.Instance);
-            services.AddSingleton<ILogger<GpuNvidia>>(NullLogger<GpuNvidia>.Instance);
+            services.AddSingleton<ILogger<GpuTelAmd>>(NullLogger<GpuTelAmd>.Instance);
+            services.AddSingleton<ILogger<GpuTelNvidia>>(NullLogger<GpuTelNvidia>.Instance);
         }
 
         services.AddSingleton<IUtilsLinux, UtilsLinux>();
 
-        services.AddSingleton<IProcessController, ProcessController>();
+        services.AddSingleton<IProcessCon, ProcessCon>();
 
-        services.AddSingleton<ICpu, Cpu>();
-        services.AddSingleton<IDrive, Drive>();
-        services.AddSingleton<IMemory, Memory>();
-        services.AddSingleton<INetwork, Network>();
-        services.AddSingleton<IProcess, Process>();
-        services.AddSingleton<ISystem, Linux.Services.Telemetry.System>();
+        services.AddSingleton<ICpuTel, CpuTel>();
+        services.AddSingleton<IDriveTel, DriveTel>();
+        services.AddSingleton<IMemoryTel, MemoryTel>();
+        services.AddSingleton<INetworkTel, NetworkTel>();
+        services.AddSingleton<IProcessTel, ProcessTel>();
+        services.AddSingleton<ISystemTel, SystemTel>();
 
         var vendor = DetectGpuVendor();
 
-        services.AddSingleton<IGpu>(serviceProvider =>
+        services.AddSingleton<IGpuTel>(serviceProvider =>
         {
             return vendor switch
             {
-                GpuVendor.Nvidia => ActivatorUtilities.CreateInstance<GpuNvidia>(serviceProvider),
-                GpuVendor.Amd => ActivatorUtilities.CreateInstance<GpuAmd>(serviceProvider),
-                _ => new NullGpu()
+                GpuVendor.Nvidia => ActivatorUtilities.CreateInstance<GpuTelNvidia>(serviceProvider),
+                GpuVendor.Amd => ActivatorUtilities.CreateInstance<GpuTelAmd>(serviceProvider),
+                _ => new NullGpuTel()
             };
         });
     }
@@ -106,7 +106,7 @@ internal static class LinuxRegistration
         }
         catch
         {
-            // Ignore detection errors, fall back to NullGpu
+            // Ignore detection errors, fall back to NullGpuTel
         }
         return GpuVendor.Unknown;
     }

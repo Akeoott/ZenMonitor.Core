@@ -3,11 +3,5 @@
 
 namespace ZenMonitor.Core.Models;
 
-/// <summary>
-/// Represents the result of running an external process.
-/// </summary>
-/// <param name="ExitCode">Process exit code.</param>
-/// <param name="StandardOutput">Captured standard output.</param>
-/// <param name="StandardError">Captured standard error.</param>
-[SupportedOSPlatform("linux")]
-public record ProcessResult(int ExitCode, string StandardOutput, string StandardError);
+// Contains non-explicit user facing models only used internally.
+

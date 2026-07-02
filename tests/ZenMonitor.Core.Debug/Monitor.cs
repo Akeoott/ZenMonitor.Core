@@ -29,34 +29,34 @@ internal sealed class Monitor(ILogger<Monitor> logger, ISystemTelemetry monitor)
                 Console.Write("\n\n========================DEBUG========================\n\n\n");
 
                 Console.WriteLine("CPU INFORMATION");
-                Console.WriteLine($"  Name: {monitor.Cpu.GetCpuName()}");
-                Console.Write($"  Speed (MHz): C0 {monitor.Cpu.GetCpuSpeed()}");
-                var cpuCoreSpeed = monitor.Cpu.GetCoreSpeeds();
+                Console.WriteLine($"  Name: {monitor.CpuTel.GetCpuName()}");
+                Console.Write($"  Speed (MHz): C0 {monitor.CpuTel.GetCpuSpeed()}");
+                var cpuCoreSpeed = monitor.CpuTel.GetCoreSpeeds();
                 foreach (var speed in cpuCoreSpeed)
                 {
                     Console.Write($", C{speed.Index + 1} {speed.Speed}");
                 }
                 Console.WriteLine();
 
-                Console.Write($"  Usage (%): C0 {monitor.Cpu.GetCpuUsage()}");
-                var cpuCoreUsage = monitor.Cpu.GetCoreUsages();
+                Console.Write($"  Usage (%): C0 {monitor.CpuTel.GetCpuUsage()}");
+                var cpuCoreUsage = monitor.CpuTel.GetCoreUsages();
                 foreach (var usage in cpuCoreUsage)
                 {
                     Console.Write($", C{usage.Index + 1} {usage.Usage}");
                 }
                 Console.WriteLine();
 
-                Console.Write($"  Temperature (°C): C0 {monitor.Cpu.GetCpuTemp()}");
-                var cpuCoreTemp = monitor.Cpu.GetCoreTemps();
+                Console.Write($"  Temperature (°C): C0 {monitor.CpuTel.GetCpuTemp()}");
+                var cpuCoreTemp = monitor.CpuTel.GetCoreTemps();
                 foreach (var temp in cpuCoreTemp)
                 {
                     Console.Write($", C{temp.Index + 1} {temp.Temp}");
                 }
                 Console.WriteLine();
-                Console.WriteLine($"  Power Draw (W): {monitor.Cpu.GetPowerDraw()}\n");
+                Console.WriteLine($"  Power Draw (W): {monitor.CpuTel.GetPowerDraw()}\n");
 
                 Console.WriteLine("DRIVE INFORMATION");
-                var mountInfos = monitor.Drive.GetMountInfos();
+                var mountInfos = monitor.DriveTel.GetMountInfos();
                 foreach (var mount in mountInfos)
                 {
                     var usagePercent = mount.TotalBytes > 0 ? (double)mount.UsedBytes / mount.TotalBytes * 100 : 0;
@@ -65,28 +65,28 @@ internal sealed class Monitor(ILogger<Monitor> logger, ISystemTelemetry monitor)
                 Console.WriteLine();
 
                 Console.WriteLine("GPU INFORMATION");
-                Console.WriteLine($"  Name: {monitor.Gpu.GetGpuName()}");
-                Console.WriteLine($"  GPU Usage (%): {monitor.Gpu.GetUsageGpu()}");
-                Console.WriteLine($"  Memory Usage (%): {monitor.Gpu.GetUsageMemory()}");
-                Console.WriteLine($"  Memory Used: {monitor.Gpu.GetMemoryUsed()}");
-                Console.WriteLine($"  Memory Total: {monitor.Gpu.GetMemoryTotal()}");
-                Console.WriteLine($"  Temperature (°C): {monitor.Gpu.GetTemperatureGpu()}");
-                Console.WriteLine($"  Power State: {monitor.Gpu.GetPowerState()}");
-                Console.WriteLine($"  Power Draw (W): {monitor.Gpu.GetPowerDraw()}\n");
+                Console.WriteLine($"  Name: {monitor.GpuTel.GetGpuName()}");
+                Console.WriteLine($"  GPU Usage (%): {monitor.GpuTel.GetUsageGpu()}");
+                Console.WriteLine($"  Memory Usage (%): {monitor.GpuTel.GetUsageMemory()}");
+                Console.WriteLine($"  Memory Used: {monitor.GpuTel.GetMemoryUsed()}");
+                Console.WriteLine($"  Memory Total: {monitor.GpuTel.GetMemoryTotal()}");
+                Console.WriteLine($"  Temperature (°C): {monitor.GpuTel.GetTemperatureGpu()}");
+                Console.WriteLine($"  Power State: {monitor.GpuTel.GetPowerState()}");
+                Console.WriteLine($"  Power Draw (W): {monitor.GpuTel.GetPowerDraw()}\n");
 
                 Console.WriteLine("MEMORY INFORMATION");
-                Console.WriteLine($"  Total: {monitor.Memory.GetMemTotal()}");
-                Console.WriteLine($"  Free: {monitor.Memory.GetMemFree()}");
-                Console.WriteLine($"  Available: {monitor.Memory.GetMemAvailable()}");
-                Console.WriteLine($"  Used: {monitor.Memory.GetMemUsed()}");
-                Console.WriteLine($"  Cached: {monitor.Memory.GetCached()}");
-                Console.WriteLine($"  Swap Total: {monitor.Memory.GetSwapTotal()}");
-                Console.WriteLine($"  Swap Free: {monitor.Memory.GetSwapFree()}\n");
+                Console.WriteLine($"  Total: {monitor.MemoryTel.GetMemTotal()}");
+                Console.WriteLine($"  Free: {monitor.MemoryTel.GetMemFree()}");
+                Console.WriteLine($"  Available: {monitor.MemoryTel.GetMemAvailable()}");
+                Console.WriteLine($"  Used: {monitor.MemoryTel.GetMemUsed()}");
+                Console.WriteLine($"  Cached: {monitor.MemoryTel.GetCached()}");
+                Console.WriteLine($"  Swap Total: {monitor.MemoryTel.GetSwapTotal()}");
+                Console.WriteLine($"  Swap Free: {monitor.MemoryTel.GetSwapFree()}\n");
 
                 // Hidden due to the MASSIVE output.
                 Console.WriteLine("PROCESS INFORMATION");
-                Console.WriteLine($"  Total Processes: {monitor.Process.GetTotalProcesses()}");
-                var processes = monitor.Process.GetProcesses();
+                Console.WriteLine($"  Total Processes: {monitor.ProcessTel.GetTotalProcesses()}");
+                var processes = monitor.ProcessTel.GetProcesses();
                 foreach (var process in processes)
                 {
                     Console.WriteLine($"  {process.Pid}, {process.Program}, {process.Command}, {process.State}, {process.Threads}, {process.User}, {process.MemoryUsage}, {process.CpuUsage}");
@@ -94,10 +94,10 @@ internal sealed class Monitor(ILogger<Monitor> logger, ISystemTelemetry monitor)
                 Console.WriteLine();
 
                 Console.WriteLine("NETWORK INFORMATION");
-                Console.WriteLine($"  Download in bytes: {monitor.Network.GetDownloadSpeed()}");
-                Console.WriteLine($"  Upload in bytes: {monitor.Network.GetUploadSpeed()}\n");
+                Console.WriteLine($"  Download in bytes: {monitor.NetworkTel.GetDownloadSpeed()}");
+                Console.WriteLine($"  Upload in bytes: {monitor.NetworkTel.GetUploadSpeed()}\n");
 
-                var networks = monitor.Network.GetNetworks();
+                var networks = monitor.NetworkTel.GetNetworks();
                 foreach (var network in networks)
                 {
                     Console.WriteLine($"  {network.Name} {network.IsUp}, Upload (Speed {network.UploadSpeed} / Total {network.TotalBytesUploaded}), Download (Speed {network.DownloadSpeed} / Total {network.TotalBytesDownloaded})");
@@ -105,11 +105,11 @@ internal sealed class Monitor(ILogger<Monitor> logger, ISystemTelemetry monitor)
                 Console.WriteLine();
 
                 Console.WriteLine("SYSTEM INFORMATION");
-                Console.WriteLine($"  Kernel: {monitor.System.GetKernelVersion()}");
-                Console.WriteLine($"  Hostname: {monitor.System.GetHostname()}");
-                Console.WriteLine($"  Uptime (s): {monitor.System.GetUptimeSeconds()}");
-                Console.WriteLine($"  Running Tasks: {monitor.System.GetRunningTasks()}");
-                Console.WriteLine($"  Total Tasks: {monitor.System.GetTotalTasks()}\n");
+                Console.WriteLine($"  Kernel: {monitor.SystemTel.GetKernelVersion()}");
+                Console.WriteLine($"  Hostname: {monitor.SystemTel.GetHostname()}");
+                Console.WriteLine($"  Uptime (s): {monitor.SystemTel.GetUptimeSeconds()}");
+                Console.WriteLine($"  Running Tasks: {monitor.SystemTel.GetRunningTasks()}");
+                Console.WriteLine($"  Total Tasks: {monitor.SystemTel.GetTotalTasks()}\n");
             }
             catch (TaskCanceledException)
             {
