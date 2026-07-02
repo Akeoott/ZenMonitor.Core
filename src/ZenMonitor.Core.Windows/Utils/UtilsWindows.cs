@@ -16,16 +16,16 @@ namespace ZenMonitor.Core.Windows.Utils;
 /// </summary>
 [ExcludeFromCodeCoverage]
 [SupportedOSPlatform("windows")]
-public partial class UtilsWindows(UtilsWindows.RawCpuTelemetry rawCpu) : IUtilsWindows
+public partial class UtilsWindows(UtilsWindows.RawCpuTel rawCpu) : IUtilsWindows
 {
     /// <inheritdoc />
-    public IRawCpuTelemetry RawCpu { get; } = rawCpu;
+    public IRawCpuTel RawCpu { get; } = rawCpu;
 
-    #region RawCpuTelemetry
+    #region RawCpuTel
     /// <summary>
-    /// Implementation of <see cref="IRawCpuTelemetry"/> that gets CPU metrics
+    /// Implementation of <see cref="IRawCpuTel"/> that gets CPU metrics
     /// </summary>
-    public class RawCpuTelemetry : IRawCpuTelemetry
+    public class RawCpuTel : IRawCpuTel
     {
         /// <inheritdoc />
         public string GetProcessorName()

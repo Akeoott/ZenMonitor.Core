@@ -7,7 +7,7 @@ namespace ZenMonitor.Core.Windows.Utils;
 [SupportedOSPlatform("windows")]
 public partial class UtilsWindows
 {
-    #region RawCpuTelemetry
+    #region RawCpuTel
     [StructLayout(LayoutKind.Sequential)]
     private struct SYSTEM_INFO
     {

@@ -14,14 +14,14 @@ namespace ZenMonitor.Core.Utils;
 public interface IUtilsWindows
 {
     /// <summary>Gets the CPU telemetry service.</summary>
-    IRawCpuTelemetry RawCpu { get; }
+    IRawCpuTel RawCpu { get; }
 }
 
 /// <summary>
-/// Provides raw CPU telemetry values for the windows implementation of <see cref="ICpu"/>.
+/// Provides raw CPU telemetry values for the windows implementation of <see cref="ICpuTel"/>.
 /// </summary>
 [SupportedOSPlatform("windows")]
-public interface IRawCpuTelemetry
+public interface IRawCpuTel
 {
     /// <summary>Returns the CPU processor model name.</summary>
     string GetProcessorName();

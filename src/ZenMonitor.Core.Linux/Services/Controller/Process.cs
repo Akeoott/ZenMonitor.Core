@@ -9,11 +9,11 @@ using ZenMonitor.Core.Utils;
 namespace ZenMonitor.Core.Linux.Services.Controller;
 
 /// <summary>>
-/// Linux implementation of <see cref="IProcess"/>
+/// Linux implementation of <see cref="IProcessCon"/>
 /// that allows the user to run, terminate and kill processes
 /// </summary>
 [SupportedOSPlatform("linux")]
-public class Process(IUtilsLinux utils) : IProcess
+public class ProcessCon(IUtilsLinux utils) : IProcessCon
 {
     /// <inheritdoc />
     public ProcessResult Run(string programName, params string[] arguments) => utils.RunProcess(programName, arguments);
