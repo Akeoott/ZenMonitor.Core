@@ -7,7 +7,7 @@ namespace ZenMonitor.Core.Windows.Utils;
 [SupportedOSPlatform("windows")]
 public partial class UtilsWindows
 {
-    #region RawCpuTelemetry
+    #region RawCpuTel
     [LibraryImport("kernel32.dll", EntryPoint = "GetSystemInfo")]
     private static partial void GetSystemInfo(out SYSTEM_INFO lpSystemInfo);
 

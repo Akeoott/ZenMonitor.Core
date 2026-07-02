@@ -3,7 +3,6 @@
 
 using System.Diagnostics;
 
-using ZenMonitor.Core.Models;
 using ZenMonitor.Core.Models.Controller;
 using ZenMonitor.Core.Utils;
 
