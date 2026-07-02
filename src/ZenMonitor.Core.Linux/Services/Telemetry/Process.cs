@@ -79,6 +79,7 @@ public class Process(ILogger<Process> logger, IFileSystem fileSystem, IUtilsLinu
                 var userName = _userMap.GetValueOrDefault(uid, "N/A");
                 var memUsage = (int)Math.Round(memUsageKb / 1024.0);
                 var cpuUsage = ComputeCpuUsage(pid, statPath, utcNow);
+                var priority = ComputePriority(statPath);
 
                 newProcessList.Add(new ProcessDetail(
                     pid,
@@ -86,6 +87,7 @@ public class Process(ILogger<Process> logger, IFileSystem fileSystem, IUtilsLinu
                     commandLine,
                     userName,
                     state,
+                    priority,
                     threads,
                     memUsage,
                     cpuUsage
@@ -256,13 +258,49 @@ public class Process(ILogger<Process> logger, IFileSystem fileSystem, IUtilsLinu
     {
         'R' => ProcessState.Running,
         'S' or 'I' => ProcessState.Sleeping,
-        'D' => ProcessState.DiskSleep,
         'Z' => ProcessState.Zombie,
-        'T' => ProcessState.Stopped,
-        't' => ProcessState.TracingStop,
+        'T' or 't' => ProcessState.Stopped,
         'X' or 'x' => ProcessState.Dead,
         _ => ProcessState.Unknown
     };
+
+    private ProcessPriority ComputePriority(string statPath)
+    {
+        try
+        {
+            if (!fileSystem.File.Exists(statPath))
+                return ProcessPriority.Normal;
+
+            var content = fileSystem.File.ReadAllText(statPath);
+
+            var lastParen = content.LastIndexOf(')');
+            if (lastParen == -1 || lastParen + 2 >= content.Length)
+                return ProcessPriority.Normal;
+
+            var numericPart = content[(lastParen + 2)..];
+            var fields = numericPart.Split(' ', StringSplitOptions.RemoveEmptyEntries);
+
+            // The nice value is field 19 in /proc/[pid]/stat (index 16 in the numeric fields).
+            // In the numeric part: index 0 = state, 1 = ppid, ..., 16 = nice
+            if (fields.Length <= 16 || !int.TryParse(fields[16], out var niceValue))
+                return ProcessPriority.Normal;
+
+            return niceValue switch
+            {
+                >= 19 => ProcessPriority.Idle,
+                >= 1 => ProcessPriority.BelowNormal,
+                0 => ProcessPriority.Normal,
+                >= -5 => ProcessPriority.AboveNormal,
+                >= -10 => ProcessPriority.High,
+                _ => ProcessPriority.RealTime
+            };
+        }
+        catch (Exception ex)
+        {
+            logger.LogWarning(ex, "Something unexpected happened.");
+            return ProcessPriority.Normal;
+        }
+    }
 
     private struct CpuCacheEntry
     {

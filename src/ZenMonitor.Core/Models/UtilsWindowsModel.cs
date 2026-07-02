@@ -3,6 +3,8 @@
 
 namespace ZenMonitor.Core.Models;
 
+// Contains non-explicit user facing models only used internally.
+
 /// <summary>
 /// Represents a snapshot of processor time counters from the system.
 /// </summary>

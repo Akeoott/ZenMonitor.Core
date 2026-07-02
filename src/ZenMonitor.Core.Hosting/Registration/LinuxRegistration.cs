@@ -18,6 +18,9 @@ using ZenMonitor.Core.Models.Telemetry;
 using ZenMonitor.Core.Services;
 using ZenMonitor.Core.Utils;
 
+using IProcess = ZenMonitor.Core.Abstractions.Controller.IProcess;
+using Process = ZenMonitor.Core.Linux.Services.Controller.Process;
+
 namespace ZenMonitor.Core.Hosting.Registration;
 
 /// <summary>
@@ -39,7 +42,7 @@ internal static class LinuxRegistration
             services.AddSingleton<ILogger<Drive>>(NullLogger<Drive>.Instance);
             services.AddSingleton<ILogger<Memory>>(NullLogger<Memory>.Instance);
             services.AddSingleton<ILogger<Network>>(NullLogger<Network>.Instance);
-            services.AddSingleton<ILogger<Process>>(NullLogger<Process>.Instance);
+            services.AddSingleton<ILogger<Linux.Services.Telemetry.Process>>(NullLogger<Linux.Services.Telemetry.Process>.Instance);
             services.AddSingleton<ILogger<Linux.Services.Telemetry.System>>(NullLogger<Linux.Services.Telemetry.System>.Instance);
 
             services.AddSingleton<ILogger<GpuAmd>>(NullLogger<GpuAmd>.Instance);
@@ -48,13 +51,13 @@ internal static class LinuxRegistration
 
         services.AddSingleton<IUtilsLinux, UtilsLinux>();
 
-        services.AddSingleton<IProcessController, ProcessController>();
+        services.AddSingleton<IProcess, Process>();
 
         services.AddSingleton<ICpu, Cpu>();
         services.AddSingleton<IDrive, Drive>();
         services.AddSingleton<IMemory, Memory>();
         services.AddSingleton<INetwork, Network>();
-        services.AddSingleton<IProcess, Process>();
+        services.AddSingleton<Abstractions.Telemetry.IProcess, Linux.Services.Telemetry.Process>();
         services.AddSingleton<ISystem, Linux.Services.Telemetry.System>();
 
         var vendor = DetectGpuVendor();

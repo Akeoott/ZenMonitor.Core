@@ -10,18 +10,31 @@ public enum ProcessState : byte
     Unknown,
     /// <summary>The process is currently running or ready to run.</summary>
     Running,
-    /// <summary>The process is sleeping (interruptible or idle).</summary>
+    /// <summary>The process is sleeping, idle, or waiting for resources (e.g., I/O).</summary>
     Sleeping,
-    /// <summary>The process is in an uninterruptible disk sleep (usually I/O).</summary>
-    DiskSleep,
-    /// <summary>The process is a zombie (terminated but not yet reaped by its parent).</summary>
+    /// <summary>The process has terminated but its parent has not yet reaped it.</summary>
     Zombie,
-    /// <summary>The process has been stopped (e.g., by a SIGSTOP signal).</summary>
+    /// <summary>The process has been stopped or suspended.</summary>
     Stopped,
-    /// <summary>The process is being traced and is stopped by a ptrace event.</summary>
-    TracingStop,
-    /// <summary>The process is dead (should not be visible in most listings).</summary>
+    /// <summary>The process is dead and should no longer appear in listings.</summary>
     Dead
+}
+
+/// <summary>Defines the scheduling priority of a process, from lowest to highest.</summary>
+public enum ProcessPriority : byte
+{
+    /// <summary>Lowest priority; runs only when the system is idle.</summary>
+    Idle,
+    /// <summary>Priority below normal (e.g., positive nice value on Unix systems).</summary>
+    BelowNormal,
+    /// <summary>Default or normal scheduling priority.</summary>
+    Normal,
+    /// <summary>Priority above normal (e.g., negative nice value on Unix systems).</summary>
+    AboveNormal,
+    /// <summary>High priority, reserved for time-critical tasks.</summary>
+    High,
+    /// <summary>Highest priority; real-time scheduling. May require root priviliges.</summary>
+    RealTime
 }
 
 /// <summary>Provides a snapshot of a single process's identifier, metadata, and resource usage.</summary>
@@ -30,6 +43,7 @@ public enum ProcessState : byte
 /// <param name="Command">The full command line used to start the process.</param>
 /// <param name="User">The name of the user who owns the process.</param>
 /// <param name="State">The current execution state of the process.</param>
+/// <param name="Priority">The scheduling priority of the process.</param>
 /// <param name="Threads">The number of threads in the process.</param>
 /// <param name="MemoryUsage">The memory usage of the process in megabytes (MB).</param>
 /// <param name="CpuUsage">The current CPU usage percentage of the process.</param>
@@ -39,6 +53,7 @@ public record ProcessDetail(
     string Command,
     string User,
     ProcessState State,
+    ProcessPriority Priority,
     int Threads,
     int MemoryUsage,
     double CpuUsage

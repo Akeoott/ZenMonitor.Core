@@ -7,17 +7,18 @@ using Xunit;
 
 using ZenMonitor.Core.Linux.Services.Controller;
 using ZenMonitor.Core.Models;
+using ZenMonitor.Core.Models.Controller;
 using ZenMonitor.Core.Utils;
 
 namespace ZenMonitor.Core.Tests.Services.Linux.Controller;
 
 [Trait("Platform", "Linux")]
 [SupportedOSPlatform("linux")]
-public class ProcessControllerTests
+public class ProcessTests
 {
     private readonly Mock<IUtilsLinux> _mockUtils = new();
 
-    private ProcessController CreateProcessController() => new(_mockUtils.Object);
+    private Process CreateProcessController() => new(_mockUtils.Object);
 
     [Fact]
     public void Expected_Run_DelegatesToUtils()

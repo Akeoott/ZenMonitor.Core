@@ -55,6 +55,7 @@ public class ProcessTests
         Assert.Equal("test-program --flag value", p.Command);
         Assert.Equal("testuser", p.User);
         Assert.Equal(ProcessState.Running, p.State);
+        Assert.Equal(ProcessPriority.Normal, p.Priority);
         Assert.Equal(5, p.Threads);
         Assert.Equal(10, p.MemoryUsage);
     }
@@ -141,6 +142,7 @@ public class ProcessTests
         Assert.Equal("/usr/bin/proc-two", p2.Command);
         Assert.Equal("root", p2.User);
         Assert.Equal(ProcessState.Sleeping, p2.State);
+        Assert.Equal(ProcessPriority.Normal, p2.Priority);
         Assert.Equal(3, p2.Threads);
         Assert.Equal(2, p2.MemoryUsage);
     }
