@@ -28,19 +28,19 @@ public static class DependencyInjection
         {
             services.AddSingleton<IFileSystem, FileSystem>();
 
-#if PLATFORM_LINUX
             if (OperatingSystem.IsLinux())
             {
                 LinuxRegistration.Register(services);
             }
-#elif PLATFORM_WINDOWS
-            if (OperatingSystem.IsWindows())
+            else if (OperatingSystem.IsWindows())
             {
                 WindowsRegistration.Register(services);
             }
-#else
-            throw new PlatformNotSupportedException();
-#endif
+            else
+            {
+                throw new PlatformNotSupportedException();
+            }
+
             services.AddSingleton<ISystemTelemetry, SystemTelemetry>();
             return services;
         }
