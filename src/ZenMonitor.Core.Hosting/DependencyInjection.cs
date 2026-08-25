@@ -41,7 +41,7 @@ public static class DependencyInjection
                 throw new PlatformNotSupportedException();
             }
 
-            services.AddSingleton<ISystemTelemetry, SystemTelemetry>();
+            services.AddSingleton<ITelemetryAggregate, TelemetryAggregate>();
             return services;
         }
     }

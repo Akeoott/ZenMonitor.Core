@@ -9,7 +9,7 @@ using ZenMonitor.Core.Abstractions;
 
 namespace ZenMonitor.Core.Debug;
 
-internal sealed class Monitor(ILogger<Monitor> logger, ISystemTelemetry monitor)
+internal sealed class Monitor(ILogger<Monitor> logger, ITelemetryAggregate monitor)
 {
     private readonly SemaphoreSlim _dataReadyEvent = new(0, int.MaxValue);
 

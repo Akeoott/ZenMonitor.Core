@@ -10,10 +10,10 @@ namespace ZenMonitor.Core.Abstractions;
 /// Each sub-interface is exposed as a property so consumers (and DI) can
 /// access individual monitors or the whole system at once.
 /// </summary>
-public interface ISystemTelemetry
+public interface ITelemetryAggregate
 {
     /// <summary>
-    /// Runs Update() for every interface in ISystemTelemetry in alphabetical order.
+    /// Runs Update() for every interface in ITelemetryAggregate in alphabetical order.
     /// </summary>
     void UpdateAll();
 
