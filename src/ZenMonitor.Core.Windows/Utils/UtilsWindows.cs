@@ -16,7 +16,7 @@ namespace ZenMonitor.Core.Windows.Utils;
 /// </summary>
 [ExcludeFromCodeCoverage]
 [SupportedOSPlatform("windows")]
-public partial class UtilsWindows(UtilsWindows.RawCpuTel rawCpu) : IUtilsWindows
+public partial class UtilsWindows(IRawCpuTel rawCpu) : IUtilsWindows
 {
     /// <inheritdoc />
     public IRawCpuTel RawCpu { get; } = rawCpu;
