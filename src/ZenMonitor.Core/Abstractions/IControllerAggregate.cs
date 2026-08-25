@@ -8,6 +8,6 @@ namespace ZenMonitor.Core.Abstractions;
 /// Each sub-interface is exposed as a property so consumers (and DI) can
 /// access individual controllers or the whole system at once.
 /// </summary>
-public interface ISystemController
+public interface IControllerAggregate
 {
 }

@@ -7,18 +7,18 @@ using ZenMonitor.Core.Abstractions.Telemetry;
 namespace ZenMonitor.Core.Services;
 
 /// <summary>
-/// No-op <see cref="ISystemTelemetry"/> that exposes all Null sub-services.
+/// No-op <see cref="ITelemetryAggregate"/> that exposes all Null sub-services.
 /// Used as a fallback when the platform is unsupported or detection fails.
 /// </summary>
 [ExcludeFromCodeCoverage]
-public sealed class SystemTelemetry(
+public sealed class TelemetryAggregate(
     ICpuTel cpuTel,
     IDriveTel driveTel,
     IGpuTel gpuTel,
     IMemoryTel memoryTel,
     INetworkTel networkTel,
     IProcessTel processTel,
-    ISystemTel systemTel) : ISystemTelemetry
+    ISystemTel systemTel) : ITelemetryAggregate
 {
     /// <inheritdoc />
     public void UpdateAll()
