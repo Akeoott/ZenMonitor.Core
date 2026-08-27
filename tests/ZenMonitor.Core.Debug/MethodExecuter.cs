@@ -61,7 +61,6 @@ internal class MethodExecuter(ITelemetryAggregate telemetry)
         DelayWithSpace();
         entry.Update();
         return entry.GetSnapshot();
-
     }
 
     private static void DelayWithSpace()
