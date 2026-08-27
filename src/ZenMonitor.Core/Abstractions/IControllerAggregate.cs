@@ -1,6 +1,8 @@
 // Copyright (c) Ame (Akeoot/Akeoott) <akeoot@pm.me>. Licensed under the LGPL-3.0 Licence.
 // See the LICENSE file in the repository root for full license text.
 
+using ZenMonitor.Core.Abstractions.Controller;
+
 namespace ZenMonitor.Core.Abstractions;
 
 /// <summary>
@@ -10,4 +12,6 @@ namespace ZenMonitor.Core.Abstractions;
 /// </summary>
 public interface IControllerAggregate
 {
+    /// <summary>Gets the Process controller service.</summary>
+    IProcessCon ProcessCon { get; }
 }
