@@ -2,15 +2,19 @@
 
   <PropertyGroup>
     <TargetFramework>net10.0</TargetFramework>
-    <Nullable>enable</Nullable>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <RootNamespace>ZenMonitor.Core.Linux</RootNamespace>
 
     <!-- NuGet Package Metadata -->
     <PackageId>ZenMonitor.Core.Linux</PackageId>
     <Description>Linux platform services and implementations for ZenMonitor.Core.</Description>
-    <PackageTags>system-monitoring;telemetry;linux;hardware</PackageTags>
+    <PackageTags>system-monitoring;telemetry;hardware;linux;service</PackageTags>
   </PropertyGroup>
+
+  <ItemGroup>
+    <None Include="README.md" Pack="true" PackagePath="\" />
+    <None Include="$(MSBuildThisFileDirectory)LICENSE" Pack="true" PackagePath="\" />
+  </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" />

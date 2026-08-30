@@ -2,6 +2,7 @@
 // See the LICENSE file in the repository root for full license text.
 
 using System.IO.Abstractions;
+using System.Linq;
 
 using Microsoft.Extensions.DependencyInjection;
 

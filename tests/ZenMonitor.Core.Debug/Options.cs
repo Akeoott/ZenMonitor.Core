@@ -3,8 +3,6 @@
 
 using CommandLine;
 
-using Serilog.Events;
-
 namespace ZenMonitor.Core.Debug;
 
 internal class Options

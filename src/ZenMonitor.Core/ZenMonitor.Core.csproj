@@ -2,15 +2,21 @@
 
   <PropertyGroup>
     <TargetFramework>net10.0</TargetFramework>
-    <Nullable>enable</Nullable>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <RootNamespace>ZenMonitor.Core</RootNamespace>
 
     <!-- NuGet Package Metadata -->
     <PackageId>ZenMonitor.Core</PackageId>
-    <Description>Core hardware abstraction interfaces, models, and platform services for the
-      ZenMonitor system telemetry monitor.</Description>
+    <Description>
+      Core hardware abstraction interfaces, models, and platform services for the
+      ZenMonitor system telemetry monitor.
+    </Description>
     <PackageTags>system-monitoring;telemetry;hardware;abstraction</PackageTags>
   </PropertyGroup>
+
+  <ItemGroup>
+    <None Include="$(MSBuildThisFileDirectory)README.md" Pack="true" PackagePath="\" />
+    <None Include="$(MSBuildThisFileDirectory)LICENSE" Pack="true" PackagePath="\" />
+  </ItemGroup>
 
 </Project>
