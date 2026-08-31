@@ -75,7 +75,30 @@ services.AddZenMonitor();
 
 ## Project Overview
 
-- ### Interfaces
+- ### Structure
+
+  The repo is split across six projects:
+
+  | Project                   | Descriptions                                                                                                                                         |
+  |---------------------------|------------------------------------------------------------------------------------------------------------------------------------------------------|
+  | `ZenMonitor.Core`         | Interfaces for consumers, data models and utils for services.                                                                                        |
+  | `ZenMonitor.Core.Hosting` | DI registration extensions (`AddZenMonitor()`) that auto-detect the OS and register the correct platform services. This is optional but recommended. |
+  | `ZenMonitor.Core.Linux`   | Linux-specific platform implementations for all interfaces.                                                                                          |
+  | `ZenMonitor.Core.Windows` | Windows-specific platform implementations for all interfaces.                                                                                        |
+  | `ZenMonitor.Core.Debug`   | Quick debugging interface providing all info out of the box to the terminal with logging.                                                            |
+  | `ZenMonitor.Core.Tests`   | xUnit test suite.                                                                                                                                    |
+
+- ### NuGet Packages
+
+  Four NuGet packages are built and published:
+    - `ZenMonitor.Core` — interfaces, models, utils for services.
+    - `ZenMonitor.Core.Hosting` — DI registration helpers.
+    - `ZenMonitor.Core.Linux` — Linux platform services.
+    - `ZenMonitor.Core.Windows` — Windows platform services.
+
+  Use `using ZenMonitor.Core.Hosting;` for initialization and DI, and `using ZenMonitor.Core;` for core components.
+
+- ### Core Interfaces
 
   Each service is defined as an interface in `Abstractions.*` and it's sub namespaces.
   The Linux project provides real implementations, while Windows support is under development.
@@ -105,29 +128,25 @@ services.AddZenMonitor();
 
     More will be added in the future!
 
+- ### Core Data Models
 
-- ### Project Structure
+  All records are defined in `ZenMonitor.Core.Models` and shared across all platform libraries.
 
-  The repo is split across six projects:
+  - ### Telemetry Records
+    | Record                | Fields                                                                                                         |
+    |-----------------------|----------------------------------------------------------------------------------------------------------------|
+    | `CpuInfoSnapshot`     | `CpuName`, `CpuSpeed`, `CpuUsage`, `CpuTemp`, `PowerDraw`, `CoreSpeeds`, `CoreUsages`, `CoreTemps`             |
+    | `DriveInfoSnapshot`   | `MountInfos`                                                                                                   |
+    | `GpuInfoSnapshot`     | `GpuName`, `UsageGpu`, `UsageMemory`, `MemoryUsed`, `MemoryTotal`, `TemperatureGpu`, `PowerState`, `PowerDraw` |
+    | `MemoryInfoSnapshot`  | `MemTotal`, `MemFree`, `MemAvailable`, `MemUsed`, `Cached`, `SwapTotal`, `SwapFree`                            |
+    | `NetworkInfoSnapshot` | `DownloadSpeed`, `UploadSpeed`, `Networks`                                                                     |
+    | `ProcessInfoSnapshot` | `TotalProcesses`, `ProcessDetails`                                                                             |
+    | `SystemInfoSnapshot`  | `KernelVersion`, `Hostname`, `UptimeSeconds`, `RunningTasks`, `TotalTasks`                                     |
 
-  | Project                   | Descriptions                                                                                                                                         |
-  |---------------------------|------------------------------------------------------------------------------------------------------------------------------------------------------|
-  | `ZenMonitor.Core`         | Interfaces for consumers, data models and utils for services.                                                                                        |
-  | `ZenMonitor.Core.Hosting` | DI registration extensions (`AddZenMonitor()`) that auto-detect the OS and register the correct platform services. This is optional but recommended. |
-  | `ZenMonitor.Core.Linux`   | Linux-specific platform implementations for all interfaces.                                                                                          |
-  | `ZenMonitor.Core.Windows` | Windows-specific platform implementations for all interfaces.                                                                                        |
-  | `ZenMonitor.Core.Debug`   | Quick debugging interface providing all info out of the box to the terminal with logging.                                                            |
-  | `ZenMonitor.Core.Tests`   | xUnit test suite.                                                                                                                                    |
-
-- ### NuGet Packages
-
-  Four NuGet packages are built and published:
-  - `ZenMonitor.Core` — interfaces, models, utils for services.
-  - `ZenMonitor.Core.Hosting` — DI registration helpers.
-  - `ZenMonitor.Core.Linux` — Linux platform services.
-  - `ZenMonitor.Core.Windows` — Windows platform services.
-
-  Use `using ZenMonitor.Core.Hosting;` for initialization and DI, and `using ZenMonitor.Core;` for core components.
+  - ### Controller Records
+    | Record          | Fields                                                                                                         |
+    |-----------------|----------------------------------------------------------------------------------------------------------------|
+    | `ProcessResult` | `ExitCode`, `StandardOutput`, `StandardError`       |
 
 ---
 

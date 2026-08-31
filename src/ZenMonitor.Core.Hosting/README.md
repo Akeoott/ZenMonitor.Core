@@ -8,6 +8,12 @@
 The hosting library of ZenMonitor.Core that provides
 an easy access point for injecting ZenMonitor as a Dependency.
 
+> [!IMPORTANT]
+> Major docs are all present in [ZenMonitor.Core](https://github.com/Akeoott/ZenMonitor.Core/blob/main/README.md).
+> This includes data structures, interfaces, project status and more.
+>
+> It's highly recommended to read them first.
+
 ---
 
 ## Usage
