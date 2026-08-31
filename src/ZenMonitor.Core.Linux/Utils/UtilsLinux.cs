@@ -2,6 +2,7 @@
 // See the LICENSE file in the repository root for full license text.
 
 using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 
 using ZenMonitor.Core.Models.Controller;
 using ZenMonitor.Core.Utils;

@@ -3,7 +3,7 @@
   <PropertyGroup>
     <OutputType>Exe</OutputType>
     <TargetFramework>net10.0</TargetFramework>
-    <Nullable>enable</Nullable>
+    <RootNamespace>ZenMonitor.Core.Debug</RootNamespace>
     <IsPackable>false</IsPackable>
   </PropertyGroup>
 

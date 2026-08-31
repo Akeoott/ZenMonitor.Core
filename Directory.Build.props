@@ -1,32 +1,25 @@
 <Project>
 
   <PropertyGroup>
-    <!-- Shared NuGet packaging metadata for all projects -->
-    <Version Condition=" '$(Version)' == '' ">1.0.0-local</Version>
     <Authors>Akeoott</Authors>
-    <PackageLicenseExpression>LGPL-3.0-or-later</PackageLicenseExpression>
-    <PackageProjectUrl>https://github.com/Akeoott/ZenMonitor.Core</PackageProjectUrl>
-    <RepositoryUrl>https://github.com/Akeoott/ZenMonitor.Core.git</RepositoryUrl>
+    <Version Condition=" '$(Version)' == '' ">1.0.0-local</Version>
+
     <RepositoryType>git</RepositoryType>
     <PackageReadmeFile>README.md</PackageReadmeFile>
+    <PackageLicenseExpression>LGPL-3.0-or-later</PackageLicenseExpression>
+
+    <PackageProjectUrl>https://github.com/Akeoott/ZenMonitor.Core</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/Akeoott/ZenMonitor.Core.git</RepositoryUrl>
+
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>disable</ImplicitUsings>
     <IncludeSymbols>true</IncludeSymbols>
     <SymbolPackageFormat>snupkg</SymbolPackageFormat>
-    <ImplicitUsings>disable</ImplicitUsings>
   </PropertyGroup>
 
   <ItemGroup>
-    <None Include="$(MSBuildThisFileDirectory)README.md" Pack="true" PackagePath="\" />
-    <None Include="$(MSBuildThisFileDirectory)LICENSE" Pack="true" PackagePath="\" />
-  </ItemGroup>
-
-  <ItemGroup>
     <Using Include="System" />
-    <Using Include="System.Collections.Generic" />
-    <Using Include="System.Diagnostics.CodeAnalysis" />
-    <Using Include="System.Linq" />
-    <Using Include="System.Runtime.InteropServices" />
     <Using Include="System.Runtime.Versioning" />
-    <Using Include="System.Threading.Tasks" />
   </ItemGroup>
 
 </Project>
