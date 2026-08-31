@@ -10,7 +10,7 @@ an easy access point for injecting ZenMonitor as a Dependency.
 
 ---
 
-## Usage:
+## Usage
 
 The recommended usage is by using dependency injection.
 The hosting namespace provides a single method which does all this for you.
