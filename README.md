@@ -15,6 +15,9 @@ Core hardware abstraction interfaces, models, and platform services
 powering the [ZenMonitor](https://github.com/Akeoott/ZenMonitor) project.
 
 > [!WARNING]
+> This repository is being rewritten in rust! Therefore, development is likely going to cease from now on.
+
+> [!NOTE]
 > This repository is a separate NuGet library extracted from
 > the original [ZenMonitor](https://github.com/Akeoott/ZenMonitor) project.
 >
