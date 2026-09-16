@@ -17,12 +17,9 @@ powering the [ZenMonitor](https://github.com/Akeoott/ZenMonitor) project.
 > [!WARNING]
 > This repository is being rewritten in rust! Therefore, development is likely going to cease from now on.
 
-> [!NOTE]
-> This repository is a separate NuGet library extracted from
-> the original [ZenMonitor](https://github.com/Akeoott/ZenMonitor) project.
->
-> Only fully supports Linux at the moment. Windows support is WIP.
-> The structure is still being defined. Expect changes.
+> [!CAUTION]
+> As of now, this repository has been archived. Why?
+> I'm using what I've learned to rebuild the ZenMonitor project better than before with a plan in mind.
 
 ---
 
